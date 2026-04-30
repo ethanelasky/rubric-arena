@@ -1,0 +1,139 @@
+{
+  "schema_version": "v4",
+  "rubric_version": "1.0",
+  "id": "matharena_usamo_2026_p2",
+  "description": "Annie's game with powers of 2, proving the final number is less than 4 times the sum.",
+  "points": 7,
+  "guidelines": [
+    "Zero-Credit Items:",
+    "- Conjecturing that Annie can always win without providing a mathematical proof.",
+    "- Testing small sequences or specific initial board states and concluding the result holds generally.",
+    "- Outlining a valid conceptual approach (e.g., \"I will use induction\" or \"I will build a tree\") but failing to execute any formal mathematics.",
+    "Deductions and Caps (apply manually as needed):",
+    "- Deduct 1 point for minor arithmetic, algebraic, or indexing errors that do not invalidate the overall logic of the proof (can be applied up to 2 times; cap at -2).",
+    "- Cap at 2/7: The proof states the correct bounds (2 pts) but the execution relies on a fundamental mathematical fallacy (e.g., circular reasoning, or assuming a tree exists without checking total \"volume\" constraints)."
+  ],
+  "combinator": "one_of",
+  "children": [
+    {
+      "id": "matharena_usamo_2026_p2.chain_a",
+      "combinator": "sum",
+      "selection_signal": "Chain A: Constructive / Algorithmic / Invariant-Based Approach",
+      "children": [
+        {
+          "id": "matharena_usamo_2026_p2.chain_a.step1",
+          "satisfied_when": "all",
+          "points": 2,
+          "description": "Defining a deterministic strategy AND accurately stating a precise mathematical invariant/bound.",
+          "guidelines": [
+            "The claim must explicitly formulate a strict lower bound on the initial sum required to generate a localized configuration of elements.",
+            "This is all-or-nothing. 0 points if the strict inequality or formulation is mathematically incorrect, even if the strategy/framework is mentioned."
+          ],
+          "children": [
+            {
+              "id": "matharena_usamo_2026_p2.chain_a.step1.strategy",
+              "description": "Defining a deterministic strategy (forward or reverse)."
+            },
+            {
+              "id": "matharena_usamo_2026_p2.chain_a.step1.invariant",
+              "description": "Accurately stating a precise mathematical invariant/bound that tracks the sequence's sum."
+            }
+          ]
+        },
+        {
+          "id": "matharena_usamo_2026_p2.chain_a.step2",
+          "combinator": "one_of",
+          "children": [
+            {
+              "id": "matharena_usamo_2026_p2.chain_a.step2.5pts",
+              "points": 5,
+              "selection_signal": "Rigorously proving that this bound holds globally via a flawless inductive, recursive, or telescoping algebraic argument, concluding that F < 4S.",
+              "description": "Rigorously proving that this bound holds globally via a flawless inductive, recursive, or telescoping algebraic argument, concluding that F < 4S."
+            },
+            {
+              "id": "matharena_usamo_2026_p2.chain_a.step2.4pts",
+              "points": 4,
+              "selection_signal": "The proof is logically complete and mathematically sound, but contains a localized, non-trivial gap.",
+              "description": "The proof is logically complete and mathematically sound, but contains a localized, non-trivial gap (e.g., failing to explicitly address boundary edge cases, such as adjacent elements that do not merge)."
+            },
+            {
+              "id": "matharena_usamo_2026_p2.chain_a.step2.2pts",
+              "points": 2,
+              "selection_signal": "Complete and rigorous proof of the bound for a highly restricted but meaningful sub-case, or flawlessly executes the base cases and sets up the inductive gaps but fails the final algebraic reduction.",
+              "description": "The student provides a complete and rigorous proof of the bound for a highly restricted but meaningful sub-case (e.g., perfectly proving the bound for a starting board consisting only of 1s and 2s), or flawlessly executes the base cases and sets up the inductive gaps but fails the final algebraic reduction."
+            },
+            {
+              "id": "matharena_usamo_2026_p2.chain_a.step2.0pts",
+              "points": 0,
+              "selection_signal": "Does not meet the criteria for 2, 4, or 5 points in the proof of the bound.",
+              "description": "Does not meet the criteria for 2, 4, or 5 points in the proof of the bound."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "matharena_usamo_2026_p2.chain_b",
+      "combinator": "sum",
+      "selection_signal": "Chain B: Existential / Structural / Information-Theoretic Approach",
+      "children": [
+        {
+          "id": "matharena_usamo_2026_p2.chain_b.step1",
+          "satisfied_when": "all",
+          "points": 2,
+          "description": "Translating the game into a global structure AND identifying the strict mathematical constraints required for a winning structure to exist.",
+          "guidelines": [
+            "Constraints include defining the target V < 4S, the depth limits d_i <= log_2(V/a_i), and identifying the required inverse-power sum.",
+            "This is all-or-nothing. 0 points for merely stating the game is a binary tree without the precise depth and volume limits."
+          ],
+          "children": [
+            {
+              "id": "matharena_usamo_2026_p2.chain_b.step1.structure",
+              "description": "Translating the game into a global structure (e.g., a binary tree)."
+            },
+            {
+              "id": "matharena_usamo_2026_p2.chain_b.step1.constraints",
+              "description": "Identifying the strict mathematical constraints required for a winning structure to exist."
+            }
+          ]
+        },
+        {
+          "id": "matharena_usamo_2026_p2.chain_b.step2",
+          "combinator": "one_of",
+          "children": [
+            {
+              "id": "matharena_usamo_2026_p2.chain_b.step2.5pts",
+              "points": 5,
+              "selection_signal": "Rigorously proving the existence of a valid structure that satisfies these constraints without violating game rules, concluding that F < 4S.",
+              "description": "Rigorously proving the existence of a valid structure that satisfies these constraints without violating game rules (e.g., applying the Kraft-McMillan inequality and proving prefix domains are strictly disjoint), concluding that F < 4S."
+            },
+            {
+              "id": "matharena_usamo_2026_p2.chain_b.step2.4pts",
+              "points": 4,
+              "selection_signal": "The existence proof is mathematically valid, but lacks a rigorous verification of one specific structural rule.",
+              "description": "The existence proof is mathematically valid, but lacks a rigorous verification of one specific structural rule (e.g., proving the total volume fits, but failing to formally prove strict left-to-right ordering)."
+            },
+            {
+              "id": "matharena_usamo_2026_p2.chain_b.step2.2pts",
+              "points": 2,
+              "selection_signal": "Sets up the correct system of prefix code intervals or spatial domains, but fails to mathematically prove the Kraft-McMillan sum evaluates to <= 1 for this game, OR calculates the sum correctly but fails to map it to a valid geometric/structural existence proof.",
+              "description": "Sets up the correct system of prefix code intervals or spatial domains, but fails to mathematically prove the Kraft-McMillan sum evaluates to <= 1 for this game, OR calculates the sum correctly but fails to map it to a valid geometric/structural existence proof."
+            },
+            {
+              "id": "matharena_usamo_2026_p2.chain_b.step2.0pts",
+              "points": 0,
+              "selection_signal": "Does not meet the criteria for 2, 4, or 5 points in the existence proof.",
+              "description": "Does not meet the criteria for 2, 4, or 5 points in the existence proof."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "matharena_usamo_2026_p2.neither",
+      "points": 0,
+      "selection_signal": "Neither Chain A nor Chain B is meaningfully attempted.",
+      "description": "Neither Chain A nor Chain B is meaningfully attempted."
+    }
+  ]
+}

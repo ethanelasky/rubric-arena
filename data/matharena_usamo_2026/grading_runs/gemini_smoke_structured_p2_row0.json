@@ -1,0 +1,49 @@
+{
+  "computed_score": 7,
+  "model_declared_score": null,
+  "score_consistent": null,
+  "judgment": {
+    "id": "matharena_usamo_2026_p2",
+    "reasoning": "The candidate solution uses an information-theoretic/structural approach, which corresponds to Chain B. It successfully translates the game into a binary tree, identifies the depth constraints, and explicitly constructs a valid alphabetic prefix code to prove the existence of a winning strategy.",
+    "selected": "matharena_usamo_2026_p2.chain_b",
+    "children": [
+      {
+        "id": "matharena_usamo_2026_p2.chain_b",
+        "reasoning": "The candidate follows the existential/structural approach.",
+        "children": [
+          {
+            "id": "matharena_usamo_2026_p2.chain_b.step1",
+            "reasoning": "The candidate translates the game into a binary tree, defines the target value V < 4S, establishes the depth limits d_i <= log_2(V/a_i), and identifies the required inverse-power sum constraint.",
+            "children": [
+              {
+                "id": "matharena_usamo_2026_p2.chain_b.step1.structure",
+                "reasoning": "The candidate models the game as the construction of a full binary tree.",
+                "satisfied": true
+              },
+              {
+                "id": "matharena_usamo_2026_p2.chain_b.step1.constraints",
+                "reasoning": "The candidate defines the target V < 4S, the depth limits d_i <= log_2(V/a_i), and the inverse-power sum constraint.",
+                "satisfied": true
+              }
+            ],
+            "satisfied": true
+          },
+          {
+            "id": "matharena_usamo_2026_p2.chain_b.step2",
+            "reasoning": "The candidate rigorously proves the existence of a valid structure by explicitly constructing an alphabetic prefix code using disjoint intervals, proving that no codeword is a prefix of another, and ensuring the correct left-to-right order. The candidate then compresses the tree and concludes that the final value is strictly less than 4S.",
+            "selected": "matharena_usamo_2026_p2.chain_b.step2.5pts",
+            "children": [
+              {
+                "id": "matharena_usamo_2026_p2.chain_b.step2.5pts",
+                "reasoning": "The proof of existence is mathematically flawless, explicitly constructing the prefix code and verifying all structural rules, concluding that F < 4S.",
+                "satisfied": true
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "validation_warnings": [],
+  "raw_model_output": "```json\n{\n  \"id\": \"matharena_usamo_2026_p2\",\n  \"reasoning\": \"The candidate solution uses an information-theoretic/structural approach, which corresponds to Chain B. It successfully translates the game into a binary tree, identifies the depth constraints, and explicitly constructs a valid alphabetic prefix code to prove the existence of a winning strategy.\",\n  \"selected\": \"matharena_usamo_2026_p2.chain_b\",\n  \"children\": [\n    {\n      \"id\": \"matharena_usamo_2026_p2.chain_b\",\n      \"reasoning\": \"The candidate follows the existential/structural approach.\",\n      \"children\": [\n        {\n          \"id\": \"matharena_usamo_2026_p2.chain_b.step1\",\n          \"reasoning\": \"The candidate translates the game into a binary tree, defines the target value V < 4S, establishes the depth limits d_i <= log_2(V/a_i), and identifies the required inverse-power sum constraint.\",\n          \"children\": [\n            {\n              \"id\": \"matharena_usamo_2026_p2.chain_b.step1.structure\",\n              \"reasoning\": \"The candidate models the game as the construction of a full binary tree.\",\n              \"satisfied\": true\n            },\n            {\n              \"id\": \"matharena_usamo_2026_p2.chain_b.step1.constraints\",\n              \"reasoning\": \"The candidate defines the target V < 4S, the depth limits d_i <= log_2(V/a_i), and the inverse-power sum constraint.\",\n              \"satisfied\": true\n            }\n          ]\n        },\n        {\n          \"id\": \"matharena_usamo_2026_p2.chain_b.step2\",\n          \"reasoning\": \"The candidate rigorously proves the existence of a valid structure by explicitly constructing an alphabetic prefix code using disjoint intervals, proving that no codeword is a prefix of another, and ensuring the correct left-to-right order. The candidate then compresses the tree and concludes that the final value is strictly less than 4S.\",\n          \"selected\": \"matharena_usamo_2026_p2.chain_b.step2.5pts\",\n          \"children\": [\n            {\n              \"id\": \"matharena_usamo_2026_p2.chain_b.step2.5pts\",\n              \"reasoning\": \"The proof of existence is mathematically flawless, explicitly constructing the prefix code and verifying all structural rules, concluding that F < 4S.\",\n              \"satisfied\": true,\n              \"points_awarded\": 5\n            }\n          ]\n        }\n      ]\n    }\n  ]\n}\n```"
+}

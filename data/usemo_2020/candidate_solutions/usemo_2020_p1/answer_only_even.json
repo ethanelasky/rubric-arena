@@ -1,0 +1,6 @@
+{
+  "id": "answer_only_even",
+  "expected_score": 0,
+  "expected_regime": "usemo_2020_p1.no_progress",
+  "candidate_solution": "The answer is exactly the even positive integers."
+}

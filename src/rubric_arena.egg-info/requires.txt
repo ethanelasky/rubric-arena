@@ -1,0 +1,4 @@
+anthropic<1.0,>=0.34
+datasets<4.0,>=2.20
+google-genai>=1.73.1
+pytest>=8.4.2

@@ -1,0 +1,6 @@
+{
+  "id": "construction_plus_one_v2_case",
+  "expected_score": 2,
+  "expected_regime": "usemo_2020_p1.partial_v2",
+  "candidate_solution": "I claim the answer is the even positive integers.\n\nFirst, every even integer works. Let k=2n. Choose x=1, z=1, and y=n.\nThen lcm(x,y)=n, lcm(y,z)=n, and lcm(x,z)=1, so the expression is 2n.\n\nNow suppose k is odd. Write A=v2(x), B=v2(y), and C=v2(z).\nI will look only at the case where B is strictly larger than both A and C.\nThen v2(lcm(x,y))=B and v2(lcm(y,z))=B, while v2(k*lcm(x,z))=max(A,C),\nwhich is smaller. This case is impossible. I have not checked the other cases."
+}

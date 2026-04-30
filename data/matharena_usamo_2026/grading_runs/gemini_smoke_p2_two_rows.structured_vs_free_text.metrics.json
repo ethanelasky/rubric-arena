@@ -1,0 +1,20 @@
+{
+  "n": 4,
+  "exact_match": 1.0,
+  "mae": 0.0,
+  "rmse": 0.0,
+  "by_method": {
+    "free_text": {
+      "n": 2,
+      "exact_match": 1.0,
+      "mae": 0.0,
+      "rmse": 0.0
+    },
+    "structured_v4": {
+      "n": 2,
+      "exact_match": 1.0,
+      "mae": 0.0,
+      "rmse": 0.0
+    }
+  }
+}

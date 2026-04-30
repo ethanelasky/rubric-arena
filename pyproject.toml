@@ -1,0 +1,23 @@
+[project]
+name = "rubric-arena"
+version = "0.1.0"
+description = "Rubric-based math grading benchmarks"
+readme = "README.md"
+requires-python = ">=3.12,<3.14"
+dependencies = [
+  "anthropic>=0.34,<1.0",
+  "datasets>=2.20,<4.0",
+  "google-genai>=1.73.1",
+  "pytest>=8.4.2",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
