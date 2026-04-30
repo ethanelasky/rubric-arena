@@ -161,8 +161,154 @@ Walk through your judgment and verify:
 
 ## §8 — Worked example
 
-[Brief worked example: a sample paper, the prose summary, and the JSON judgment, for one of the simpler encoded rubrics like USEMO 2025 P5.]
+### 2025 USEMO P2 
+
+Problem prompt: 
+
+Let ABC be a fixed triangle with circumcircle ω. Consider P a variable point inside
+ABC. Ray BP meets side AC at Y while ray CP meets side AB at X. Let Q be
+the second intersection of ω and the circumcircle of triangle AXY . Let K be the
+second intersection of ray AP and ω.
+Prove that as P varies, the circumcircles of triangle QP K all have a common
+radical center.
+
+Corresponding rubric: 
+
+{
+  "schema_version": "v4",
+  "rubric_version": "1.0",
+  "id": "usemo-2025-p2",
+  "description": "Show that as P varies inside fixed triangle ABC, the circumcircles of triangle QPK have a common radical center.",
+  "points": 7,
+  "combinator": "sum",
+  "guidelines": [
+    "The intended fixed point is M, the midpoint of BC.",
+    "The +1 for naming M as the fixed point is additive with everything else.",
+    "No deductions for typographical issues or configuration issues that can be resolved by directed angles.",
+    "If a solution is correct contingent on an unproven claim, route to the 0+ scheme unless the claim is a well-known result (e.g., the existence of the Newton-Gauss line, spiral similarities occurring in pairs, Zack's lemma) or a minor omission. Stating moving-points / gliding-principle / 4QXY ~ 4QBC / Newton-Gauss line / Zack's lemma without significant progress earns 0pt under 0+."
+  ],
+  "children": [
+    {
+      "id": "fixed-point-claim",
+      "description": "States that the fixed point (the common radical center) is M, the midpoint of BC.",
+      "points": 1
+    },
+    {
+      "id": "main-scheme",
+      "description": "The main solution work, scored under one of two schemes: 7- (essentially correct) or 0+ (incomplete partial credit).",
+      "points": 6,
+      "combinator": "one_of",
+      "children": [
+        {
+          "id": "main-scheme.complete",
+          "selection_signal": "Solution gives a complete and correct synthetic argument that M lies on the radical axis of all (QPK), with no substantive gaps and no uncited well-known facts that have not been proven.",
+          "points": 6,
+          "satisfied_when": "all",
+          "children": [
+            { "id": "main-scheme.complete.argument", "description": "Complete and correct synthetic proof that M is the common radical center." }
+          ]
+        },
+        {
+          "id": "main-scheme.well-known-fact-uncited",
+          "selection_signal": "Solution is essentially correct in structure and reaches the conclusion, but assumes a named well-known result without proof or proper citation. Apply specifically when: (a) the assumption is unambiguously an instance of a recognized lemma (Newton-Gauss line, spiral similarity occurring in pairs, Zack's lemma in moving points), and (b) no further mathematical work needs to be done beyond invoking the lemma. If the use is unclear or the lemma is misapplied, route to 0+ instead.",
+          "points": 5,
+          "satisfied_when": "all",
+          "children": [
+            { "id": "main-scheme.well-known-fact-uncited.essentially-correct", "description": "Argument is essentially correct, depends on a named well-known result that the contestant invokes without proof or citation." }
+          ]
+        },
+        {
+          "id": "main-scheme.minor-fixable-detail",
+          "selection_signal": "Solution is essentially correct but missing a minor detail the contestant could have easily repaired. Examples per source: a singular missing degenerate moving-points case in an otherwise correct list, an obvious-from-context equality omitted from an angle chase. Use only when no other regime better describes the work.",
+          "points": 4,
+          "satisfied_when": "all",
+          "children": [
+            { "id": "main-scheme.minor-fixable-detail.essentially-correct", "description": "Argument is essentially correct modulo a minor easily-reparable detail." }
+          ]
+        },
+        {
+          "id": "main-scheme.zero-plus",
+          "selection_signal": "Solution does not reach an essentially-correct argument: incomplete computational approaches, claims without proof, or fragments without a working radical-axis argument. Score under the 0+ scheme.",
+          "points": 2,
+          "combinator": "one_of",
+          "guidelines": [
+            "Capped at 2pt under main-scheme; the +1 fixed-point claim sits above as a sibling.",
+            "Stating named theorems or facts without significant progress earns 0pt here.",
+            "Incomplete algebraic / coordinate / moving-points solutions are 0pt by default unless they include an independent synthetic claim with proof.",
+            "The four 2pt named claims are non-additive to each other; the grader picks at most one."
+          ],
+          "children": [
+            {
+              "id": "main-scheme.zero-plus.qlmk-concyclic",
+              "selection_signal": "Solution proves that Q, L, M, K are concyclic (where L is the midpoint of AP and K is the second intersection of ray AP with ω).",
+              "points": 2,
+              "satisfied_when": "all",
+              "children": [
+                { "id": "main-scheme.zero-plus.qlmk-concyclic.proof", "description": "Valid proof of the QLMK concyclicity." }
+              ]
+            },
+            {
+              "id": "main-scheme.zero-plus.p-on-b1c1",
+              "selection_signal": "Solution proves that P lies on line B₁C₁ (where B₁, C₁ are the points on AB, AC such that the relevant circumcircles are tangent to AC, AB respectively).",
+              "points": 2,
+              "satisfied_when": "all",
+              "children": [
+                { "id": "main-scheme.zero-plus.p-on-b1c1.proof", "description": "Valid proof that P lies on B₁C₁." }
+              ]
+            },
+            {
+              "id": "main-scheme.zero-plus.z-on-b1c1-and-gamma",
+              "selection_signal": "Solution proves that Z (the second intersection of the circumcircles of BB₁Q and CC₁Q) lies on both line B₁C₁ and circle Γ.",
+              "points": 2,
+              "satisfied_when": "all",
+              "children": [
+                { "id": "main-scheme.zero-plus.z-on-b1c1-and-gamma.proof", "description": "Valid proof that Z lies on both B₁C₁ and Γ." }
+              ]
+            },
+            {
+              "id": "main-scheme.zero-plus.alternate-comparable",
+              "selection_signal": "Solution proves a synthetic claim along an alternate solution path of comparable value to the named claims above. Highlight the claim explicitly for grader consistency.",
+              "points": 2,
+              "satisfied_when": "all",
+              "children": [
+                { "id": "main-scheme.zero-plus.alternate-comparable.proof", "description": "Valid proof of a comparable-value synthetic claim." }
+              ]
+            },
+            {
+              "id": "main-scheme.zero-plus.no-substantial-progress",
+              "selection_signal": "Solution is in the 0+ scheme and does not prove any of the named 2pt claims or a comparable-value alternate.",
+              "points": 0,
+              "satisfied_when": "all",
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "main-scheme.no-progress",
+          "selection_signal": "Solution shows no substantial progress: blank, off-topic, or only restates the problem.",
+          "points": 0,
+          "satisfied_when": "all",
+          "children": []
+        }
+      ]
+    }
+  ]
+}
 
 ## Output format
 
 Your response should be:
+
+```
+**Grading summary
+
+[3-8 paragraphs of prose.]
+
+{
+    "id": "..."
+    "reasoning" : "...",
+    ...
+}
+```
+
+That's the compelte output. No preamble, no postamble. 
