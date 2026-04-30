@@ -161,154 +161,87 @@ Walk through your judgment and verify:
 
 ## §8 — Worked example
 
-### 2025 USEMO P2 
+The rubric is **USEMO 2025 P5**, encoded as a `one_of` ladder over six regimes (complete, both-bounds-conditional, one-bound-and-corollary, one-bound-conditional, answer-only, no-progress).
 
-Problem prompt: 
+### Sample contestant paper
 
-Let ABC be a fixed triangle with circumcircle ω. Consider P a variable point inside
-ABC. Ray BP meets side AC at Y while ray CP meets side AB at X. Let Q be
-the second intersection of ω and the circumcircle of triangle AXY . Let K be the
-second intersection of ray AP and ω.
-Prove that as P varies, the circumcircles of triangle QP K all have a common
-radical center.
+> Suppose Azza is playing optimally. After turn $k$, Bob has effectively committed to a set of sequences he could be on — call it $X_k$. Initially $X_0$ has size 1 (Bob has chosen one sequence). After Azza guesses $g$ sequences, $|X_{k+1}|$ can grow because Bob has 100 indices times 3 possible $\delta$ values, so up to $300|X_k|$ — but most of that grows is collapsed since many sequences end up in the same place.
+>
+> The key idea is to look at the "surface" of $X_k$. By surface I mean pairs $(P, Q)$ where $P \in X_k$ and $Q \notin X_k$ but $Q$ is reachable from $P$. If the surface is large, Bob has many escape options. So Azza wants to keep the surface small but $X_k$ small too — these fight each other.
+>
+> I'll use the isoperimetric inequality on $\mathbb{Z}^{100}$. For any finite $S \subset \mathbb{Z}^d$, the edge boundary satisfies $|\partial S| \geq c_d |S|^{(d-1)/d}$ for some constant $c_d$ depending on $d$. Here $d = 100$ and $c_{100}$ is some positive constant; I'll just call it $c$. So $|\partial X_k| \geq c |X_k|^{99/100}$.
+>
+> Now if $g \leq c|X_k|^{99/100}/2$, then Azza can guess at most half the surface, so Bob has at least half the surface as escape routes. Each escape grows $X_{k+1}$ by 1 (relative to $X_k$ minus the guesses). So $|X_{k+1}| \geq |X_k| + c|X_k|^{99/100}/2 - g$. Iterating this, if $g < cn^{99/100}/2$ for all relevant $X_k$, then $X_k$ grows unboundedly.
+>
+> Wait, $|X_k| \leq $ number of sequences total which is finite, but for the asymptotics in $n$, what matters is whether Azza can ever cover $X_k$. Azza wins iff at some turn $k$ all of $X_k$ is in her current $g$ guesses. If $|X_k| > g$ throughout the game, Azza can't win.
+>
+> Since the game has 100 indices and Bob can change one per turn, the game length is bounded but $|X_k|$ grows polynomially in turn count from the inequality. Pinning this down: the inequality gives $|X_k| \gtrsim k^{100/1} \cdot |X_0|$ roughly — no wait, it gives $|X_k| \gtrsim (ck)^{100}$ since we add $c|X|^{99/100}$ each turn, and integrating $dx/dt = cx^{99/100}$ gives $x \sim t^{100}$.
+>
+> So if $g < cn^{99/100}/2$ for $n = $ alphabet size or some bound, then $|X_k|$ grows past $g$ and Azza loses. This shows $\alpha < 99/100$ doesn't work — i.e., we need $g \geq Cn^{99/100}$, i.e., $\alpha \geq 99/100$.
+>
+> For the upper bound: Azza chooses $m \approx n^{1/100}$ and considers sequences with all entries in $\{1, \ldots, m\}$. There are $m^{100} \approx n$ such sequences. The "outer shell" of sequences with at least one entry equal to $1$ or $m$ has size $m^{100} - (m-2)^{100} = O(m^{99}) = O(n^{99/100})$. Azza guesses all of these. Bob is forced to a sequence with entries in $\{2, \ldots, m-1\}$. Repeat: peel off shells until the alphabet is $\{1, 2, 3\}$, at which point there are $3^{100}$ sequences, a constant, which Azza covers in one turn. Total guesses needed: roughly $m \cdot O(n^{99/100}) = O(n^{99/100} \log n)$ which is $O(n^{99/100 + \epsilon})$ for any $\epsilon > 0$.
+>
+> Wait, I need $g = Cn^{99/100}$ not $Cn^{99/100} \log n$. Let me recount. At alphabet size $j$, the shell has size $j^{100} - (j-2)^{100} = O(j^{99})$. Sum over $j = m$ down to $j = 3$: $\sum_{j=3}^{m} O(j^{99}) = O(m^{100}) = O(n)$. That's too many. Hmm.
+>
+> Actually I think you peel one shell at a time and each peeling uses one turn with $O(n^{99/100})$ guesses, and you need $m \approx n^{1/100}$ peelings. So total turns is $O(n^{1/100})$ but $g$ per turn is $O(n^{99/100})$. So $g \cdot \text{turns} = O(n)$ total guesses but per-turn $g$ is $n^{99/100}$ which is what we want.
+>
+> So $\alpha = 99/100$ is the answer.
 
-Corresponding rubric: 
+### Grading summary
 
+The contestant attempts both bounds and reaches the correct answer α = 99/100. The work is uneven: the upper bound is essentially right but stated messily with a self-correction, and the lower bound argument has the right structural idea but does not establish the corollary it depends on.
+
+**The upper bound (Azza's strategy).** The contestant correctly describes the shell-peeling strategy: at alphabet size $j$, guess the outer shell of size $O(j^{99})$, forcing Bob into the inner alphabet $\{2, \ldots, j-1\}$, iterate. They get confused mid-argument about whether they need $\log n$ extra factors but recover correctly: per-turn guesses are $O(n^{99/100})$, total turns are $O(n^{1/100})$. The argument matches the reference construction. I read this as essentially correct, with the self-correction visible but resolved.
+
+**The lower bound.** The contestant's idea is the right one — apply an isoperimetric inequality to $X_k$, show the surface forces $X_k$ to grow, conclude that small $g$ cannot keep up. They cite "the isoperimetric inequality on $\mathbb{Z}^{100}$" with a constant $c_d$ depending on dimension. They don't state the inequality precisely, don't prove it, and don't show that the inequality they need (the rubric's corollary: $|S| \geq (1/100) |X|^{99/100}$ for the *adjacency-graph* boundary in this specific setup) follows from a named theorem.
+
+The relevant rubric guideline is explicit: "A complete and accurate citation of Loomis-Whitney plus a proof that it implies the corollary counts as a full proof of the corollary. A reference to a 'well-known result' without proper citation does not." The contestant's invocation is closer to the latter than the former — they name "isoperimetric inequality on $\mathbb{Z}^{100}$" without statement, and the constant $c$ is left as "some positive constant," which is exactly the kind of un-pinned-down citation the guideline rejects. They do not show that the standard discrete isoperimetric inequality (which is about edge boundary in $\mathbb{Z}^d$) corresponds to the rubric's corollary (which is about the specific adjacency relation in the squeakuence game).
+
+Beyond the citation issue, the iterative growth argument has gaps. The contestant moves from "$|X_{k+1}| \geq |X_k| + c|X_k|^{99/100}/2 - g$" to "$|X_k| \gtrsim (ck)^{100}$" via a continuous-time analogy ("integrating $dx/dt = cx^{99/100}$ gives $x \sim t^{100}$"). This is heuristic — the discrete inequality doesn't immediately give the continuous bound, and the contestant doesn't carry out the discrete induction. They also conflate the alphabet size $n$ with the set size $|X_k|$ in the final step ("if $g < cn^{99/100}/2$ for $n = $ alphabet size or some bound") — these are different quantities and the argument needs to track which one $g$ is being compared against.
+
+So the lower bound has two layers of issue: the corollary is assumed-by-name rather than proved, and the iterative argument from the corollary to "Azza loses" has gaps in the discrete-to-continuous transition and the variable conflation. The argument is a sketch of the right shape, not a proof.
+
+**Routing.** This paper has both bounds attempted, but only the upper bound is essentially correct. The lower bound is conditional on the corollary (since the corollary isn't proved) AND has gaps in how the corollary would be used even if granted. The rubric's regimes:
+
+- `complete` (7pt): requires both bounds AND the corollary proved. The corollary is not proved, so ruled out.
+- `both-bounds-conditional` (5pt): requires both bounds proved while assuming the corollary. The lower bound has additional gaps beyond just assuming the corollary (the discrete-to-continuous step, the variable conflation) — so calling this a "proof of the lower bound conditional on the corollary" is a stretch. Borderline.
+- `one-bound-and-corollary` (5pt): requires one bound AND the corollary. The corollary isn't proved. Ruled out.
+- `one-bound-conditional` (2pt): one bound established, the other gestured-at conditional on the corollary. The upper bound is essentially correct (one bound established); the lower bound is gestured-at conditional on the corollary. This fits.
+- `answer-only` (1pt): answer claimed, no bounds established. Ruled out — the upper bound is established.
+
+The close call is between `both-bounds-conditional` (5pt) and `one-bound-conditional` (2pt). The question is whether the lower-bound argument is "proved conditional on the corollary" or just "gestured-at conditional on the corollary." I read it as the latter: even granting Loomis-Whitney/the corollary, the contestant's iterative argument has gaps that prevent it from being a proof. The discrete-to-continuous step is a non-trivial analytic move that the contestant skips, and the variable conflation in the final step would need to be cleaned up. This is closer to a sketch than a proof, even conditionally.
+
+I select `one-bound-conditional` (2pt). The borderline alternative is `both-bounds-conditional` (5pt); a debater could argue that the gaps in the iterative argument are minor and the lower bound is essentially proved conditional on the corollary. The call rests on how strict to be about "proof" versus "sketch" when the underlying corollary is also assumed.
+
+**Final score.** 2 points (selected `one-bound-conditional`).
+
+### Judgment
+
+```json
 {
-  "schema_version": "v4",
-  "rubric_version": "1.0",
-  "id": "usemo-2025-p2",
-  "description": "Show that as P varies inside fixed triangle ABC, the circumcircles of triangle QPK have a common radical center.",
-  "points": 7,
-  "combinator": "sum",
-  "guidelines": [
-    "The intended fixed point is M, the midpoint of BC.",
-    "The +1 for naming M as the fixed point is additive with everything else.",
-    "No deductions for typographical issues or configuration issues that can be resolved by directed angles.",
-    "If a solution is correct contingent on an unproven claim, route to the 0+ scheme unless the claim is a well-known result (e.g., the existence of the Newton-Gauss line, spiral similarities occurring in pairs, Zack's lemma) or a minor omission. Stating moving-points / gliding-principle / 4QXY ~ 4QBC / Newton-Gauss line / Zack's lemma without significant progress earns 0pt under 0+."
-  ],
-  "children": [
-    {
-      "id": "fixed-point-claim",
-      "description": "States that the fixed point (the common radical center) is M, the midpoint of BC.",
-      "points": 1
-    },
-    {
-      "id": "main-scheme",
-      "description": "The main solution work, scored under one of two schemes: 7- (essentially correct) or 0+ (incomplete partial credit).",
-      "points": 6,
-      "combinator": "one_of",
-      "children": [
-        {
-          "id": "main-scheme.complete",
-          "selection_signal": "Solution gives a complete and correct synthetic argument that M lies on the radical axis of all (QPK), with no substantive gaps and no uncited well-known facts that have not been proven.",
-          "points": 6,
-          "satisfied_when": "all",
-          "children": [
-            { "id": "main-scheme.complete.argument", "description": "Complete and correct synthetic proof that M is the common radical center." }
-          ]
-        },
-        {
-          "id": "main-scheme.well-known-fact-uncited",
-          "selection_signal": "Solution is essentially correct in structure and reaches the conclusion, but assumes a named well-known result without proof or proper citation. Apply specifically when: (a) the assumption is unambiguously an instance of a recognized lemma (Newton-Gauss line, spiral similarity occurring in pairs, Zack's lemma in moving points), and (b) no further mathematical work needs to be done beyond invoking the lemma. If the use is unclear or the lemma is misapplied, route to 0+ instead.",
-          "points": 5,
-          "satisfied_when": "all",
-          "children": [
-            { "id": "main-scheme.well-known-fact-uncited.essentially-correct", "description": "Argument is essentially correct, depends on a named well-known result that the contestant invokes without proof or citation." }
-          ]
-        },
-        {
-          "id": "main-scheme.minor-fixable-detail",
-          "selection_signal": "Solution is essentially correct but missing a minor detail the contestant could have easily repaired. Examples per source: a singular missing degenerate moving-points case in an otherwise correct list, an obvious-from-context equality omitted from an angle chase. Use only when no other regime better describes the work.",
-          "points": 4,
-          "satisfied_when": "all",
-          "children": [
-            { "id": "main-scheme.minor-fixable-detail.essentially-correct", "description": "Argument is essentially correct modulo a minor easily-reparable detail." }
-          ]
-        },
-        {
-          "id": "main-scheme.zero-plus",
-          "selection_signal": "Solution does not reach an essentially-correct argument: incomplete computational approaches, claims without proof, or fragments without a working radical-axis argument. Score under the 0+ scheme.",
-          "points": 2,
-          "combinator": "one_of",
-          "guidelines": [
-            "Capped at 2pt under main-scheme; the +1 fixed-point claim sits above as a sibling.",
-            "Stating named theorems or facts without significant progress earns 0pt here.",
-            "Incomplete algebraic / coordinate / moving-points solutions are 0pt by default unless they include an independent synthetic claim with proof.",
-            "The four 2pt named claims are non-additive to each other; the grader picks at most one."
-          ],
-          "children": [
-            {
-              "id": "main-scheme.zero-plus.qlmk-concyclic",
-              "selection_signal": "Solution proves that Q, L, M, K are concyclic (where L is the midpoint of AP and K is the second intersection of ray AP with ω).",
-              "points": 2,
-              "satisfied_when": "all",
-              "children": [
-                { "id": "main-scheme.zero-plus.qlmk-concyclic.proof", "description": "Valid proof of the QLMK concyclicity." }
-              ]
-            },
-            {
-              "id": "main-scheme.zero-plus.p-on-b1c1",
-              "selection_signal": "Solution proves that P lies on line B₁C₁ (where B₁, C₁ are the points on AB, AC such that the relevant circumcircles are tangent to AC, AB respectively).",
-              "points": 2,
-              "satisfied_when": "all",
-              "children": [
-                { "id": "main-scheme.zero-plus.p-on-b1c1.proof", "description": "Valid proof that P lies on B₁C₁." }
-              ]
-            },
-            {
-              "id": "main-scheme.zero-plus.z-on-b1c1-and-gamma",
-              "selection_signal": "Solution proves that Z (the second intersection of the circumcircles of BB₁Q and CC₁Q) lies on both line B₁C₁ and circle Γ.",
-              "points": 2,
-              "satisfied_when": "all",
-              "children": [
-                { "id": "main-scheme.zero-plus.z-on-b1c1-and-gamma.proof", "description": "Valid proof that Z lies on both B₁C₁ and Γ." }
-              ]
-            },
-            {
-              "id": "main-scheme.zero-plus.alternate-comparable",
-              "selection_signal": "Solution proves a synthetic claim along an alternate solution path of comparable value to the named claims above. Highlight the claim explicitly for grader consistency.",
-              "points": 2,
-              "satisfied_when": "all",
-              "children": [
-                { "id": "main-scheme.zero-plus.alternate-comparable.proof", "description": "Valid proof of a comparable-value synthetic claim." }
-              ]
-            },
-            {
-              "id": "main-scheme.zero-plus.no-substantial-progress",
-              "selection_signal": "Solution is in the 0+ scheme and does not prove any of the named 2pt claims or a comparable-value alternate.",
-              "points": 0,
-              "satisfied_when": "all",
-              "children": []
-            }
-          ]
-        },
-        {
-          "id": "main-scheme.no-progress",
-          "selection_signal": "Solution shows no substantial progress: blank, off-topic, or only restates the problem.",
-          "points": 0,
-          "satisfied_when": "all",
-          "children": []
-        }
-      ]
-    }
-  ]
-}
-
-## Output format
-
-Your response should be:
-
-```
-**Grading summary
-
-[3-8 paragraphs of prose.]
-
-{
-    "id": "..."
-    "reasoning" : "...",
-    ...
+  "id": "usemo-2025-p5",
+  "selected": "one-bound-conditional",
+  "reasoning": "Contestant proves Azza's strategy (the upper bound) essentially correctly via shell-peeling, with a visible self-correction but a sound conclusion. The lower bound is attempted via isoperimetric inequality on Z^100 but assumes the corollary (cites 'isoperimetric inequality' by name without statement, with constant c left as 'some positive constant') and additionally has gaps in the iterative argument: a heuristic discrete-to-continuous step ('integrating dx/dt = cx^(99/100)') without justification, and conflation between alphabet size n and set size |X_k| in the final inequality. Routing is between both-bounds-conditional (5pt) and one-bound-conditional (2pt); selecting the latter because the lower-bound argument has gaps even granting the corollary, making it closer to a sketch than a proof.",
+  "children": [
+    {
+      "id": "one-bound-conditional",
+      "satisfied": true,
+      "reasoning": "Satisfied via the upper bound: contestant establishes Azza's shell-peeling strategy. The lower bound, while attempted, does not constitute a proof even conditional on the corollary, but the regime requires only one bound be established.",
+      "children": [
+        {
+          "id": "one-bound-conditional.azza-strategy",
+          "satisfied": true,
+          "reasoning": "Contestant describes the shell-peeling construction: at alphabet size j, guess the outer shell of size O(j^99), force Bob into inner alphabet {2,...,j-1}, iterate down to {1,2,3}. Per-turn guess count is O(n^(99/100)) and total turns O(n^(1/100)). The contestant has a visible mid-argument confusion about log n factors but resolves it correctly: 'per-turn g is n^(99/100) which is what we want.' Matches the reference construction."
+        },
+        {
+          "id": "one-bound-conditional.lower-bound-conditional",
+          "satisfied": false,
+          "reasoning": "Contestant attempts the lower bound but does not establish it even conditionally. The argument assumes the corollary by citing 'isoperimetric inequality on Z^100' with an unspecified constant, without statement of the underlying theorem or proof that it implies the rubric's corollary. Beyond the citation, the iterative argument has gaps: the discrete-to-continuous step ('integrating dx/dt = cx^(99/100) gives x ~ t^100') is a heuristic rather than a proof, and the variable conflation in 'g < cn^(99/100)/2 for n = alphabet size or some bound' is not resolved. Reads as a sketch, not a conditional proof."
+        }
+      ]
+    }
+  ]
 }
 ```
 
-That's the compelte output. No preamble, no postamble. 
+The score is 2 (the one-bound-conditional regime is selected and satisfies via `satisfied_when: "any"` over its two children, with one of them satisfied).

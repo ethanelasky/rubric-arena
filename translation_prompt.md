@@ -1,6 +1,6 @@
 # USEMO Rubric Translation Prompt
 
-You are given a free-text source rubric for a math olympiad problem (typically from a contest report) and asked to translate it into the USEMO Rubric Schema v4 (a structured JSON form). Your output is a v4 rubric JSON document that faithfully reflects the source.
+You are given a free-text source rubric for a math olympiad problem (typically from a contest report) and asked to translate it into the USEMO Rubric Schema (a structured JSON form). Your output is a rubric JSON document that faithfully reflects the source.
 
 ## Inputs
 
@@ -15,11 +15,11 @@ You will receive:
 Two things, in this order:
 
 1. **A structural commitment in prose** (3–8 paragraphs, see §4 of this prompt).
-2. **The v4 rubric JSON document**, consistent with the commitment.
+2. **The rubric JSON document**, consistent with the commitment.
 
 No preamble, no postamble.
 
-## §1 — Schema (v4)
+## §1 — Schema 
 
 A rubric is a tree. Every node:
 ```json
@@ -485,7 +485,7 @@ Add an explicit `no-progress` 0pt regime. The "crux is surface area" framing is 
 
 [3–8 paragraphs of prose, per Step 4]
 
-### v4 JSON
+### JSON
 ```json
 { ... }
 ```
