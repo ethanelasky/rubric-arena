@@ -1,0 +1,497 @@
+[load] grading 2 rows for p1: idx_answers=[2, 3]
+[rubric] generating for matharena_usamo_2026_p1 via gemini-3.1-pro-preview
+The top-level shape of the rubric is a `sum` of six additive items, perfectly matching the source's 7-point total (1 + 1 + 1 + 1 + 2 + 1 = 7). Because the items sum exactly to the maximum score, Pattern 1 (Completeness as its own regime) does not apply; the rubric is genuinely additive.
+
+The 2-point item for proving the general upper bound is encoded as a `one_of` over three regimes: `general` (2 pts), `coprime-only` (1 pt), and `no-progress` (0 pts). This handles the source's partial credit and the specific deduction for assuming the general case follows from the coprime case without proof (Pattern 8: Sub-regimes inside listed items).
+
+The deduction for "minor cosmetic or arithmetic slips in the evaluation" is handled by the atomicity of the 1-point `evaluation` item. If a slip occurs, the item is not satisfied, effectively resulting in a 1-point deduction from the total score. This is clarified in the top-level guidelines.
+
+Several items that use "AND" or imply multiple steps (like evaluating the range AND calculating the maximum, or identifying equality cases AND concluding the exact set) are split into atomic sub-criteria under `satisfied_when: "all"` to avoid compound descriptions (Anti-pattern C).
+
+Zero-credit items from the source (conjecturing without proof, computing small values, restating the problem) are placed in the top-level `guidelines` as grader instructions (Pattern 10).
+
+```json
+{
+  "rubric_version": "1.0",
+  "id": "matharena_usamo_2026_p1",
+  "description": "Find the maximum value of f(x) and the real numbers x that achieve it.",
+  "points": 7,
+  "combinator": "sum",
+  "guidelines": [
+    "Zero credit for conjecturing the maximum value or optimal intervals without proof.",
+    "Zero credit for computing f(x) for small specific values of n without generalizing the algebraic step.",
+    "Zero credit for restating the problem in an equivalent form without making tangible progress toward bounding the sum.",
+    "The 1 point for evaluating the maximum value requires a fully correct evaluation. Minor cosmetic or arithmetic slips in this evaluation result in 0 points for that specific item (effectively a 1-point deduction).",
+    "If a student assumes without proof that the multiset of fractional parts for \\gcd(\\ell, n) > 1 is majorized by the coprime case, they earn at most 1 out of 2 points for the upper bound item."
+  ],
+  "children": [
+    {
+      "id": "matharena_usamo_2026_p1.periodicity",
+      "points": 1,
+      "description": "Proves that f(x) is periodic with period 1 (i.e., f(x+1) = f(x))."
+    },
+    {
+      "id": "matharena_usamo_2026_p1.non-increasing",
+      "points": 1,
+      "description": "Shows that within any interval of the form [\\ell/n, (\\ell+1)/n) for integer \\ell, f(x) is non-increasing."
+    },
+    {
+      "id": "matharena_usamo_2026_p1.evaluation",
+      "points": 1,
+      "satisfied_when": "all",
+      "children": [
+        {
+          "id": "matharena_usamo_2026_p1.evaluation.optimal-range",
+          "description": "Evaluates f(x) for the optimal range (e.g., testing x \\in [1-1/n, 1) or x = (n-1)/n)."
+        },
+        {
+          "id": "matharena_usamo_2026_p1.evaluation.maximum-value",
+          "description": "Explicitly calculates the candidate maximum value -1 + \\sum_{k=1}^n \\frac{1}{k}."
+        }
+      ]
+    },
+    {
+      "id": "matharena_usamo_2026_p1.fractional-parts",
+      "points": 1,
+      "description": "Expresses the function algebraically in terms of fractional parts (e.g., deriving f(x) = \\sum_{k=1}^n \\frac{\\{kx\\}}{k} - \\{nx\\})."
+    },
+    {
+      "id": "matharena_usamo_2026_p1.upper-bound",
+      "points": 2,
+      "combinator": "one_of",
+      "children": [
+        {
+          "id": "matharena_usamo_2026_p1.upper-bound.general",
+          "selection_signal": "Proves the general upper bound for all integers \\ell.",
+          "points": 2,
+          "satisfied_when": "all",
+          "children": [
+            {
+              "id": "matharena_usamo_2026_p1.upper-bound.general.proof",
+              "description": "Proves the general upper bound \\sum_{k=1}^n \\frac{\\{k\\ell/n\\}}{k} \\le \\sum_{k=1}^n \\frac{n-k}{nk} for all integers \\ell."
+            }
+          ]
+        },
+        {
+          "id": "matharena_usamo_2026_p1.upper-bound.coprime",
+          "selection_signal": "Proves the bound only for the coprime case \\gcd(\\ell, n) = 1, or assumes the general case follows from it without proof.",
+          "points": 1,
+          "satisfied_when": "all",
+          "children": [
+            {
+              "id": "matharena_usamo_2026_p1.upper-bound.coprime.proof",
+              "description": "Proves the upper bound for the coprime case \\gcd(\\ell, n) = 1."
+            }
+          ]
+        },
+        {
+          "id": "matharena_usamo_2026_p1.upper-bound.no-progress",
+          "selection_signal": "Does not prove the upper bound for the coprime case.",
+          "points": 0,
+          "description": "No progress on the upper bound."
+        }
+      ]
+    },
+    {
+      "id": "matharena_usamo_2026_p1.equality-cases",
+      "points": 1,
+      "satisfied_when": "all",
+      "children": [
+        {
+          "id": "matharena_usamo_2026_p1.equality-cases.identify",
+          "description": "Identifies the correct equality cases of the upper bound."
+        },
+        {
+          "id": "matharena_usamo_2026_p1.equality-cases.conclude",
+          "description": "Concludes the exact set of optimal x (e.g., x \\in \\bigcup_{m \\in \\mathbb{Z}} [m + 1 - 1/n, m + 1))."
+        }
+      ]
+    }
+  ]
+}
+```
+[rubric] wrote /Users/franknakasako/projects/rubric-arena/data/matharena_usamo_2026/rubrics/matharena_usamo_2026_p1.gemini-3.1-pro-preview.rubric.json
+
+--- structured grading: matharena_usamo_2026_p1_Gemini_3.1_Pro_Preview_2 ---
+The candidate attempts to find the maximum value of the given function and the real numbers $x$ that achieve it. They reformulate the function using fractional parts, reduce it to an expression involving step functions, and bound the resulting sum using the Rearrangement Inequality.
+
+The paper achieves a complete and rigorous proof of all required components. The candidate successfully expresses the function in terms of fractional parts, implicitly proves periodicity, and explicitly shows the function is non-increasing on intervals of length $1/n$. They then establish a general upper bound using a brilliant application of the Rearrangement Inequality on the fractional parts, correctly handling the general case where $\gcd(c, n) \ge 1$. Finally, they identify the exact equality conditions and conclude the optimal intervals and maximum value.
+
+For the upper bound, the paper is evaluated under the `upper-bound.general` regime, as the candidate proves the bound for all integers $q$ (equivalent to $\ell$ in the rubric) without assuming the coprime case.
+
+One minor fuzzy call is regarding the proof of periodicity. The rubric requires proving that $f(x)$ is periodic with period 1. The candidate states "Since $f_n(x)$ is periodic with period 1..." immediately after expressing $f_n(x)$ entirely in terms of fractional parts $\{kx\}$ and $\{nx\}$. Because the fractional part function is trivially periodic with period 1, this algebraic representation constitutes a valid and complete proof of periodicity in an Olympiad context.
+
+The final score is 7 points. The candidate earns 1 point for periodicity, 1 point for showing the function is non-increasing on the relevant intervals, 1 point for evaluating the maximum value, 1 point for the fractional parts algebraic expression, 2 points for the general upper bound, and 1 point for correctly identifying the equality cases and optimal $x$.
+
+```json
+{
+  "id": "matharena_usamo_2026_p1",
+  "reasoning": "The candidate provides a complete and correct solution, earning all available points across the rubric.",
+  "children": [
+    {
+      "id": "matharena_usamo_2026_p1.periodicity",
+      "satisfied": true,
+      "reasoning": "The candidate expresses f_n(x) entirely in terms of fractional parts \\{kx\\} and \\{nx\\}, and then states 'Since f_n(x) is periodic with period 1...'. The algebraic representation in terms of fractional parts constitutes a valid proof of periodicity."
+    },
+    {
+      "id": "matharena_usamo_2026_p1.non-increasing",
+      "satisfied": true,
+      "reasoning": "The candidate shows that on intervals of the form [(p-1)/n, p/n), m_n(x) is constant and m_k(x) is non-decreasing, meaning the sum is minimized (and thus f_n(x) is maximized) at the left endpoint. This proves f_n(x) is non-increasing on these intervals."
+    },
+    {
+      "id": "matharena_usamo_2026_p1.evaluation",
+      "satisfied": true,
+      "reasoning": "The candidate evaluates the function for the optimal range and explicitly calculates the maximum value.",
+      "children": [
+        {
+          "id": "matharena_usamo_2026_p1.evaluation.optimal-range",
+          "satisfied": true,
+          "reasoning": "The candidate shows that for x in the optimal range [1 - 1/n, 1), the structural sum achieves equality, evaluating the function to its maximum."
+        },
+        {
+          "id": "matharena_usamo_2026_p1.evaluation.maximum-value",
+          "satisfied": true,
+          "reasoning": "The candidate explicitly calculates the maximum value as \\sum_{k=2}^n 1/k, which is equivalent to H_n - 1."
+        }
+      ]
+    },
+    {
+      "id": "matharena_usamo_2026_p1.fractional-parts",
+      "satisfied": true,
+      "reasoning": "The candidate explicitly derives f_n(x) = \\sum_{k=1}^n \\frac{\\{kx\\}}{k} - \\{nx\\} in Step 1."
+    },
+    {
+      "id": "matharena_usamo_2026_p1.upper-bound",
+      "selected": "matharena_usamo_2026_p1.upper-bound.general",
+      "reasoning": "The candidate proves the general upper bound for all integers using the Rearrangement Inequality.",
+      "children": [
+        {
+          "id": "matharena_usamo_2026_p1.upper-bound.general",
+          "satisfied": true,
+          "reasoning": "The candidate successfully proves the general upper bound for all cases.",
+          "children": [
+            {
+              "id": "matharena_usamo_2026_p1.upper-bound.general.proof",
+              "satisfied": true,
+              "reasoning": "The candidate uses the Rearrangement Inequality on the sequence of fractional parts, correctly bounding the sorted sequence elements as \\epsilon_{(k)} \\ge k/n, which rigorously proves the upper bound for all integers."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "matharena_usamo_2026_p1.equality-cases",
+      "satisfied": true,
+      "reasoning": "The candidate correctly identifies the equality cases and concludes the exact set of optimal x.",
+      "children": [
+        {
+          "id": "matharena_usamo_2026_p1.equality-cases.identify",
+          "satisfied": true,
+          "reasoning": "The candidate identifies that equality in the Rearrangement Inequality holds iff d = \\gcd(c, n) = 1 and the sequence is strictly increasing, meaning c = 1."
+        },
+        {
+          "id": "matharena_usamo_2026_p1.equality-cases.conclude",
+          "satisfied": true,
+          "reasoning": "The candidate concludes the exact set of optimal x as \\bigcup_{m \\in \\mathbb{Z}} [m + 1 - 1/n, m + 1)."
+        }
+      ]
+    }
+  ]
+}
+```
+
+--- free-text grading: matharena_usamo_2026_p1_Gemini_3.1_Pro_Preview_2 ---
+```json
+{
+  "score": 7.0,
+  "max_points": 7.0,
+  "reasoning": "The candidate successfully completes all steps required by the grading scheme. They express the function in terms of fractional parts, which makes its periodicity with period 1 manifest. They show that the function is non-increasing on intervals of the form [p-1/n, p/n) by noting that m_k(x) is non-decreasing. They rigorously prove the general upper bound using the Rearrangement Inequality, explicitly and correctly handling the case where gcd(c, n) > 1 by bounding the sorted elements of the multiset. Finally, they correctly identify the equality cases and the maximal value.",
+  "matched_rubric_items": [
+    {
+      "description": "Proving that f(x) is periodic with period 1",
+      "points_awarded": 1.0,
+      "reasoning": "The candidate expresses f(x) entirely in terms of fractional parts {kx}, which trivially establishes periodicity with period 1, and explicitly states this to restrict the domain to [0, 1)."
+    },
+    {
+      "description": "Showing that within any interval of the form [\\ell/n, (\\ell+1)/n), f(x) is non-increasing",
+      "points_awarded": 1.0,
+      "reasoning": "The candidate notes that m_k(x) is non-decreasing, so to minimize the subtracted sum on the interval, it must be evaluated at the left endpoint."
+    },
+    {
+      "description": "Evaluating f(x) for the optimal range and explicitly calculating the candidate maximum value",
+      "points_awarded": 1.0,
+      "reasoning": "The candidate correctly calculates the maximum value as H_n - 1."
+    },
+    {
+      "description": "Expressing the function algebraically in terms of fractional parts",
+      "points_awarded": 1.0,
+      "reasoning": "The candidate derives f_n(x) = \\sum_{k=1}^{n-1} \\frac{\\{kx\\}}{k} - \\frac{n-1}{n}\\{nx\\}."
+    },
+    {
+      "description": "Proving the general upper bound for all integers \\ell",
+      "points_awarded": 2.0,
+      "reasoning": "The candidate rigorously proves the upper bound using the Rearrangement Inequality, correctly handling the gcd(c, n) = d > 1 case by showing that the sorted elements satisfy \\epsilon_{(k)} = \\lceil k/d \\rceil \\frac{d}{n} \\ge \\frac{k}{n}."
+    },
+    {
+      "description": "Identifying the correct equality cases of the upper bound",
+      "points_awarded": 1.0,
+      "reasoning": "The candidate correctly identifies that equality requires d = 1 and c = 1, leading to the exact set of optimal x."
+    }
+  ]
+}
+```
+[done] matharena_usamo_2026_p1_Gemini_3.1_Pro_Preview_2 gt=6 structured=7 free_text=7.0
+
+--- structured grading: matharena_usamo_2026_p1_Gemini_3.1_Pro_Preview_3 ---
+The contestant attempts to find the maximum value of $f(x)$ by first showing periodicity and rewriting the function in terms of fractional parts. They then define $c_k = k - 1 - \lfloor kx \rfloor$ and evaluate the function at the left endpoints of intervals of the form $[\frac{n-m-1}{n}, \frac{n-m}{n})$. They use the rearrangement inequality to bound the resulting sum, handling the coprime case and attempting to generalize to the non-coprime case. Finally, they identify the equality cases to find the optimal $x$.
+
+The contestant successfully proves periodicity, rewrites the function using fractional parts, evaluates the maximum value, and correctly identifies the equality cases and optimal intervals. They also successfully prove the upper bound for the coprime case using the rearrangement inequality. However, they fail to prove that $f(x)$ is non-increasing on the intervals $[\ell/n, (\ell+1)/n)$, merely evaluating the sum at the left endpoint without justification. Furthermore, their proof of the upper bound for the non-coprime case is incomplete, relying on a hand-wavy assertion that the terms are "identically bounded $\ge 1$".
+
+For the top-level regime selection in the `upper-bound` node, the contestant proves the bound for the coprime case but fails to rigorously prove the general case. Their argument for $\gcd(m+1, n) > 1$ assumes the result without a proper proof, falling exactly into the specific rubric guideline: "If a student assumes without proof that the multiset of fractional parts for $\gcd(\ell, n) > 1$ is majorized by the coprime case, they earn at most 1 out of 2 points for the upper bound item." Thus, the `coprime` regime is selected.
+
+A fuzzy call was made regarding the `non-increasing` item. The contestant notes that $f(x)$ is constant between discontinuities, but then jumps to evaluating the sum at the left endpoint of $[\frac{n-m-1}{n}, \frac{n-m}{n})$ without justifying why this point maximizes the function on that interval (which contains many discontinuities of $\lfloor kx \rfloor$). Because they skip the proof that the function is non-increasing across these discontinuities, this item is marked as not satisfied.
+
+The final score is 5 out of 7. The contestant earns 1 point for `periodicity`, 1 point for `fractional-parts`, 1 point for `evaluation`, 1 point for `upper-bound` (coprime regime), and 1 point for `equality-cases`. They lose 1 point for `non-increasing` and 1 point for the general `upper-bound`.
+
+```json
+{
+  "id": "matharena_usamo_2026_p1",
+  "reasoning": "The contestant successfully proves periodicity, rewrites the function using fractional parts, evaluates the maximum value, and correctly identifies the equality cases. They prove the upper bound for the coprime case but fail to rigorously prove the general case, and they do not prove that the function is non-increasing on the relevant intervals.",
+  "children": [
+    {
+      "id": "matharena_usamo_2026_p1.periodicity",
+      "reasoning": "The contestant explicitly proves that f(x+m) = f(x) for any integer m.",
+      "satisfied": true
+    },
+    {
+      "id": "matharena_usamo_2026_p1.non-increasing",
+      "reasoning": "The contestant notes that f(x) is constant between discontinuities, but does not prove that f(x) is non-increasing on the intervals [\\ell/n, (\\ell+1)/n). They merely evaluate the sum at the left endpoint without justifying why this point maximizes the function on that interval.",
+      "satisfied": false
+    },
+    {
+      "id": "matharena_usamo_2026_p1.evaluation",
+      "reasoning": "The contestant correctly evaluates the maximum value as H_n - 1 for the optimal range.",
+      "satisfied": true,
+      "children": [
+        {
+          "id": "matharena_usamo_2026_p1.evaluation.optimal-range",
+          "reasoning": "The contestant evaluates the function for the optimal range, corresponding to m=0.",
+          "satisfied": true
+        },
+        {
+          "id": "matharena_usamo_2026_p1.evaluation.maximum-value",
+          "reasoning": "The contestant explicitly calculates the maximum value as H_n - 1.",
+          "satisfied": true
+        }
+      ]
+    },
+    {
+      "id": "matharena_usamo_2026_p1.fractional-parts",
+      "reasoning": "The contestant rewrites f(x) as \\sum_{k=1}^n \\frac{\\{kx\\}}{k} - \\{nx\\}.",
+      "satisfied": true
+    },
+    {
+      "id": "matharena_usamo_2026_p1.upper-bound",
+      "reasoning": "The contestant proves the upper bound for the coprime case using the rearrangement inequality. However, for the general case where \\gcd(m+1, n) > 1, they provide a hand-wavy argument ('producing terms each identically bounded \\ge 1') that assumes the result without rigorous proof. Following the rubric guidelines, this falls into the coprime regime.",
+      "selected": "matharena_usamo_2026_p1.upper-bound.coprime",
+      "children": [
+        {
+          "id": "matharena_usamo_2026_p1.upper-bound.coprime",
+          "reasoning": "The contestant successfully proves the upper bound for the coprime case using the rearrangement inequality.",
+          "satisfied": true,
+          "children": [
+            {
+              "id": "matharena_usamo_2026_p1.upper-bound.coprime.proof",
+              "reasoning": "The contestant shows that when \\gcd(m+1, n) = 1, y_k is a permutation of {1, ..., n-1}, and the sum \\sum y_k/k is minimized when y_k = k, yielding n-1.",
+              "satisfied": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "matharena_usamo_2026_p1.equality-cases",
+      "reasoning": "The contestant correctly identifies the equality cases and concludes the exact set of optimal x.",
+      "satisfied": true,
+      "children": [
+        {
+          "id": "matharena_usamo_2026_p1.equality-cases.identify",
+          "reasoning": "The contestant identifies that equality holds uniquely when m=0.",
+          "satisfied": true
+        },
+        {
+          "id": "matharena_usamo_2026_p1.equality-cases.conclude",
+          "reasoning": "The contestant concludes the exact set of optimal x as x - \\lfloor x \\rfloor \\in [\\frac{n-1}{n}, 1).",
+          "satisfied": true
+        }
+      ]
+    }
+  ]
+}
+```
+
+--- free-text grading: matharena_usamo_2026_p1_Gemini_3.1_Pro_Preview_3 ---
+```json
+{
+  "score": 6.0,
+  "max_points": 7.0,
+  "reasoning": "The candidate successfully proves periodicity (1 pt), expresses the function in terms of fractional parts (1 pt), evaluates the optimal range to find the maximum value (1 pt), proves the general upper bound using the rearrangement inequality with a rigorous and elegant argument for both coprime and non-coprime cases (2 pts), and identifies the correct equality cases (1 pt). However, the candidate fails to explicitly show or state that the function is non-increasing on the intervals [\\ell/n, (\\ell+1)/n) to justify restricting the search for the maximum to the left endpoints, missing the second checkpoint (0/1 pt).",
+  "matched_rubric_items": [
+    {
+      "description": "Proving that f(x) is periodic with period 1",
+      "points_awarded": 1.0,
+      "reasoning": "The candidate explicitly proves that f(x+m) = f(x) for integer m, restricting the domain to [0, 1)."
+    },
+    {
+      "description": "Showing that within any interval of the form [\\ell/n, (\\ell+1)/n) for integer \\ell, f(x) is non-increasing",
+      "points_awarded": 0.0,
+      "reasoning": "The candidate evaluates the function at the left endpoints x = (n-m-1)/n but does not explicitly show or state that f(x) is non-increasing on the intervals [\\ell/n, (\\ell+1)/n) to justify this restriction."
+    },
+    {
+      "description": "Evaluating f(x) for the optimal range and explicitly calculating the candidate maximum value",
+      "points_awarded": 1.0,
+      "reasoning": "The candidate correctly evaluates the maximum value as H_n - 1."
+    },
+    {
+      "description": "Expressing the function algebraically in terms of fractional parts",
+      "points_awarded": 1.0,
+      "reasoning": "The candidate derives the identity f(x) = \\sum {kx}/k - {nx}."
+    },
+    {
+      "description": "Proving the general upper bound for all integers \\ell",
+      "points_awarded": 2.0,
+      "reasoning": "The candidate proves the bound using the rearrangement inequality. For the coprime case, they show the sum evaluates to n-1. For the non-coprime case (gcd = g > 1), they correctly observe that the sorted sequence y_k produces terms y_{(k)}/k that are each identically bounded \\ge 1, rigorously sustaining the bound \\ge n-1 without handwaving."
+    },
+    {
+      "description": "Identifying the correct equality cases of the upper bound to conclude the exact set of optimal x",
+      "points_awarded": 1.0,
+      "reasoning": "The candidate correctly identifies that equality holds uniquely when m=0, corresponding to x \\in [ (n-1)/n, 1 ) modulo 1."
+    }
+  ]
+}
+```
+[done] matharena_usamo_2026_p1_Gemini_3.1_Pro_Preview_3 gt=4 structured=5 free_text=6.0
+
+wrote /Users/franknakasako/projects/rubric-arena/data/matharena_usamo_2026/grading_runs/p1.Gemini_3.1_Pro_Preview.gemini-3.1-pro-preview.mid_credit_v1.jsonl
+{
+  "n": 4,
+  "exact_match": 0.0,
+  "mae": 1.25,
+  "rmse": 1.3228756555322954,
+  "by_method": {
+    "free_text": {
+      "n": 2,
+      "exact_match": 0.0,
+      "mae": 1.5,
+      "rmse": 1.5811388300841898
+    },
+    "structured": {
+      "n": 2,
+      "exact_match": 0.0,
+      "mae": 1.0,
+      "rmse": 1.0
+    }
+  },
+  "score_distributions": {
+    "structured": {
+      "n": 2,
+      "mean": 6.0,
+      "unique_scores": [
+        "5",
+        "7"
+      ],
+      "score_counts": {
+        "7": 1,
+        "5": 1
+      },
+      "clustering_rate": 0.5
+    },
+    "free_text": {
+      "n": 2,
+      "mean": 6.5,
+      "unique_scores": [
+        "6",
+        "7"
+      ],
+      "score_counts": {
+        "7": 1,
+        "6": 1
+      },
+      "clustering_rate": 0.5
+    }
+  },
+  "structured_atoms": {
+    "n_atoms": 26,
+    "n_binary_decisions": 22,
+    "n_selection_decisions": 2,
+    "positive_rate": 0.9545454545454546,
+    "by_node": {
+      "matharena_usamo_2026_p1.periodicity": {
+        "n": 2,
+        "positive": 2,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p1.non-increasing": {
+        "n": 2,
+        "positive": 1,
+        "positive_rate": 0.5
+      },
+      "matharena_usamo_2026_p1.evaluation": {
+        "n": 2,
+        "positive": 2,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p1.evaluation.optimal-range": {
+        "n": 2,
+        "positive": 2,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p1.evaluation.maximum-value": {
+        "n": 2,
+        "positive": 2,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p1.fractional-parts": {
+        "n": 2,
+        "positive": 2,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p1.upper-bound.general": {
+        "n": 1,
+        "positive": 1,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p1.upper-bound.general.proof": {
+        "n": 1,
+        "positive": 1,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p1.equality-cases": {
+        "n": 2,
+        "positive": 2,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p1.equality-cases.identify": {
+        "n": 2,
+        "positive": 2,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p1.equality-cases.conclude": {
+        "n": 2,
+        "positive": 2,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p1.upper-bound.coprime": {
+        "n": 1,
+        "positive": 1,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p1.upper-bound.coprime.proof": {
+        "n": 1,
+        "positive": 1,
+        "positive_rate": 1.0
+      }
+    }
+  },
+  "structured_failures": []
+}

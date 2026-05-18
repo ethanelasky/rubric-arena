@@ -1,0 +1,79 @@
+{
+  "rubric_version": "1.0",
+  "id": "matharena_usamo_2026_p6",
+  "description": "Prove that if φ(ab+1) divides a^2 + b^2 + 1, then a and b are Fibonacci numbers.",
+  "points": 7,
+  "combinator": "sum",
+  "guidelines": [
+    "Solutions that assume ab+1 is prime (t=1) immediately after deducing it is a prime power, without proving higher powers are impossible, will naturally score at most 3/7 by missing the items in the `higher-powers` section.",
+    "Zero credit is awarded for conjecturing that a and b are Fibonacci numbers based on testing small values without providing a proof.",
+    "Zero credit is awarded for showing that a^2+b^2+1 is not divisible by 4 without successfully restricting the prime factorization form of ab+1.",
+    "Zero credit is awarded for citing Vieta Jumping without first proving that ab | a^2+b^2+1 or establishing the specific prime form of ab+1.",
+    "Deduction for missing edge cases: The rubric specifies a flat -1 point penalty for omitting valid small cases (e.g., missing {1,1} or {1,8}). Apply this by leaving exactly one relevant 1-point item (such as `higher-powers.t-2-p-3` or `vieta-jumping.characterization`) unsatisfied. Do not penalize multiple times if multiple edge cases are missed.",
+    "Deduction for minor slips: The rubric specifies a -1 point penalty for minor algebraic or arithmetic slips that do not invalidate the overall logical pipeline. Apply this by leaving the specific 1-point item where the slip occurred unsatisfied."
+  ],
+  "children": [
+    {
+      "id": "matharena_usamo_2026_p6.prime-power",
+      "description": "Shows that ab+1 = p^t for an odd prime p ≡ 3 (mod 4).",
+      "points": 1,
+      "satisfied_when": "all",
+      "children": [
+        {
+          "id": "matharena_usamo_2026_p6.prime-power.form",
+          "description": "Shows that ab+1 = p^t for an odd prime p (e.g., by parity arguments showing ν_2(a^2+b^2+1) = 1)."
+        },
+        {
+          "id": "matharena_usamo_2026_p6.prime-power.mod-4",
+          "description": "Shows that p ≡ 3 (mod 4)."
+        }
+      ]
+    },
+    {
+      "id": "matharena_usamo_2026_p6.vieta-jumping",
+      "description": "Handles the case t=1 using Vieta Jumping.",
+      "points": 2,
+      "combinator": "sum",
+      "children": [
+        {
+          "id": "matharena_usamo_2026_p6.vieta-jumping.k-3",
+          "description": "Shows that k=3 in the relation a^2 + b^2 + 1 = kab using Vieta Jumping.",
+          "points": 1
+        },
+        {
+          "id": "matharena_usamo_2026_p6.vieta-jumping.characterization",
+          "description": "Characterizes all solutions when k=3 as Fibonacci pairs (and (1,1)) using Vieta Jumping.",
+          "points": 1
+        }
+      ]
+    },
+    {
+      "id": "matharena_usamo_2026_p6.higher-powers",
+      "description": "Handles t ≥ 2 by showing no solutions exist for t ≥ 3 and finding exceptional cases for t=2.",
+      "points": 4,
+      "combinator": "sum",
+      "children": [
+        {
+          "id": "matharena_usamo_2026_p6.higher-powers.p-mod-3",
+          "description": "Shows that p=3 or p ≡ 1 (mod 3) by applying divisibility properties (e.g., proving p | (a^2+a+1)(a^2-a+1)).",
+          "points": 1
+        },
+        {
+          "id": "matharena_usamo_2026_p6.higher-powers.p-1-mod-3-impossible",
+          "description": "Shows that p ≡ 1 (mod 3) is impossible (e.g., by deriving a contradiction from 3|a or 3|b).",
+          "points": 1
+        },
+        {
+          "id": "matharena_usamo_2026_p6.higher-powers.t-gt-2-impossible",
+          "description": "Shows that t > 2 is impossible (e.g., by deriving a contradiction modulo 9).",
+          "points": 1
+        },
+        {
+          "id": "matharena_usamo_2026_p6.higher-powers.t-2-p-3",
+          "description": "Shows that t=2 and p=3 leads to the solutions (1,8) and (8,1).",
+          "points": 1
+        }
+      ]
+    }
+  ]
+}

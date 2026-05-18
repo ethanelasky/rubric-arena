@@ -37,7 +37,7 @@ For nodes whose score is binary, gated by a condition over children:
 
 - **`"all"`**: every child satisfied.
 - **`"any"`**: at least one child satisfied.
-- **`{"count_at_least": k}`**: at least k children satisfied.
+- **`{"count_at_least": k}`**: at least k children satisfied. `k` must be a positive integer.
 
 Children of `satisfied_when` nodes must NOT have their own `points` (they are conditions, not scoring criteria). The parent contributes its `points` if satisfied, 0 otherwise.
 
@@ -55,7 +55,7 @@ Either a non-negative integer, or a range:
 }
 ```
 
-`scale` must include both `min` and `max` as values. Only values in `scale` are awardable. Use a range only when the source rubric explicitly grants discretion within a regime ("5–6 points for any tiny slip"); the `scale` criteria must distinguish the values clearly enough that an LLM grader can pick.
+`scale` must include both `min` and `max` as values, and `default` must satisfy `min <= default <= max`. Only values in `scale` are awardable. Use a range only when the source rubric explicitly grants discretion within a regime ("5–6 points for any tiny slip"); the `scale` criteria must distinguish the values clearly enough that an LLM grader can pick.
 
 ### Guidelines
 
@@ -152,8 +152,9 @@ This invents a 3-point "completeness top-up" that the source never claimed. The 
     },
     {
       "id": "main.no-progress",
+      "description": "No-progress fallback regime.",
       "selection_signal": "None of the above applies.",
-      "points": 0, "satisfied_when": "all", "children": []
+      "points": 0
     }
   ]
 }
@@ -247,7 +248,7 @@ Be explicit; don't hedge. The commitment is what the validator and any reviewer 
 
 ### Step 5: Emit JSON
 
-Write the v4 rubric JSON, consistent with the commitment. Verify:
+Write the rubric JSON, consistent with the commitment. Verify:
 - IDs are dot-path-style and unique.
 - Every `one_of` parent's children have `selection_signal`.
 - Every `sum` parent's children's `points.default` sum to the parent's `points.default`.
@@ -303,11 +304,10 @@ Distributional guidance: "Most solutions are worth 0 or 7" is Pattern 9; goes in
 
 No "0 points for X" enumerations beyond the 0-pt regime itself; no patterns 1, 2, 5, 6, 7, 8, 10 apply.
 
-**v4 JSON:**
+**rubric JSON:**
 
 ```json
 {
-  "schema_version": "v4",
   "rubric_version": "1.0",
   "id": "usemo-2020-p5",
   "description": "Show that the 50 specified diagonals of a colored 200-gon are concurrent.",
@@ -372,8 +372,9 @@ No "0 points for X" enumerations beyond the 0-pt regime itself; no patterns 1, 2
     },
     {
       "id": "no-progress",
+      "description": "No-progress fallback regime.",
       "selection_signal": "Solution shows no progress, only handles special cases, or has geometric content not matching any regime above.",
-      "points": 0, "satisfied_when": "all", "children": []
+      "points": 0
     }
   ]
 }
@@ -401,11 +402,10 @@ The "Conditional on the corollary" framing (assuming the corollary without proof
 
 Add an explicit `no-progress` 0pt regime. The "crux is surface area" framing is mild distributional/intent guidance — goes in top-level guidelines.
 
-**v4 JSON:**
+**rubric JSON:**
 
 ```json
 {
-  "schema_version": "v4",
   "rubric_version": "1.0",
   "id": "usemo-2025-p5",
   "description": "Find the smallest α such that Azza can win when g > Cn^α.",
@@ -472,8 +472,9 @@ Add an explicit `no-progress` 0pt regime. The "crux is surface area" framing is 
     },
     {
       "id": "no-progress",
+      "description": "No-progress fallback regime.",
       "selection_signal": "No claim of the answer or any component above.",
-      "points": 0, "satisfied_when": "all", "children": []
+      "points": 0
     }
   ]
 }

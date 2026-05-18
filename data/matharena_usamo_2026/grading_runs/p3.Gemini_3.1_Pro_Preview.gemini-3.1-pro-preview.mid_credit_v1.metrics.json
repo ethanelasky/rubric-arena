@@ -1,0 +1,79 @@
+{
+  "n": 6,
+  "exact_match": 0.5,
+  "mae": 0.8333333333333334,
+  "rmse": 1.224744871391589,
+  "by_method": {
+    "free_text": {
+      "n": 3,
+      "exact_match": 0.6666666666666666,
+      "mae": 0.6666666666666666,
+      "rmse": 1.1547005383792515
+    },
+    "structured": {
+      "n": 3,
+      "exact_match": 0.3333333333333333,
+      "mae": 1.0,
+      "rmse": 1.2909944487358056
+    }
+  },
+  "score_distributions": {
+    "structured": {
+      "n": 3,
+      "mean": 5.0,
+      "unique_scores": [
+        "1",
+        "7"
+      ],
+      "score_counts": {
+        "7": 2,
+        "1": 1
+      },
+      "clustering_rate": 0.6666666666666666
+    },
+    "free_text": {
+      "n": 3,
+      "mean": 4.666666666666667,
+      "unique_scores": [
+        "1",
+        "6",
+        "7"
+      ],
+      "score_counts": {
+        "7": 1,
+        "1": 1,
+        "6": 1
+      },
+      "clustering_rate": 0.3333333333333333
+    }
+  },
+  "structured_atoms": {
+    "n_atoms": 12,
+    "n_binary_decisions": 6,
+    "n_selection_decisions": 6,
+    "positive_rate": 1.0,
+    "by_node": {
+      "matharena_usamo_2026_p3.chain-b.complete": {
+        "n": 2,
+        "positive": 2,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p3.chain-b.complete.proof": {
+        "n": 2,
+        "positive": 2,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p3.chain-b.setup": {
+        "n": 1,
+        "positive": 1,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p3.chain-b.setup.inversion": {
+        "n": 1,
+        "positive": 1,
+        "positive_rate": 1.0
+      }
+    }
+  },
+  "structured_failures": []
+}

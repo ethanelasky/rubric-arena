@@ -1,0 +1,106 @@
+{
+  "n": 8,
+  "exact_match": 0.0,
+  "mae": 1.75,
+  "rmse": 1.8027756377319946,
+  "by_method": {
+    "free_text": {
+      "n": 4,
+      "exact_match": 0.0,
+      "mae": 1.75,
+      "rmse": 1.8027756377319946
+    },
+    "structured": {
+      "n": 4,
+      "exact_match": 0.0,
+      "mae": 1.75,
+      "rmse": 1.8027756377319946
+    }
+  },
+  "score_distributions": {
+    "structured": {
+      "n": 4,
+      "mean": 4.5,
+      "unique_scores": [
+        "0",
+        "4",
+        "7"
+      ],
+      "score_counts": {
+        "7": 2,
+        "4": 1,
+        "0": 1
+      },
+      "clustering_rate": 0.5
+    },
+    "free_text": {
+      "n": 4,
+      "mean": 5.0,
+      "unique_scores": [
+        "2",
+        "4",
+        "7"
+      ],
+      "score_counts": {
+        "7": 2,
+        "4": 1,
+        "2": 1
+      },
+      "clustering_rate": 0.5
+    }
+  },
+  "structured_atoms": {
+    "n_atoms": 48,
+    "n_binary_decisions": 36,
+    "n_selection_decisions": 0,
+    "positive_rate": 0.6666666666666666,
+    "by_node": {
+      "matharena_usamo_2026_p6.prime-power": {
+        "n": 4,
+        "positive": 3,
+        "positive_rate": 0.75
+      },
+      "matharena_usamo_2026_p6.prime-power.form": {
+        "n": 4,
+        "positive": 3,
+        "positive_rate": 0.75
+      },
+      "matharena_usamo_2026_p6.prime-power.mod-4": {
+        "n": 4,
+        "positive": 3,
+        "positive_rate": 0.75
+      },
+      "matharena_usamo_2026_p6.vieta-jumping.k-3": {
+        "n": 4,
+        "positive": 3,
+        "positive_rate": 0.75
+      },
+      "matharena_usamo_2026_p6.vieta-jumping.characterization": {
+        "n": 4,
+        "positive": 3,
+        "positive_rate": 0.75
+      },
+      "matharena_usamo_2026_p6.higher-powers.p-mod-3": {
+        "n": 4,
+        "positive": 2,
+        "positive_rate": 0.5
+      },
+      "matharena_usamo_2026_p6.higher-powers.p-1-mod-3-impossible": {
+        "n": 4,
+        "positive": 2,
+        "positive_rate": 0.5
+      },
+      "matharena_usamo_2026_p6.higher-powers.t-gt-2-impossible": {
+        "n": 4,
+        "positive": 2,
+        "positive_rate": 0.5
+      },
+      "matharena_usamo_2026_p6.higher-powers.t-2-p-3": {
+        "n": 4,
+        "positive": 3,
+        "positive_rate": 0.75
+      }
+    }
+  },
+  "structured_failures": []
+}

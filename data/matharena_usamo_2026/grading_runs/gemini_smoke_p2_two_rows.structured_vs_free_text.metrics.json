@@ -10,7 +10,7 @@
       "mae": 0.0,
       "rmse": 0.0
     },
-    "structured_v4": {
+    "structured": {
       "n": 2,
       "exact_match": 1.0,
       "mae": 0.0,

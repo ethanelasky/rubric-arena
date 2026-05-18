@@ -1,0 +1,63 @@
+{
+  "n": 2,
+  "exact_match": 0.5,
+  "mae": 0.5,
+  "rmse": 0.7071067811865476,
+  "by_method": {
+    "free_text": {
+      "n": 1,
+      "exact_match": 1.0,
+      "mae": 0.0,
+      "rmse": 0.0
+    },
+    "structured": {
+      "n": 1,
+      "exact_match": 0.0,
+      "mae": 1.0,
+      "rmse": 1.0
+    }
+  },
+  "score_distributions": {
+    "structured": {
+      "n": 1,
+      "mean": 5.0,
+      "unique_scores": [
+        "5"
+      ],
+      "score_counts": {
+        "5": 1
+      },
+      "clustering_rate": 1.0
+    },
+    "free_text": {
+      "n": 1,
+      "mean": 6.0,
+      "unique_scores": [
+        "6"
+      ],
+      "score_counts": {
+        "6": 1
+      },
+      "clustering_rate": 1.0
+    }
+  },
+  "structured_atoms": {
+    "n_atoms": 3,
+    "n_binary_decisions": 2,
+    "n_selection_decisions": 1,
+    "positive_rate": 1.0,
+    "by_node": {
+      "matharena_usamo_2026_p5.complex-minor-error": {
+        "n": 1,
+        "positive": 1,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p5.complex-minor-error.proof": {
+        "n": 1,
+        "positive": 1,
+        "positive_rate": 1.0
+      }
+    }
+  },
+  "structured_failures": []
+}

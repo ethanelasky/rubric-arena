@@ -1,5 +1,4 @@
 {
-  "schema_version": "v4",
   "rubric_version": "1.0",
   "id": "usemo_2020_p1",
   "description": "Classify the positive integers representable by the lcm expression.",

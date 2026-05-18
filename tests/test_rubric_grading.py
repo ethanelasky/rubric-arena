@@ -10,7 +10,7 @@ from rubric_arena import rubric_grading
 
 
 USEMO1_RUBRIC = json.loads(
-    Path("data/usemo_2020/rubrics/usemo_2020_p1.rubric.v4.json").read_text()
+    Path("data/usemo_2020/rubrics/usemo_2020_p1.rubric.json").read_text()
 )
 
 
@@ -72,13 +72,12 @@ def test_rubric_generation_prompt_and_parse() -> None:
     )
     assert "<source_grading_scheme><![CDATA[" in prompt
     parsed = rubric_grading.rubric_from_model_output(json.dumps(USEMO1_RUBRIC))
-    assert parsed["schema_version"] == "v4"
+    assert parsed["id"] == "usemo_2020_p1"
 
 
 
 def test_rubric_from_model_output_repairs_common_model_errors() -> None:
     rough = {
-        "schema_version": "v4",
         "rubric_version": "1.0",
         "id": "demo",
         "description": "Demo rubric",
@@ -115,7 +114,6 @@ def test_rubric_from_model_output_repairs_common_model_errors() -> None:
 
 def test_grade_from_model_output_repairs_missing_atomic_parent_satisfied() -> None:
     rubric = {
-        "schema_version": "v4",
         "rubric_version": "1.0",
         "id": "demo_judgment",
         "description": "Demo judgment repair.",

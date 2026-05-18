@@ -1,0 +1,62 @@
+{
+  "n": 2,
+  "exact_match": 0.0,
+  "mae": 2.0,
+  "rmse": 2.0,
+  "by_method": {
+    "free_text": {
+      "n": 1,
+      "exact_match": 0.0,
+      "mae": 2.0,
+      "rmse": 2.0
+    },
+    "structured": {
+      "n": 1,
+      "exact_match": 0.0,
+      "mae": 2.0,
+      "rmse": 2.0
+    }
+  },
+  "score_distributions": {
+    "structured": {
+      "n": 1,
+      "mean": 7.0,
+      "unique_scores": [
+        "7"
+      ],
+      "score_counts": {
+        "7": 1
+      },
+      "clustering_rate": 1.0
+    },
+    "free_text": {
+      "n": 1,
+      "mean": 7.0,
+      "unique_scores": [
+        "7"
+      ],
+      "score_counts": {
+        "7": 1
+      },
+      "clustering_rate": 1.0
+    }
+  },
+  "structured_atoms": {
+    "n_atoms": 4,
+    "n_binary_decisions": 2,
+    "n_selection_decisions": 1,
+    "positive_rate": 1.0,
+    "by_node": {
+      "matharena_usamo_2026_p3.chain-b.setup": {
+        "n": 1,
+        "positive": 1,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p3.chain-b.computation": {
+        "n": 1,
+        "positive": 1,
+        "positive_rate": 1.0
+      }
+    }
+  }
+}

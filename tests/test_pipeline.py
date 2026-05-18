@@ -31,13 +31,13 @@ def test_parse_free_text_grading_output_score() -> None:
 def test_compare_to_ground_truth_by_method() -> None:
     metrics = compare_to_ground_truth(
         [
-            {"method": "structured_v4", "computed_score": 7, "ground_truth_score": 7},
-            {"method": "structured_v4", "computed_score": 5, "ground_truth_score": 7},
+            {"method": "structured", "computed_score": 7, "ground_truth_score": 7},
+            {"method": "structured", "computed_score": 5, "ground_truth_score": 7},
             {"method": "free_text", "computed_score": 6, "ground_truth_score": 7},
         ]
     )
     assert metrics["n"] == 3
-    assert metrics["by_method"]["structured_v4"]["n"] == 2
+    assert metrics["by_method"]["structured"]["n"] == 2
     assert metrics["by_method"]["free_text"]["mae"] == 1
 
 
@@ -74,7 +74,7 @@ def test_structured_diagnostics() -> None:
     )
 
     structured = {
-        "method": "structured_v4",
+        "method": "structured",
         "candidate_id": "c1",
         "problem_id": "p1",
         "model_name": "answer-model",
@@ -123,7 +123,7 @@ def test_structured_diagnostics() -> None:
     assert atom_summary["positive_rate"] == 1
 
     distribution = score_distribution_metrics(results)
-    assert distribution["structured_v4"]["score_counts"] == {"1": 1}
+    assert distribution["structured"]["score_counts"] == {"1": 1}
     assert distribution["free_text"]["score_counts"] == {"0": 1}
 
     paired = holistic_vs_structured_diagnostics(results)

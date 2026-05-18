@@ -1,0 +1,125 @@
+{
+  "rubric_version": "1.0",
+  "id": "matharena_usamo_2026_p2",
+  "description": "Grading rubric for USAMO 2026 Problem 2: Annie's power of 2 game.",
+  "points": 7,
+  "combinator": "one_of",
+  "guidelines": [
+    "Score exactly one chain: take the maximum subtotal among chains; do not add points across chains.",
+    "Zero-Credit Items: Conjecturing that Annie can always win without providing a mathematical proof.",
+    "Zero-Credit Items: Testing small sequences or specific initial board states and concluding the result holds generally.",
+    "Zero-Credit Items: Outlining a valid conceptual approach but failing to execute any formal mathematics.",
+    "Deductions: Subtract 1 point for minor arithmetic, algebraic, or indexing errors that do not invalidate the overall logic of the proof (can be applied up to 2 times; cap at -2).",
+    "Caps: Cap at 2/7 if the proof states the correct bounds (2 pts) but the execution relies on a fundamental mathematical fallacy (e.g., circular reasoning, or assuming a tree exists without checking total 'volume' constraints)."
+  ],
+  "children": [
+    {
+      "id": "matharena_usamo_2026_p2.chain_a",
+      "selection_signal": "Constructive / Algorithmic / Invariant-Based Approach",
+      "combinator": "sum",
+      "points": 7,
+      "children": [
+        {
+          "id": "matharena_usamo_2026_p2.chain_a.setup",
+          "points": 2,
+          "satisfied_when": "all",
+          "guidelines": [
+            "This is all-or-nothing. 0 points if the strict inequality or formulation is mathematically incorrect, even if the strategy/framework is mentioned."
+          ],
+          "children": [
+            {
+              "id": "matharena_usamo_2026_p2.chain_a.setup.strategy",
+              "description": "Defining a deterministic strategy (forward or reverse)"
+            },
+            {
+              "id": "matharena_usamo_2026_p2.chain_a.setup.invariant",
+              "description": "Accurately stating a precise mathematical invariant/bound that tracks the sequence's sum. The claim must explicitly formulate a strict lower bound on the initial sum required to generate a localized configuration of elements."
+            }
+          ],
+          "description": "matharena_usamo_2026_p2.chain_a.setup"
+        },
+        {
+          "id": "matharena_usamo_2026_p2.chain_a.proof",
+          "combinator": "one_of",
+          "points": 5,
+          "children": [
+            {
+              "id": "matharena_usamo_2026_p2.chain_a.proof.full",
+              "points": 5,
+              "selection_signal": "Flawless proof",
+              "description": "Rigorously proving that this bound holds globally via a flawless inductive, recursive, or telescoping algebraic argument, concluding that F < 4S."
+            },
+            {
+              "id": "matharena_usamo_2026_p2.chain_a.proof.partial_4",
+              "points": 4,
+              "selection_signal": "Proof with minor gap",
+              "description": "The proof is logically complete and mathematically sound, but contains a localized, non-trivial gap (e.g., failing to explicitly address boundary edge cases, such as adjacent elements that do not merge)."
+            },
+            {
+              "id": "matharena_usamo_2026_p2.chain_a.proof.partial_2",
+              "points": 2,
+              "selection_signal": "Proof for sub-case or incomplete reduction",
+              "description": "Provides a complete and rigorous proof of the bound for a highly restricted but meaningful sub-case (e.g., perfectly proving the bound for a starting board consisting only of 1s and 2s), or flawlessly executes the base cases and sets up the inductive gaps but fails the final algebraic reduction."
+            }
+          ],
+          "description": "matharena_usamo_2026_p2.chain_a.proof"
+        }
+      ],
+      "description": "Constructive / Algorithmic / Invariant-Based Approach"
+    },
+    {
+      "id": "matharena_usamo_2026_p2.chain_b",
+      "selection_signal": "Existential / Structural / Information-Theoretic Approach",
+      "combinator": "sum",
+      "points": 7,
+      "children": [
+        {
+          "id": "matharena_usamo_2026_p2.chain_b.setup",
+          "points": 2,
+          "satisfied_when": "all",
+          "guidelines": [
+            "This is all-or-nothing. 0 points for merely stating the game is a binary tree without the precise depth and volume limits."
+          ],
+          "children": [
+            {
+              "id": "matharena_usamo_2026_p2.chain_b.setup.structure",
+              "description": "Translating the game into a global structure (e.g., a binary tree)"
+            },
+            {
+              "id": "matharena_usamo_2026_p2.chain_b.setup.constraints",
+              "description": "Identifying the strict mathematical constraints required for a winning structure to exist (e.g., defining the target V < 4S, the depth limits, and identifying the required inverse-power sum)."
+            }
+          ],
+          "description": "matharena_usamo_2026_p2.chain_b.setup"
+        },
+        {
+          "id": "matharena_usamo_2026_p2.chain_b.proof",
+          "combinator": "one_of",
+          "points": 5,
+          "children": [
+            {
+              "id": "matharena_usamo_2026_p2.chain_b.proof.full",
+              "points": 5,
+              "selection_signal": "Flawless existence proof",
+              "description": "Rigorously proving the existence of a valid structure that satisfies these constraints without violating game rules (e.g., applying the Kraft-McMillan inequality and proving prefix domains are strictly disjoint), concluding that F < 4S."
+            },
+            {
+              "id": "matharena_usamo_2026_p2.chain_b.proof.partial_4",
+              "points": 4,
+              "selection_signal": "Existence proof with minor gap",
+              "description": "The existence proof is mathematically valid, but lacks a rigorous verification of one specific structural rule (e.g., proving the total volume fits, but failing to formally prove strict left-to-right ordering)."
+            },
+            {
+              "id": "matharena_usamo_2026_p2.chain_b.proof.partial_2",
+              "points": 2,
+              "selection_signal": "Incomplete existence proof",
+              "description": "Sets up the correct system of prefix code intervals or spatial domains, but fails to mathematically prove the Kraft-McMillan sum evaluates to <= 1 for this game, OR calculates the sum correctly but fails to map it to a valid geometric/structural existence proof."
+            }
+          ],
+          "description": "matharena_usamo_2026_p2.chain_b.proof"
+        }
+      ],
+      "description": "Existential / Structural / Information-Theoretic Approach"
+    }
+  ]
+}

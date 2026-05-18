@@ -1,0 +1,283 @@
+[load] grading 1 rows for p5: idx_answers=[2]
+[rubric] generating for matharena_usamo_2026_p5 via gemini-3.1-pro-preview
+This rubric is structured as a top-level `one_of` over five mutually exclusive regimes: `complex-complete` (7 pts), `complex-minor-error` (range 4–6 pts), `complex-trivialized` (range 1–3 pts), `synthetic-chain` (sum, 7 pts), and `no-progress` (0 pts). This implements the source's instruction to "Score exactly one chain: take the maximum subtotal among chains" by separating the two main approaches while allowing partial progress to be evaluated additively.
+
+The Complex Bashing approach is split into three regimes based on completeness and errors (Pattern 2). `complex-complete` is an atomic 7-point regime for a flawless bash. `complex-minor-error` uses a range (Pattern 4) to deduct 1 point per minor calculation error, scaling from 6 (one error) down to 4 (three errors). `complex-trivialized` uses a range (1–3 pts) for computations that contain a drastically trivializing error, capping the score at 3 as instructed.
+
+The Synthetic Geometry approach is encoded in the `synthetic-chain` regime, which is a `sum` of seven 1-point items directly mirroring Chain A. This regime also naturally handles all partial credit for incomplete complex solutions: because the first two items of Chain B perfectly overlap with the first three items of Chain A, any incomplete complex setup is simply evaluated for its synthetic observations here.
+
+The source rubric's deductions for "Unjustified assumptions about spiral similarities" and "Incomplete similarity argument" are encoded as strict requirements within the relevant 1-point items of the `synthetic-chain` (Anti-pattern B). Failing to justify the spiral similarity or the isosceles triangle simply results in 0 points for that specific step, naturally applying the 1-point deduction without violating the additive schema.
+
+Finally, the source's "Zero-credit items" (e.g., conjecturing from a diagram, restating the problem, incomplete unsimplified complex coordinates) are grader guidance rather than scoring leaves. These have been placed in the top-level `guidelines` array (Pattern 10).
+
+```json
+{
+  "rubric_version": "1.0",
+  "id": "matharena_usamo_2026_p5",
+  "description": "Prove that OM = ON.",
+  "points": 7,
+  "combinator": "one_of",
+  "guidelines": [
+    "Score exactly one chain: take the maximum subtotal among chains; do not add points across chains. This rubric implements this by providing mutually exclusive regimes for the Complex Bashing approach and a comprehensive additive regime for the Synthetic Geometry approach (which also covers all partial progress).",
+    "0 points for conjecturing that OM = ON from an accurately drawn diagram without any angle chasing or algebraic proof.",
+    "0 points for simply restating the problem or rewriting the given angle conditions without deriving meaningful conclusions (e.g., not finding the tangent conditions).",
+    "0 points for the computation part if introducing complex coordinates but failing to simplify them into a usable factored form (e.g., writing the full determinant for O_A but not evaluating it).",
+    "0 points for any incomplete computational approach that does not finish the solution, unless it arrives at meaningful synthetic observations (which are then scored under the synthetic chain)."
+  ],
+  "children": [
+    {
+      "id": "matharena_usamo_2026_p5.complex-complete",
+      "selection_signal": "Solution uses complex bashing and correctly completes the computations to show OM = ON without errors.",
+      "points": 7,
+      "satisfied_when": "all",
+      "children": [
+        {
+          "id": "matharena_usamo_2026_p5.complex-complete.proof",
+          "description": "Correctly completes the complex computation to prove OM = ON."
+        }
+      ]
+    },
+    {
+      "id": "matharena_usamo_2026_p5.complex-minor-error",
+      "selection_signal": "Solution uses complex bashing and is essentially complete, but contains minor calculation errors in evaluating determinants or expanding expressions.",
+      "points": {
+        "min": 4,
+        "max": 6,
+        "default": 6,
+        "scale": [
+          {
+            "value": 6,
+            "criterion": "One minor calculation error."
+          },
+          {
+            "value": 5,
+            "criterion": "Two minor calculation errors."
+          },
+          {
+            "value": 4,
+            "criterion": "Three minor calculation errors, but the problem is not drastically trivialized."
+          }
+        ]
+      },
+      "satisfied_when": "all",
+      "children": [
+        {
+          "id": "matharena_usamo_2026_p5.complex-minor-error.proof",
+          "description": "Completes the complex computation with only minor errors."
+        }
+      ]
+    },
+    {
+      "id": "matharena_usamo_2026_p5.complex-trivialized",
+      "selection_signal": "Solution uses complex bashing and completes the computation, but contains an algebraic error that drastically trivializes the remainder of the problem.",
+      "points": {
+        "min": 1,
+        "max": 3,
+        "default": 3,
+        "scale": [
+          {
+            "value": 3,
+            "criterion": "Substantial correct setup and computation before the trivializing error."
+          },
+          {
+            "value": 2,
+            "criterion": "Some correct computation before the trivializing error."
+          },
+          {
+            "value": 1,
+            "criterion": "Trivializing error occurs very early in the computation."
+          }
+        ]
+      },
+      "satisfied_when": "all",
+      "children": [
+        {
+          "id": "matharena_usamo_2026_p5.complex-trivialized.proof",
+          "description": "Completes the complex computation but with a trivializing error."
+        }
+      ]
+    },
+    {
+      "id": "matharena_usamo_2026_p5.synthetic-chain",
+      "selection_signal": "Solution follows the synthetic geometry approach, or makes partial progress (including synthetic observations made during an incomplete complex bash).",
+      "points": 7,
+      "combinator": "sum",
+      "children": [
+        {
+          "id": "matharena_usamo_2026_p5.synthetic-chain.abc-efd",
+          "description": "Prove that triangle ABC is similar to triangle EFD (e.g., by identifying that DE is tangent to (AFE)).",
+          "points": 1
+        },
+        {
+          "id": "matharena_usamo_2026_p5.synthetic-chain.miquel-point",
+          "description": "Introduce the Miquel point P of triangle ABC with respect to D, E, F.",
+          "points": 1
+        },
+        {
+          "id": "matharena_usamo_2026_p5.synthetic-chain.spiral-abc-efd",
+          "description": "Establish that P is the center of a spiral similarity mapping ABC to EFD (may be cited as a standard consequence of the Miquel point).",
+          "points": 1
+        },
+        {
+          "id": "matharena_usamo_2026_p5.synthetic-chain.abc-ooo",
+          "description": "Prove that triangle ABC is similar to triangle O_A O_B O_C.",
+          "points": 1
+        },
+        {
+          "id": "matharena_usamo_2026_p5.synthetic-chain.spiral-efd-ooo",
+          "description": "Prove that P is the center of a spiral similarity mapping EFD (or ABC) to O_A O_B O_C. (Unjustified assumption of spiral similarity from mere similarity earns 0 for this item).",
+          "points": 1
+        },
+        {
+          "id": "matharena_usamo_2026_p5.synthetic-chain.spiral-mno",
+          "description": "Deduce that P is the center of a spiral similarity mapping the respective circumcenters M -> N -> O. (Unjustified assumption of spiral similarity from mere similarity earns 0 for this item).",
+          "points": 1
+        },
+        {
+          "id": "matharena_usamo_2026_p5.synthetic-chain.conclude",
+          "description": "Conclude OM = ON using the properties of paired spiral similarities, explicitly noting why the relevant triangle (e.g., A E O_A) is isosceles. (Incomplete similarity argument missing this justification earns 0 for this item).",
+          "points": 1
+        }
+      ]
+    },
+    {
+      "id": "matharena_usamo_2026_p5.no-progress",
+      "selection_signal": "None of the above applies.",
+      "points": 0,
+      "description": "No-progress fallback regime."
+    }
+  ]
+}
+```
+[rubric] wrote /Users/franknakasako/projects/rubric-arena/data/matharena_usamo_2026/rubrics/matharena_usamo_2026_p5.gemini-3.1-pro-preview.rubric.json
+
+--- structured grading: matharena_usamo_2026_p5_Gemini_3.1_Pro_Preview_2 ---
+The contestant attempts to prove $OM = ON$ using complex coordinates. They set up the vertices and use the given angle conditions to establish a spiral similarity between $\triangle ABC$ and $\triangle EFD$. 
+
+The paper achieves a complete and highly elegant proof, avoiding the massive polynomials typical of complex bashing. The contestant successfully proves that $\triangle ABC$ and $\triangle EFD$ are related by a spiral similarity centered at $S$. They then compute the cross ratio $(A, S; E, F)$ to show that $S$ is the Miquel point (concyclic with $A, F, E$). Finally, they express the circumcenters $O_A, O_B, O_C$ and $O, N$ in terms of the similarity transformations and conclude $OM = ON$. The logic is completely sound. However, there are two minor sign errors in the cross ratio computation: writing $F - A = -t_3(B - A)$ instead of $t_3(B - A)$, and $\frac{B-F}{F-S} = \frac{1-kz}{-kz}$ instead of $\frac{1-kz}{kz}$. These two errors cancel out to give the correct cross ratio.
+
+The paper falls under the `complex-minor-error` regime. The solution uses complex bashing (specifically, complex transformations) and is essentially complete, but contains minor calculation errors in the algebraic manipulation of the cross ratio.
+
+The choice between 5 and 6 points depends on whether the two sign errors are counted as one or two errors. Since they occur in different algebraic substitutions ($F-A$ in terms of $B-A$, and $\frac{B-F}{F-S}$ in terms of $k, z$), they are two distinct minor calculation errors. Thus, 5 points is the most appropriate score according to the scale.
+
+The final score is 5 points. The `complex-minor-error` regime is selected, and 5 points are awarded based on the presence of exactly two minor calculation errors.
+
+```json
+{
+  "id": "matharena_usamo_2026_p5",
+  "selected": "matharena_usamo_2026_p5.complex-minor-error",
+  "reasoning": "The contestant uses complex coordinates and transformations to prove OM = ON. The approach is highly elegant, establishing a spiral similarity and expressing the circumcenters in terms of the similarity transformations to avoid heavy expansion. However, there are two minor sign errors in the cross ratio computation in Step 3: writing F - A = -t_3(B - A) instead of t_3(B - A), and (B - F)/(F - S) = (1 - kz)/(-kz) instead of (1 - kz)/kz. These two errors cancel out to yield the correct cross ratio. Because there are exactly two minor calculation errors, the paper scores 5 points under the complex-minor-error regime.",
+  "children": [
+    {
+      "id": "matharena_usamo_2026_p5.complex-minor-error",
+      "satisfied": true,
+      "points_awarded": 5,
+      "reasoning": "The complex computation is essentially complete and correct, but contains two minor sign errors in Step 3 that cancel each other out.",
+      "children": [
+        {
+          "id": "matharena_usamo_2026_p5.complex-minor-error.proof",
+          "satisfied": true,
+          "reasoning": "The contestant successfully completes the proof using complex transformations, with only the two aforementioned sign errors in the cross ratio calculation."
+        }
+      ]
+    }
+  ]
+}
+```
+
+--- free-text grading: matharena_usamo_2026_p5_Gemini_3.1_Pro_Preview_2 ---
+```json
+{
+  "score": 6.0,
+  "max_points": 7.0,
+  "reasoning": "The candidate uses a complex coordinate approach that perfectly aligns with Chain B. They successfully prove that triangle ABC is similar to triangle EFD (1 pt), identify the Miquel point as the center of spiral similarity (1 pt), and set up and complete a series of computations to show |O-M| = |O-N| (5 pts). However, there is a minor calculation error in Step 3 when computing the cross ratio (a sign error in evaluating (B-F)/(F-S)), which results in a 1-point deduction according to the rubric.",
+  "matched_rubric_items": [
+    {
+      "description": "Chain B: Prove that $\\triangle ABC \\sim \\triangle EFD$.",
+      "points_awarded": 1.0,
+      "reasoning": "The candidate proves this in Step 1 by showing E-F = kz(A-B), F-D = kz(B-C), and D-E = kz(C-A)."
+    },
+    {
+      "description": "Chain B: Identify the Miquel point $X$ (or $P$) as the center of spiral similarity mapping $\\triangle ABC$ to $\\triangle EFD$.",
+      "points_awarded": 1.0,
+      "reasoning": "The candidate identifies the center of spiral similarity S in Step 2 and proves it is the Miquel point via concyclicity in Step 3."
+    },
+    {
+      "description": "Chain B: Setting up and correctly completing a series of computations that result in discovering the relationship $|O-M| = |O-N|$ (or any equivalent one).",
+      "points_awarded": 5.0,
+      "reasoning": "The candidate elegantly finds the circumcenters O_A, O_B, O_C and uses spiral similarities to express O and N in terms of M and S, successfully concluding |M-O| = |N-O|."
+    },
+    {
+      "description": "Deductions: Algebraic/Arithmetic errors in Chain B",
+      "points_awarded": -1.0,
+      "reasoning": "In Step 3, the candidate makes a sign error when computing (B-F)/(F-S), writing (1-kz)/(-kz) instead of (1-kz)/kz. This leads to an incorrect sign for the cross ratio, warranting a 1-point deduction for a minor calculation error."
+    }
+  ]
+}
+```
+[done] matharena_usamo_2026_p5_Gemini_3.1_Pro_Preview_2 gt=6 structured=5 free_text=6.0
+
+wrote /Users/franknakasako/projects/rubric-arena/data/matharena_usamo_2026/grading_runs/p5.Gemini_3.1_Pro_Preview.gemini-3.1-pro-preview.mid_credit_v1.jsonl
+{
+  "n": 2,
+  "exact_match": 0.5,
+  "mae": 0.5,
+  "rmse": 0.7071067811865476,
+  "by_method": {
+    "free_text": {
+      "n": 1,
+      "exact_match": 1.0,
+      "mae": 0.0,
+      "rmse": 0.0
+    },
+    "structured": {
+      "n": 1,
+      "exact_match": 0.0,
+      "mae": 1.0,
+      "rmse": 1.0
+    }
+  },
+  "score_distributions": {
+    "structured": {
+      "n": 1,
+      "mean": 5.0,
+      "unique_scores": [
+        "5"
+      ],
+      "score_counts": {
+        "5": 1
+      },
+      "clustering_rate": 1.0
+    },
+    "free_text": {
+      "n": 1,
+      "mean": 6.0,
+      "unique_scores": [
+        "6"
+      ],
+      "score_counts": {
+        "6": 1
+      },
+      "clustering_rate": 1.0
+    }
+  },
+  "structured_atoms": {
+    "n_atoms": 3,
+    "n_binary_decisions": 2,
+    "n_selection_decisions": 1,
+    "positive_rate": 1.0,
+    "by_node": {
+      "matharena_usamo_2026_p5.complex-minor-error": {
+        "n": 1,
+        "positive": 1,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p5.complex-minor-error.proof": {
+        "n": 1,
+        "positive": 1,
+        "positive_rate": 1.0
+      }
+    }
+  },
+  "structured_failures": []
+}

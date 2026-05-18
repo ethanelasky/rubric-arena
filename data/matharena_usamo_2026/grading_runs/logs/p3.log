@@ -1,0 +1,465 @@
+[load] grading 3 rows for p3: idx_answers=[1, 2, 3]
+[rubric] generating for matharena_usamo_2026_p3 via gemini-3.1-pro-preview
+This rubric is structured as a top-level `one_of` over three main regimes: `chain-a` (synthetic approach, max 7 points), `chain-b` (complex numbers and inversion approach, max 7 points), and `no-progress` (0 points). This reflects the source's explicit instruction to "Score exactly one chain: take the maximum subtotal among chains; do not add points across chains."
+
+The `chain-a` regime is a `sum` of five additive items. The first item (proving $O$ is the incenter of $\triangle DYZ$) is worth up to 3 points and is encoded as a `one_of` over sub-regimes to handle the source's specific deductions for this step (Pattern 2). It awards 3 points for a complete proof, 2 points if there is a single arithmetic error or incomplete case analysis, 1 point for multiple errors or a combination of errors and incomplete cases, and 0 points for no progress. The remaining four items are 1-point criteria for defining $O'$, constructing $X$, applying Protassov's theorem, and proving tangency at $N$. Items with compound descriptions (e.g., "define $O'$ AND show it lies on the circumcircle") are split into atomic sub-criteria using `satisfied_when: "all"` (Anti-pattern C). The source's "Cap at 6/7" for missing the tangency at $N$ is naturally handled by the omission of the final 1-point item.
+
+The `chain-b` regime is a `one_of` ladder. It awards 7 points for a complete and correct solution. To handle the source's deductions for arithmetic/algebraic errors (up to -2), it includes an `errors` regime with a point range of 5–6 (Pattern 4), where the scale distinguishes between one error (6 points) and two or more errors (5 points). Finally, it includes a 1-point regime for setting up a suitable inversion without completing the computations.
+
+The source's zero-credit items (e.g., conjecturing without proof, routine coordinate setups, incomplete computational approaches) and the "Cap at 5/7" for contradictory claims or circular reasoning are placed in the top-level `guidelines`. They serve as grader-facing instructions on what not to award points for, rather than structural scoring nodes.
+
+```json
+{
+  "rubric_version": "1.0",
+  "id": "matharena_usamo_2026_p3",
+  "description": "Prove that the circumcircle of AYZ and the incircle of R are tangent.",
+  "points": 7,
+  "combinator": "one_of",
+  "guidelines": [
+    "If the proof contains contradictory claims or assumes the conclusion halfway through to force a collinearity or tangency condition, do not award points for the flawed steps or any subsequent steps that rely on them. The maximum possible score for such a paper is 5.",
+    "0 points for conjecturing that O is the incenter of DYZ or making other major geometric claims without proof.",
+    "0 points for merely stating an inversion strategy (Chain B) or identifying Protassov's configuration (Chain A) without performing subsequent calculations or verifying its conditions for this specific problem.",
+    "0 points for routine coordinate geometry setups (e.g., simply assigning complex coordinates to the vertices) that do not result in meaningful progress.",
+    "0 points for any incomplete computational approach that does not finish the solution or does not arrive at a meaningful synthetic observation that can help finish the solution."
+  ],
+  "children": [
+    {
+      "id": "matharena_usamo_2026_p3.chain-a",
+      "selection_signal": "Solution makes progress using the synthetic approach (Chain A).",
+      "points": 7,
+      "combinator": "sum",
+      "children": [
+        {
+          "id": "matharena_usamo_2026_p3.chain-a.incenter",
+          "description": "Proves that O is the incenter of DYZ.",
+          "points": 3,
+          "combinator": "one_of",
+          "children": [
+            {
+              "id": "matharena_usamo_2026_p3.chain-a.incenter.correct",
+              "selection_signal": "Complete and correct proof that O is the incenter of DYZ.",
+              "points": 3,
+              "satisfied_when": "all",
+              "children": [
+                {
+                  "id": "matharena_usamo_2026_p3.chain-a.incenter.correct.proof",
+                  "description": "Proves O is the incenter of DYZ without errors or missing cases."
+                }
+              ]
+            },
+            {
+              "id": "matharena_usamo_2026_p3.chain-a.incenter.minor-error",
+              "selection_signal": "Proof contains a single arithmetic error in Cartesian checks, OR incomplete case analysis in moving points (e.g., verifying only one case).",
+              "points": 2,
+              "satisfied_when": "all",
+              "children": [
+                {
+                  "id": "matharena_usamo_2026_p3.chain-a.incenter.minor-error.proof",
+                  "description": "Proves O is the incenter of DYZ but with one minor error or missing case."
+                }
+              ]
+            },
+            {
+              "id": "matharena_usamo_2026_p3.chain-a.incenter.major-error",
+              "selection_signal": "Proof contains two arithmetic errors, OR one error and incomplete case analysis.",
+              "points": 1,
+              "satisfied_when": "all",
+              "children": [
+                {
+                  "id": "matharena_usamo_2026_p3.chain-a.incenter.major-error.proof",
+                  "description": "Proves O is the incenter of DYZ but with multiple errors or missing cases."
+                }
+              ]
+            },
+            {
+              "id": "matharena_usamo_2026_p3.chain-a.incenter.none",
+              "selection_signal": "No meaningful progress on proving O is the incenter.",
+              "points": 0
+            }
+          ]
+        },
+        {
+          "id": "matharena_usamo_2026_p3.chain-a.reflection",
+          "description": "Defines O' as the reflection of O over YZ and shows it lies on (AYZ).",
+          "points": 1,
+          "satisfied_when": "all",
+          "children": [
+            {
+              "id": "matharena_usamo_2026_p3.chain-a.reflection.define",
+              "description": "Defines O' as the reflection of O over YZ."
+            },
+            {
+              "id": "matharena_usamo_2026_p3.chain-a.reflection.cyclic",
+              "description": "Shows that O' lies on the circumcircle of AYZ."
+            }
+          ]
+        },
+        {
+          "id": "matharena_usamo_2026_p3.chain-a.construct-x",
+          "description": "Constructs X on (AYZ) appropriately and shows OX bisects angle YXZ.",
+          "points": 1,
+          "satisfied_when": "all",
+          "children": [
+            {
+              "id": "matharena_usamo_2026_p3.chain-a.construct-x.construct",
+              "description": "Constructs X on (AYZ) (e.g., by letting X = NK intersect (AYZ) where OYKZ is a parallelogram)."
+            },
+            {
+              "id": "matharena_usamo_2026_p3.chain-a.construct-x.bisect",
+              "description": "Shows that OX bisects angle YXZ."
+            }
+          ]
+        },
+        {
+          "id": "matharena_usamo_2026_p3.chain-a.protassov",
+          "description": "Applies Protassov's theorem (or equivalent homothety) to deduce the tangent circle touches (AYZ) at X.",
+          "points": 1
+        },
+        {
+          "id": "matharena_usamo_2026_p3.chain-a.tangency-n",
+          "description": "Proves the constructed tangent circle passes through N.",
+          "points": 1
+        }
+      ]
+    },
+    {
+      "id": "matharena_usamo_2026_p3.chain-b",
+      "selection_signal": "Solution makes progress using the complex numbers and inversion approach (Chain B).",
+      "points": 7,
+      "combinator": "one_of",
+      "children": [
+        {
+          "id": "matharena_usamo_2026_p3.chain-b.complete",
+          "selection_signal": "Complete and correct complex number / inversion solution.",
+          "points": 7,
+          "satisfied_when": "all",
+          "children": [
+            {
+              "id": "matharena_usamo_2026_p3.chain-b.complete.proof",
+              "description": "Computes all valid coordinates to finish the complex number solution without errors."
+            }
+          ]
+        },
+        {
+          "id": "matharena_usamo_2026_p3.chain-b.errors",
+          "selection_signal": "Solution is complete but contains arithmetic or algebraic execution errors.",
+          "points": {
+            "min": 5,
+            "max": 6,
+            "default": 6,
+            "scale": [
+              {
+                "value": 6,
+                "criterion": "One arithmetic or algebraic execution error."
+              },
+              {
+                "value": 5,
+                "criterion": "Two or more arithmetic or algebraic execution errors."
+              }
+            ]
+          },
+          "satisfied_when": "all",
+          "children": [
+            {
+              "id": "matharena_usamo_2026_p3.chain-b.errors.proof",
+              "description": "Computes all valid coordinates to finish the solution, but with arithmetic/algebraic errors."
+            }
+          ]
+        },
+        {
+          "id": "matharena_usamo_2026_p3.chain-b.setup",
+          "selection_signal": "Identifies and sets up a suitable inversion, but does not complete the coordinate computations.",
+          "points": 1,
+          "satisfied_when": "all",
+          "children": [
+            {
+              "id": "matharena_usamo_2026_p3.chain-b.setup.inversion",
+              "description": "Identifies and sets up a suitable inversion (e.g., centered at A with radius sqrt(bc), combined with reflection over A-bisector)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "matharena_usamo_2026_p3.no-progress",
+      "selection_signal": "No meaningful progress in either chain.",
+      "points": 0
+    }
+  ]
+}
+```
+[rubric] wrote /Users/franknakasako/projects/rubric-arena/data/matharena_usamo_2026/rubrics/matharena_usamo_2026_p3.gemini-3.1-pro-preview.rubric.json
+
+--- structured grading: matharena_usamo_2026_p3_Gemini_3.1_Pro_Preview_1 ---
+The contestant attempts to solve the problem using a pure complex coordinate approach. They set the circumcircle of $\triangle ABC$ as the unit circle and assign unit complex numbers $a, b, c$ to the vertices. Their strategy is to find the equations of the relevant lines, compute the coordinates of $Y$ and $Z$, determine the centers and radii of the two circles in question, and directly verify the internal tangency condition by showing that the distance between the centers equals the difference of their radii.
+
+The paper achieves a complete and flawless solution. The contestant correctly derives the equations for $\ell_B$ and $\ell_C$, and subsequently finds the coordinates of $Y$ and $Z$. They then find an elegant expression for the circumcenter $w_0$ and circumradius $R_0$ of $\triangle AYZ$. Following this, they correctly identify the incenter $I$ and inradius $r$ of $\mathcal{R}$ by setting up the distance equations to the bounding lines. Finally, through a series of brilliant and highly non-trivial algebraic simplifications, the contestant factors the distance $|w_0 - I|$ and proves that $|w_0 - I| - R_0 = -r$, which establishes the internal tangency of the two circles. 
+
+For the top-level regime selection, the paper falls under `chain-b` (complex numbers and inversion approach). Although the rubric mentions "inversion" in the chain's title, the selection signal for the highest score explicitly includes a "Complete and correct complex number / inversion solution." The contestant's pure complex coordinate bash is fully rigorous, avoids any logical gaps, and successfully finishes the problem.
+
+There are no fuzzy calls to make. The rubric guidelines state that 0 points should be awarded for "routine coordinate geometry setups... that do not result in meaningful progress" or "incomplete computational approaches." However, this contestant's computational approach is entirely complete and correct, meaning it bypasses the 0-point conditions and qualifies for full credit under the `chain-b.complete` regime.
+
+The final score is 7 points. The `chain-b` regime is selected, and within it, the `chain-b.complete` regime is satisfied because the contestant computes all valid coordinates and finishes the complex number solution without any arithmetic or algebraic errors.
+
+```json
+{
+  "id": "matharena_usamo_2026_p3",
+  "selected": "matharena_usamo_2026_p3.chain-b",
+  "reasoning": "The contestant provides a complete and correct solution using complex coordinates. They successfully compute the coordinates of all relevant points, the centers and radii of both circles, and algebraically verify the tangency condition without any errors.",
+  "children": [
+    {
+      "id": "matharena_usamo_2026_p3.chain-b",
+      "selected": "matharena_usamo_2026_p3.chain-b.complete",
+      "reasoning": "The solution is a complete and flawless complex coordinate bash. The contestant finds the circumcenter and circumradius of AYZ, the incenter and inradius of R, and proves the distance between the centers equals the difference of the radii.",
+      "children": [
+        {
+          "id": "matharena_usamo_2026_p3.chain-b.complete",
+          "satisfied": true,
+          "reasoning": "The contestant computes all valid coordinates to finish the complex number solution without errors.",
+          "children": [
+            {
+              "id": "matharena_usamo_2026_p3.chain-b.complete.proof",
+              "satisfied": true,
+              "reasoning": "The contestant correctly derives the coordinates of Y and Z, the circumcenter w_0 and radius R_0 of AYZ, and the incenter I and radius r of R. The algebraic simplification to show |w_0 - I| = R_0 - r is executed perfectly."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+--- free-text grading: matharena_usamo_2026_p3_Gemini_3.1_Pro_Preview_1 ---
+```json
+{
+  "score": 7.0,
+  "max_points": 7.0,
+  "reasoning": "The candidate provides a complete and flawless complex coordinate solution. They correctly set up the complex plane, find the coordinates of all relevant points (Y, Z, circumcenter of AYZ, incenter of R), and algebraically prove that the distance between the centers is exactly the difference of the radii. This fully satisfies the requirements for Chain B (Complex numbers approach).",
+  "matched_rubric_items": [
+    {
+      "description": "Chain B: Complex numbers and inversion approach setup",
+      "points_awarded": 1.0,
+      "reasoning": "The candidate successfully sets up the complex coordinate system, which serves as the foundation for the complex number approach (equivalent to the inversion setup in the rubric)."
+    },
+    {
+      "description": "Chain B: Computing all valid coordinates to finish the complex number solution",
+      "points_awarded": 6.0,
+      "reasoning": "The candidate flawlessly computes all necessary coordinates, circumradius, inradius, and the distance between the centers, successfully completing the proof algebraically."
+    }
+  ]
+}
+```
+[done] matharena_usamo_2026_p3_Gemini_3.1_Pro_Preview_1 gt=5 structured=7 free_text=7.0
+
+--- structured grading: matharena_usamo_2026_p3_Gemini_3.1_Pro_Preview_2 ---
+The contestant attempts to solve the problem using complex coordinates and inversion (Chain B). They set the circumcircle of $ABC$ as the unit circle, find the coordinates of $Y$ and $Z$, and determine the center and radius of the incircle of $\mathcal{R}$. They then apply an inversion centered at $A$ (specifically, $w = 1/(z-A)$) to map the circumcircle of $AYZ$ to a line and the incircle of $\mathcal{R}$ to another circle.
+
+The contestant successfully computes the coordinates of the inverted points $w_Y$ and $w_Z$, as well as the center and radius of the inverted incircle. They correctly set up the distance formula to check for tangency between the inverted line and the inverted circle. However, they completely skip the final algebraic verification, simply claiming that "direct algebraic evaluation" shows the condition holds. In an Olympiad context, skipping the core algebraic identity of a computational proof means the solution is incomplete.
+
+The paper falls under the `chain-b` regime because it uses complex numbers and inversion. Within this regime, the paper matches `chain-b.setup` because the inversion is correctly identified and set up, but the final coordinate computations (the algebraic verification) are not completed.
+
+The main fuzzy call is whether to award 1 point for `chain-b.setup` or 0 points based on the top-level guideline: "0 points for any incomplete computational approach that does not finish the solution". However, the rubric explicitly contains a 1-point node for identifying and setting up a suitable inversion without completing the coordinate computations. Furthermore, another guideline states "0 points for merely stating an inversion strategy... without performing subsequent calculations". Because the contestant goes well beyond merely stating the strategy—performing all intermediate calculations up to the final identity—they bypass the 0-point conditions. The specific 1-point node for the inversion setup applies.
+
+The final score is 1 point. The `chain-b` regime is selected, and within it, `chain-b.setup` is satisfied because the inversion is correctly identified and set up, but the final algebraic execution is omitted.
+
+```json
+{
+  "id": "matharena_usamo_2026_p3",
+  "selected": "matharena_usamo_2026_p3.chain-b",
+  "reasoning": "The contestant attempts the problem using complex coordinates and inversion. They successfully set up the coordinates, find the relevant points and circles, and apply an inversion centered at A. They compute the inverted points and the inverted circle's parameters, reducing the problem to a single algebraic distance identity. However, they skip the actual algebraic verification, claiming it holds 'via direct algebraic evaluation'. This is an incomplete computational solution. The rubric explicitly awards 1 point for setting up a suitable inversion without completing the computations, which perfectly describes this paper.",
+  "children": [
+    {
+      "id": "matharena_usamo_2026_p3.chain-b",
+      "selected": "matharena_usamo_2026_p3.chain-b.setup",
+      "reasoning": "The solution is incomplete because it skips the final algebraic verification of the tangency condition. However, it successfully identifies and sets up a suitable inversion, computing all intermediate coordinates up to the final identity. Thus, it falls into the setup regime rather than the complete or error regimes.",
+      "children": [
+        {
+          "id": "matharena_usamo_2026_p3.chain-b.setup",
+          "satisfied": true,
+          "reasoning": "The contestant identifies and sets up a suitable inversion (w = 1/(z-A)) and computes the inverted coordinates and circle parameters, but skips the final algebraic verification of the tangency condition.",
+          "children": [
+            {
+              "id": "matharena_usamo_2026_p3.chain-b.setup.inversion",
+              "satisfied": true,
+              "reasoning": "The contestant explicitly defines the inversion w = 1/(z-A), computes the inverted points w_Y and w_Z, and finds the center and radius of the inverted incircle, successfully setting up the problem for the final algebraic check."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+--- free-text grading: matharena_usamo_2026_p3_Gemini_3.1_Pro_Preview_2 ---
+```json
+{
+  "score": 1.0,
+  "max_points": 7.0,
+  "reasoning": "The candidate attempts Chain B (Complex numbers and inversion). They successfully identify and set up a suitable inversion centered at A (w = 1/(z-A)), earning the 1-point checkpoint. They also compute the coordinates of the inverted points and the inverted incircle. However, they skip the final, non-trivial algebraic verification that the distance from the inverted circle's center to the line equals its radius, merely claiming that it 'universally holds'. According to the zero-credit items, 'Any incomplete computational approach that does not finish the solution' receives no further credit. Thus, the 6-point item for finishing the complex number solution is not awarded.",
+  "matched_rubric_items": [
+    {
+      "description": "Chain B: Identifying and setting up a suitable inversion (e.g., an inversion centered at $A$ with radius $\\sqrt{bc}$, combined with a reflection over the angle bisector of $A$).",
+      "points_awarded": 1.0,
+      "reasoning": "The candidate correctly identifies and sets up an inversion centered at A, given by w = 1/(z-A), and correctly describes how the geometric objects map under this transformation."
+    },
+    {
+      "description": "Chain B: Computing all valid coordinates to finish the complex number solution.",
+      "points_awarded": 0.0,
+      "reasoning": "Although the candidate computes the coordinates, they fail to perform the final algebraic evaluation to prove the tangency condition, instead handwaving it. The rubric explicitly states that any incomplete computational approach that does not finish the solution falls under zero-credit items."
+    }
+  ]
+}
+```
+[done] matharena_usamo_2026_p3_Gemini_3.1_Pro_Preview_2 gt=1 structured=1 free_text=1.0
+
+--- structured grading: matharena_usamo_2026_p3_Gemini_3.1_Pro_Preview_3 ---
+An elegant and complete solution using complex coordinates. 
+
+**What the paper attempts:**
+The contestant attempts to prove the tangency condition using complex numbers (Chain B). They set the circumcircle of $\triangle ABC$ to be the unit circle, assign coordinates to the vertices, and systematically compute the equations of the lines bounding the region $\mathcal{R}$ and the coordinates of the intersection points $Y$ and $Z$.
+
+**What the paper achieves:**
+The contestant successfully and flawlessly executes the computational approach. They correctly determine the incenter $I$ and inradius $r$ of $\mathcal{R}$, carefully handling the signs of the distances to the bounding lines to ensure $r$ is positive. They then compute the coordinates of $Y$ and $Z$, and provide the correct, highly simplified formulas for the circumcenter $K$ and circumradius $\rho$ of $\triangle AYZ$. To prove tangency, they set up the distance condition $|K-I|^2 = (\rho-r)^2$. Using a clever expansion to cancel $\rho^2$, they reduce the condition to a polynomial identity in terms of $A$, $N$, and $S=B+C$. The stated identity is mathematically correct and indeed resolves to $0=0$, completing the proof.
+
+**Top-level regime selection:**
+The paper is graded under the `chain-b` regime because it relies entirely on complex coordinates. 
+
+**Fuzzy calls:**
+There are no fuzzy calls. The solution is complete, correct, and contains no arithmetic or algebraic execution errors. While the intermediate algebraic expansions are omitted, the highly specific and correct simplified formulas (such as $K = A - \frac{s_1^2 s_3}{D}$) and the correct final polynomial identity demonstrate that the computations were successfully carried out. This fully satisfies the requirements for a complete coordinate solution.
+
+**The score and how it breaks down:**
+The score is 7 points. The paper falls under the `chain-b.complete` regime, as all valid coordinates are computed and the final algebraic identity is correctly established without errors.
+
+```json
+{
+  "id": "matharena_usamo_2026_p3",
+  "selected": "matharena_usamo_2026_p3.chain-b",
+  "reasoning": "The contestant uses a complex coordinate approach, successfully finding the coordinates of all relevant points and algebraically verifying the tangency condition.",
+  "children": [
+    {
+      "id": "matharena_usamo_2026_p3.chain-b",
+      "selected": "matharena_usamo_2026_p3.chain-b.complete",
+      "reasoning": "The solution is complete and correct. The contestant computes all necessary coordinates, simplifies them accurately, and correctly reduces the tangency condition to a valid polynomial identity without any execution errors.",
+      "children": [
+        {
+          "id": "matharena_usamo_2026_p3.chain-b.complete",
+          "satisfied": true,
+          "reasoning": "Satisfied because the contestant successfully computes all necessary coordinates and correctly verifies the tangency condition algebraically without any execution errors.",
+          "children": [
+            {
+              "id": "matharena_usamo_2026_p3.chain-b.complete.proof",
+              "satisfied": true,
+              "reasoning": "The contestant correctly computes the incenter I and inradius r of R, the coordinates of Y and Z, and the circumcenter K and circumradius \\rho of \\triangle AYZ. They correctly set up the tangency condition |K-I|^2 = (\\rho-r)^2 and reduce it to a polynomial identity in A, N, and S=B+C. The identity is correct and resolves to 0=0, completing the proof without errors."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+--- free-text grading: matharena_usamo_2026_p3_Gemini_3.1_Pro_Preview_3 ---
+```json
+{
+  "score": 6.0,
+  "max_points": 7.0,
+  "reasoning": "The candidate successfully employs a pure complex coordinate approach (Chain B). They correctly set up the equations for the lines, find the center and radius of the incircle of R, determine the coordinates of Y and Z, and compute the circumcenter and circumradius of triangle AYZ. They then correctly formulate the tangency condition and reduce it to a valid polynomial identity, completing the proof. This earns the 6 points for computing all valid coordinates to finish the complex number solution. However, the candidate does not use an inversion, so they do not earn the 1 point for identifying and setting up a suitable inversion. No deductions apply as there are no execution errors.",
+  "matched_rubric_items": [
+    {
+      "description": "Chain B: Computing all valid coordinates to finish the complex number solution.",
+      "points_awarded": 6.0,
+      "reasoning": "The candidate correctly computes all necessary complex coordinates (I, r, Y, Z, K, rho) and successfully verifies the tangency condition via a correct polynomial identity."
+    },
+    {
+      "description": "Chain B: Identifying and setting up a suitable inversion.",
+      "points_awarded": 0.0,
+      "reasoning": "The candidate uses a pure complex coordinate bash and does not identify or set up an inversion."
+    }
+  ]
+}
+```
+[done] matharena_usamo_2026_p3_Gemini_3.1_Pro_Preview_3 gt=6 structured=7 free_text=6.0
+
+wrote /Users/franknakasako/projects/rubric-arena/data/matharena_usamo_2026/grading_runs/p3.Gemini_3.1_Pro_Preview.gemini-3.1-pro-preview.mid_credit_v1.jsonl
+{
+  "n": 6,
+  "exact_match": 0.5,
+  "mae": 0.8333333333333334,
+  "rmse": 1.224744871391589,
+  "by_method": {
+    "free_text": {
+      "n": 3,
+      "exact_match": 0.6666666666666666,
+      "mae": 0.6666666666666666,
+      "rmse": 1.1547005383792515
+    },
+    "structured": {
+      "n": 3,
+      "exact_match": 0.3333333333333333,
+      "mae": 1.0,
+      "rmse": 1.2909944487358056
+    }
+  },
+  "score_distributions": {
+    "structured": {
+      "n": 3,
+      "mean": 5.0,
+      "unique_scores": [
+        "1",
+        "7"
+      ],
+      "score_counts": {
+        "7": 2,
+        "1": 1
+      },
+      "clustering_rate": 0.6666666666666666
+    },
+    "free_text": {
+      "n": 3,
+      "mean": 4.666666666666667,
+      "unique_scores": [
+        "1",
+        "6",
+        "7"
+      ],
+      "score_counts": {
+        "7": 1,
+        "1": 1,
+        "6": 1
+      },
+      "clustering_rate": 0.3333333333333333
+    }
+  },
+  "structured_atoms": {
+    "n_atoms": 12,
+    "n_binary_decisions": 6,
+    "n_selection_decisions": 6,
+    "positive_rate": 1.0,
+    "by_node": {
+      "matharena_usamo_2026_p3.chain-b.complete": {
+        "n": 2,
+        "positive": 2,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p3.chain-b.complete.proof": {
+        "n": 2,
+        "positive": 2,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p3.chain-b.setup": {
+        "n": 1,
+        "positive": 1,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p3.chain-b.setup.inversion": {
+        "n": 1,
+        "positive": 1,
+        "positive_rate": 1.0
+      }
+    }
+  },
+  "structured_failures": []
+}

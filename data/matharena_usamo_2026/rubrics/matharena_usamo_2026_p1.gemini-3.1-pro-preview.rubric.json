@@ -1,0 +1,103 @@
+{
+  "rubric_version": "1.0",
+  "id": "matharena_usamo_2026_p1",
+  "description": "Find the maximum value of f(x) and the real numbers x that achieve it.",
+  "points": 7,
+  "combinator": "sum",
+  "guidelines": [
+    "Zero credit for conjecturing the maximum value or optimal intervals without proof.",
+    "Zero credit for computing f(x) for small specific values of n without generalizing the algebraic step.",
+    "Zero credit for restating the problem in an equivalent form without making tangible progress toward bounding the sum.",
+    "The 1 point for evaluating the maximum value requires a fully correct evaluation. Minor cosmetic or arithmetic slips in this evaluation result in 0 points for that specific item (effectively a 1-point deduction).",
+    "If a student assumes without proof that the multiset of fractional parts for \\gcd(\\ell, n) > 1 is majorized by the coprime case, they earn at most 1 out of 2 points for the upper bound item."
+  ],
+  "children": [
+    {
+      "id": "matharena_usamo_2026_p1.periodicity",
+      "points": 1,
+      "description": "Proves that f(x) is periodic with period 1 (i.e., f(x+1) = f(x))."
+    },
+    {
+      "id": "matharena_usamo_2026_p1.non-increasing",
+      "points": 1,
+      "description": "Shows that within any interval of the form [\\ell/n, (\\ell+1)/n) for integer \\ell, f(x) is non-increasing."
+    },
+    {
+      "id": "matharena_usamo_2026_p1.evaluation",
+      "points": 1,
+      "satisfied_when": "all",
+      "children": [
+        {
+          "id": "matharena_usamo_2026_p1.evaluation.optimal-range",
+          "description": "Evaluates f(x) for the optimal range (e.g., testing x \\in [1-1/n, 1) or x = (n-1)/n)."
+        },
+        {
+          "id": "matharena_usamo_2026_p1.evaluation.maximum-value",
+          "description": "Explicitly calculates the candidate maximum value -1 + \\sum_{k=1}^n \\frac{1}{k}."
+        }
+      ],
+      "description": "matharena_usamo_2026_p1.evaluation"
+    },
+    {
+      "id": "matharena_usamo_2026_p1.fractional-parts",
+      "points": 1,
+      "description": "Expresses the function algebraically in terms of fractional parts (e.g., deriving f(x) = \\sum_{k=1}^n \\frac{\\{kx\\}}{k} - \\{nx\\})."
+    },
+    {
+      "id": "matharena_usamo_2026_p1.upper-bound",
+      "points": 2,
+      "combinator": "one_of",
+      "children": [
+        {
+          "id": "matharena_usamo_2026_p1.upper-bound.general",
+          "selection_signal": "Proves the general upper bound for all integers \\ell.",
+          "points": 2,
+          "satisfied_when": "all",
+          "children": [
+            {
+              "id": "matharena_usamo_2026_p1.upper-bound.general.proof",
+              "description": "Proves the general upper bound \\sum_{k=1}^n \\frac{\\{k\\ell/n\\}}{k} \\le \\sum_{k=1}^n \\frac{n-k}{nk} for all integers \\ell."
+            }
+          ],
+          "description": "Proves the general upper bound for all integers \\ell."
+        },
+        {
+          "id": "matharena_usamo_2026_p1.upper-bound.coprime",
+          "selection_signal": "Proves the bound only for the coprime case \\gcd(\\ell, n) = 1, or assumes the general case follows from it without proof.",
+          "points": 1,
+          "satisfied_when": "all",
+          "children": [
+            {
+              "id": "matharena_usamo_2026_p1.upper-bound.coprime.proof",
+              "description": "Proves the upper bound for the coprime case \\gcd(\\ell, n) = 1."
+            }
+          ],
+          "description": "Proves the bound only for the coprime case \\gcd(\\ell, n) = 1, or assumes the general case follows from it without proof."
+        },
+        {
+          "id": "matharena_usamo_2026_p1.upper-bound.no-progress",
+          "selection_signal": "Does not prove the upper bound for the coprime case.",
+          "points": 0,
+          "description": "No progress on the upper bound."
+        }
+      ],
+      "description": "matharena_usamo_2026_p1.upper-bound"
+    },
+    {
+      "id": "matharena_usamo_2026_p1.equality-cases",
+      "points": 1,
+      "satisfied_when": "all",
+      "children": [
+        {
+          "id": "matharena_usamo_2026_p1.equality-cases.identify",
+          "description": "Identifies the correct equality cases of the upper bound."
+        },
+        {
+          "id": "matharena_usamo_2026_p1.equality-cases.conclude",
+          "description": "Concludes the exact set of optimal x (e.g., x \\in \\bigcup_{m \\in \\mathbb{Z}} [m + 1 - 1/n, m + 1))."
+        }
+      ],
+      "description": "matharena_usamo_2026_p1.equality-cases"
+    }
+  ]
+}

@@ -1,0 +1,188 @@
+{
+  "rubric_version": "1.0",
+  "id": "matharena_usamo_2026_p3",
+  "description": "Prove that the circumcircle of AYZ and the incircle of R are tangent.",
+  "points": 7,
+  "combinator": "one_of",
+  "guidelines": [
+    "If the proof contains contradictory claims or assumes the conclusion halfway through to force a collinearity or tangency condition, do not award points for the flawed steps or any subsequent steps that rely on them. The maximum possible score for such a paper is 5.",
+    "0 points for conjecturing that O is the incenter of DYZ or making other major geometric claims without proof.",
+    "0 points for merely stating an inversion strategy (Chain B) or identifying Protassov's configuration (Chain A) without performing subsequent calculations or verifying its conditions for this specific problem.",
+    "0 points for routine coordinate geometry setups (e.g., simply assigning complex coordinates to the vertices) that do not result in meaningful progress.",
+    "0 points for any incomplete computational approach that does not finish the solution or does not arrive at a meaningful synthetic observation that can help finish the solution."
+  ],
+  "children": [
+    {
+      "id": "matharena_usamo_2026_p3.chain-a",
+      "selection_signal": "Solution makes progress using the synthetic approach (Chain A).",
+      "points": 7,
+      "combinator": "sum",
+      "children": [
+        {
+          "id": "matharena_usamo_2026_p3.chain-a.incenter",
+          "description": "Proves that O is the incenter of DYZ.",
+          "points": 3,
+          "combinator": "one_of",
+          "children": [
+            {
+              "id": "matharena_usamo_2026_p3.chain-a.incenter.correct",
+              "selection_signal": "Complete and correct proof that O is the incenter of DYZ.",
+              "points": 3,
+              "satisfied_when": "all",
+              "children": [
+                {
+                  "id": "matharena_usamo_2026_p3.chain-a.incenter.correct.proof",
+                  "description": "Proves O is the incenter of DYZ without errors or missing cases."
+                }
+              ],
+              "description": "Complete and correct proof that O is the incenter of DYZ."
+            },
+            {
+              "id": "matharena_usamo_2026_p3.chain-a.incenter.minor-error",
+              "selection_signal": "Proof contains a single arithmetic error in Cartesian checks, OR incomplete case analysis in moving points (e.g., verifying only one case).",
+              "points": 2,
+              "satisfied_when": "all",
+              "children": [
+                {
+                  "id": "matharena_usamo_2026_p3.chain-a.incenter.minor-error.proof",
+                  "description": "Proves O is the incenter of DYZ but with one minor error or missing case."
+                }
+              ],
+              "description": "Proof contains a single arithmetic error in Cartesian checks, OR incomplete case analysis in moving points (e.g., verifying only one case)."
+            },
+            {
+              "id": "matharena_usamo_2026_p3.chain-a.incenter.major-error",
+              "selection_signal": "Proof contains two arithmetic errors, OR one error and incomplete case analysis.",
+              "points": 1,
+              "satisfied_when": "all",
+              "children": [
+                {
+                  "id": "matharena_usamo_2026_p3.chain-a.incenter.major-error.proof",
+                  "description": "Proves O is the incenter of DYZ but with multiple errors or missing cases."
+                }
+              ],
+              "description": "Proof contains two arithmetic errors, OR one error and incomplete case analysis."
+            },
+            {
+              "id": "matharena_usamo_2026_p3.chain-a.incenter.none",
+              "selection_signal": "No meaningful progress on proving O is the incenter.",
+              "points": 0,
+              "description": "No meaningful progress on proving O is the incenter."
+            }
+          ]
+        },
+        {
+          "id": "matharena_usamo_2026_p3.chain-a.reflection",
+          "description": "Defines O' as the reflection of O over YZ and shows it lies on (AYZ).",
+          "points": 1,
+          "satisfied_when": "all",
+          "children": [
+            {
+              "id": "matharena_usamo_2026_p3.chain-a.reflection.define",
+              "description": "Defines O' as the reflection of O over YZ."
+            },
+            {
+              "id": "matharena_usamo_2026_p3.chain-a.reflection.cyclic",
+              "description": "Shows that O' lies on the circumcircle of AYZ."
+            }
+          ]
+        },
+        {
+          "id": "matharena_usamo_2026_p3.chain-a.construct-x",
+          "description": "Constructs X on (AYZ) appropriately and shows OX bisects angle YXZ.",
+          "points": 1,
+          "satisfied_when": "all",
+          "children": [
+            {
+              "id": "matharena_usamo_2026_p3.chain-a.construct-x.construct",
+              "description": "Constructs X on (AYZ) (e.g., by letting X = NK intersect (AYZ) where OYKZ is a parallelogram)."
+            },
+            {
+              "id": "matharena_usamo_2026_p3.chain-a.construct-x.bisect",
+              "description": "Shows that OX bisects angle YXZ."
+            }
+          ]
+        },
+        {
+          "id": "matharena_usamo_2026_p3.chain-a.protassov",
+          "description": "Applies Protassov's theorem (or equivalent homothety) to deduce the tangent circle touches (AYZ) at X.",
+          "points": 1
+        },
+        {
+          "id": "matharena_usamo_2026_p3.chain-a.tangency-n",
+          "description": "Proves the constructed tangent circle passes through N.",
+          "points": 1
+        }
+      ],
+      "description": "Solution makes progress using the synthetic approach (Chain A)."
+    },
+    {
+      "id": "matharena_usamo_2026_p3.chain-b",
+      "selection_signal": "Solution makes progress using the complex numbers and inversion approach (Chain B).",
+      "points": 7,
+      "combinator": "one_of",
+      "children": [
+        {
+          "id": "matharena_usamo_2026_p3.chain-b.complete",
+          "selection_signal": "Complete and correct complex number / inversion solution.",
+          "points": 7,
+          "satisfied_when": "all",
+          "children": [
+            {
+              "id": "matharena_usamo_2026_p3.chain-b.complete.proof",
+              "description": "Computes all valid coordinates to finish the complex number solution without errors."
+            }
+          ],
+          "description": "Complete and correct complex number / inversion solution."
+        },
+        {
+          "id": "matharena_usamo_2026_p3.chain-b.errors",
+          "selection_signal": "Solution is complete but contains arithmetic or algebraic execution errors.",
+          "points": {
+            "min": 5,
+            "max": 6,
+            "default": 6,
+            "scale": [
+              {
+                "value": 6,
+                "criterion": "One arithmetic or algebraic execution error."
+              },
+              {
+                "value": 5,
+                "criterion": "Two or more arithmetic or algebraic execution errors."
+              }
+            ]
+          },
+          "satisfied_when": "all",
+          "children": [
+            {
+              "id": "matharena_usamo_2026_p3.chain-b.errors.proof",
+              "description": "Computes all valid coordinates to finish the solution, but with arithmetic/algebraic errors."
+            }
+          ],
+          "description": "Solution is complete but contains arithmetic or algebraic execution errors."
+        },
+        {
+          "id": "matharena_usamo_2026_p3.chain-b.setup",
+          "selection_signal": "Identifies and sets up a suitable inversion, but does not complete the coordinate computations.",
+          "points": 1,
+          "satisfied_when": "all",
+          "children": [
+            {
+              "id": "matharena_usamo_2026_p3.chain-b.setup.inversion",
+              "description": "Identifies and sets up a suitable inversion (e.g., centered at A with radius sqrt(bc), combined with reflection over A-bisector)."
+            }
+          ],
+          "description": "Identifies and sets up a suitable inversion, but does not complete the coordinate computations."
+        }
+      ],
+      "description": "Solution makes progress using the complex numbers and inversion approach (Chain B)."
+    },
+    {
+      "id": "matharena_usamo_2026_p3.no-progress",
+      "selection_signal": "No meaningful progress in either chain.",
+      "points": 0,
+      "description": "No meaningful progress in either chain."
+    }
+  ]
+}

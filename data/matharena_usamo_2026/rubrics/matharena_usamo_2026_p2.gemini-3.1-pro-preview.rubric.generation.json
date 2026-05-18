@@ -1,0 +1,132 @@
+{
+  "problem_id": "matharena_usamo_2026_p2",
+  "rubric_model": "gemini-3.1-pro-preview",
+  "created_at": "2026-04-30T23:48:32.144000+00:00",
+  "prompt": "<rubric_translation_task>\nTranslate the source math contest grading scheme into a rubric JSON object.\n\nOutput valid JSON only. Do not use markdown fences. Do not include text outside the JSON object.\n\nThe output root must have:\n- rubric_version: \"1.0\"\n- id: 'matharena_usamo_2026_p2'\n- description: short problem/rubric summary\n- points: 7\n- combinator or satisfied_when\n\nEvery node, including every child and grandchild, must have a unique string id. Use dot-path ids rooted at 'matharena_usamo_2026_p2', such as 'matharena_usamo_2026_p2' + \".chain_a\" and 'matharena_usamo_2026_p2' + \".chain_a.setup\".\n\nIf you include guidelines anywhere, guidelines must be an array of strings, never a single string.\n\nUse only these structural forms:\n- leaf: binary satisfied/not satisfied criterion with points\n- satisfied_when: score-bearing atomic node with pure condition children that have no points\n- combinator \"sum\": additive child scores\n- combinator \"one_of\": exactly one selected scoring regime; every child must have selection_signal\n\nImportant translation rules:\n- If the source says to score exactly one chain, encode chains as one_of children.\n- If the source gives additive checkpoints within a chain, encode that chain as sum.\n- If the source says a fixed score requires multiple conditions, use satisfied_when: \"all\" rather than inventing partial weights.\n- If a source range gives grader discretion, use a points range with explicit scale values.\n- Put non-scoring instructions, anti-credit notes, and distributional guidance in guidelines as a JSON array of strings.\n- Do not use scoring_program, max expressions, deductions, applies_if, or cross-node predicates.\n</rubric_translation_task>\n\n<problem_statement><![CDATA[Annie is playing a game where she starts with a row of positive integers, written on a blackboard, each of which is a power of $2$. On each turn, she can erase two adjacent numbers and replace them with a power of $2$ that is greater than either of the erased numbers. This shortens the row of numbers, and she continues to take turns until only one number remains. Annie wins the game if the final remaining number is less than $4$ times the sum of the original numbers. Is it always possible for Annie to win, regardless of the starting row of numbers?]]></problem_statement>\n\n<sample_solution><![CDATA[The answer is yes.\n\nModify the game so that there is an extra allowed move, erasing $2^i$ and adding $2^{i+1}$ in its place. This clearly does not help her, but it will be useful in the proof.\n\nThe strategy is to clear all the $1$s, then all the $2$s, $4$s, and etc. By clear $1$s, I mean to optimally change all $1$s to $2$s with the given moves. We can see that we can change $2k-1$ or $2k$ ones to $k$ twos. Then, we change $2k-1$ or $2k$ twos to fours, and etc. For example,\n\n$$1211124211\\to22222422\\to44444\\to888\\to16\\text{ }16\\to32$$\nis optimal.\n\nNow, we can reverse this process. We now can change $k$ twos to $2k-1$ ones.\n\n$$32\\to16\\text{ }16\\to888\\to44444\\to22222422\\to1211124211$$\n\nWe want to prove that if we start from $2^i$, then we end with numbers summing to $>2^{i-2}$. Notice that the $2^i$ at the start cannot split to a single $2^{i-1}$, as then $2^{i-1}$ would be the end, not $2^i$. So, we want to prove that if we start from $2^{i-1}\\text{ }2^{i-1}$, then we end with sum $>2^{i-2}$.\n\nI claim that if we have $k+1$ adjacent numbers of value $2^n$, then they end with sum $>2^{n-1}k$. We prove this with induction on $n$. Base case of $n=0$ is trivial.\n\nInductive step: out of these $k+1$, let indices $a_1,a_2,a_3,\\ldots,a_m$ stay as $2^n$, and all others split to $2^{n-1}$. Assume splitting splits $x$ to $2x-1$ because yes. Then, with the inductive hypothesis, we have a sum of\n$$>2^nm+2^{n-2}(2a_1-4+2a_2-2a_1-4+2a_3-2a_2-4+\\ldots+2(k+2)-2a_m-4)=2^nm+2^{n-2}(2k-4m)=2^{n-1}k$$\nThe $2a_2-2a_1-4$ is from a gap of $a_2-a_1-1$ between consecutive $a$ values, forming $2a_2-2a_2-3$ $2^{n-1}$s. If $a_2-a_1=1$, then theres no values at all so like its $>$ anyways.\n\nClaim proven.\n\nLet $k=1$ and $n=i-1$, we get $>2^{i-2}$\n]]></sample_solution>\n\n<source_grading_scheme><![CDATA[### 1. Checkpoints (7 pts total)\n**Score exactly one chain: take the maximum subtotal among chains; do not add points across chains.**\n\n**Chain A: Constructive / Algorithmic / Invariant-Based Approach**\n* **2 pts:** Defining a deterministic strategy (forward or reverse) AND accurately stating a precise mathematical invariant/bound that tracks the sequence's sum. The claim must explicitly formulate a strict lower bound on the initial sum required to generate a localized configuration of elements (e.g., an inequality relating the minimum original sum required to form a block of adjacent identical elements).\n    * *(Note: This is all-or-nothing. 0 points if the strict inequality or formulation is mathematically incorrect, even if the strategy/framework is mentioned).*\n* **5 pts:** Rigorously proving that this bound holds globally via a flawless inductive, recursive, or telescoping algebraic argument, concluding that $F < 4S$.\n    * *Partial Credit (4 pts):* The proof is logically complete and mathematically sound, but contains a localized, non-trivial gap (e.g., failing to explicitly address boundary edge cases, such as adjacent elements that do not merge).\n    * *Partial Credit (2 pts):* The student provides a complete and rigorous proof of the bound for a highly restricted but meaningful sub-case (e.g., perfectly proving the bound for a starting board consisting *only* of $1$s and $2$s), or flawlessly executes the base cases and sets up the inductive gaps but fails the final algebraic reduction.\n\n**Chain B: Existential / Structural / Information-Theoretic Approach**\n* **2 pts:** Translating the game into a global structure (e.g., a binary tree) AND identifying the strict mathematical constraints required for a winning structure to exist (e.g., defining the target $V < 4S$, the depth limits $d_i \\le \\log_2(V/a_i)$, and identifying the required inverse-power sum).\n    * *(Note: This is all-or-nothing. 0 points for merely stating the game is a binary tree without the precise depth and volume limits).*\n* **5 pts:** Rigorously proving the existence of a valid structure that satisfies these constraints without violating game rules (e.g., applying the Kraft-McMillan inequality and proving prefix domains are strictly disjoint), concluding that $F < 4S$.\n    * *Partial Credit (4 pts):* The existence proof is mathematically valid, but lacks a rigorous verification of one specific structural rule (e.g., proving the total volume fits, but failing to formally prove strict left-to-right ordering).\n    * *Partial Credit (2 pts):* Sets up the correct system of prefix code intervals or spatial domains, but fails to mathematically prove the Kraft-McMillan sum evaluates to $\\le 1$ for this game, OR calculates the sum correctly but fails to map it to a valid geometric/structural existence proof.\n\n###  2. Zero-Credit Items\n* Conjecturing that Annie can always win without providing a mathematical proof.\n* Testing small sequences or specific initial board states and concluding the result holds generally.\n* Outlining a valid conceptual approach (e.g., \"I will use induction\" or \"I will build a tree\") but failing to execute any formal mathematics.\n\n###  3. Deductions and Caps\n* **-1 point:** Minor arithmetic, algebraic, or indexing errors that do not invalidate the overall logic of the proof (can be applied up to 2 times; cap at -2).\n* **Cap at 2/7:** The proof states the correct bounds (2 pts) but the execution relies on a fundamental mathematical fallacy (e.g., circular reasoning, or assuming a tree exists without checking total \"volume\" constraints).]]></source_grading_scheme>",
+  "raw_model_output": "{\n  \"rubric_version\": \"1.0\",\n  \"id\": \"matharena_usamo_2026_p2\",\n  \"description\": \"Grading rubric for USAMO 2026 Problem 2: Annie's power of 2 game.\",\n  \"points\": 7,\n  \"combinator\": \"one_of\",\n  \"guidelines\": [\n    \"Score exactly one chain: take the maximum subtotal among chains; do not add points across chains.\",\n    \"Zero-Credit Items: Conjecturing that Annie can always win without providing a mathematical proof.\",\n    \"Zero-Credit Items: Testing small sequences or specific initial board states and concluding the result holds generally.\",\n    \"Zero-Credit Items: Outlining a valid conceptual approach but failing to execute any formal mathematics.\",\n    \"Deductions: Subtract 1 point for minor arithmetic, algebraic, or indexing errors that do not invalidate the overall logic of the proof (can be applied up to 2 times; cap at -2).\",\n    \"Caps: Cap at 2/7 if the proof states the correct bounds (2 pts) but the execution relies on a fundamental mathematical fallacy (e.g., circular reasoning, or assuming a tree exists without checking total 'volume' constraints).\"\n  ],\n  \"children\": [\n    {\n      \"id\": \"matharena_usamo_2026_p2.chain_a\",\n      \"selection_signal\": \"Constructive / Algorithmic / Invariant-Based Approach\",\n      \"combinator\": \"sum\",\n      \"points\": 7,\n      \"children\": [\n        {\n          \"id\": \"matharena_usamo_2026_p2.chain_a.setup\",\n          \"points\": 2,\n          \"satisfied_when\": \"all\",\n          \"guidelines\": [\n            \"This is all-or-nothing. 0 points if the strict inequality or formulation is mathematically incorrect, even if the strategy/framework is mentioned.\"\n          ],\n          \"children\": [\n            {\n              \"id\": \"matharena_usamo_2026_p2.chain_a.setup.strategy\",\n              \"description\": \"Defining a deterministic strategy (forward or reverse)\"\n            },\n            {\n              \"id\": \"matharena_usamo_2026_p2.chain_a.setup.invariant\",\n              \"description\": \"Accurately stating a precise mathematical invariant/bound that tracks the sequence's sum. The claim must explicitly formulate a strict lower bound on the initial sum required to generate a localized configuration of elements.\"\n            }\n          ]\n        },\n        {\n          \"id\": \"matharena_usamo_2026_p2.chain_a.proof\",\n          \"combinator\": \"one_of\",\n          \"points\": 5,\n          \"children\": [\n            {\n              \"id\": \"matharena_usamo_2026_p2.chain_a.proof.full\",\n              \"points\": 5,\n              \"selection_signal\": \"Flawless proof\",\n              \"description\": \"Rigorously proving that this bound holds globally via a flawless inductive, recursive, or telescoping algebraic argument, concluding that F < 4S.\"\n            },\n            {\n              \"id\": \"matharena_usamo_2026_p2.chain_a.proof.partial_4\",\n              \"points\": 4,\n              \"selection_signal\": \"Proof with minor gap\",\n              \"description\": \"The proof is logically complete and mathematically sound, but contains a localized, non-trivial gap (e.g., failing to explicitly address boundary edge cases, such as adjacent elements that do not merge).\"\n            },\n            {\n              \"id\": \"matharena_usamo_2026_p2.chain_a.proof.partial_2\",\n              \"points\": 2,\n              \"selection_signal\": \"Proof for sub-case or incomplete reduction\",\n              \"description\": \"Provides a complete and rigorous proof of the bound for a highly restricted but meaningful sub-case (e.g., perfectly proving the bound for a starting board consisting only of 1s and 2s), or flawlessly executes the base cases and sets up the inductive gaps but fails the final algebraic reduction.\"\n            }\n          ]\n        }\n      ]\n    },\n    {\n      \"id\": \"matharena_usamo_2026_p2.chain_b\",\n      \"selection_signal\": \"Existential / Structural / Information-Theoretic Approach\",\n      \"combinator\": \"sum\",\n      \"points\": 7,\n      \"children\": [\n        {\n          \"id\": \"matharena_usamo_2026_p2.chain_b.setup\",\n          \"points\": 2,\n          \"satisfied_when\": \"all\",\n          \"guidelines\": [\n            \"This is all-or-nothing. 0 points for merely stating the game is a binary tree without the precise depth and volume limits.\"\n          ],\n          \"children\": [\n            {\n              \"id\": \"matharena_usamo_2026_p2.chain_b.setup.structure\",\n              \"description\": \"Translating the game into a global structure (e.g., a binary tree)\"\n            },\n            {\n              \"id\": \"matharena_usamo_2026_p2.chain_b.setup.constraints\",\n              \"description\": \"Identifying the strict mathematical constraints required for a winning structure to exist (e.g., defining the target V < 4S, the depth limits, and identifying the required inverse-power sum).\"\n            }\n          ]\n        },\n        {\n          \"id\": \"matharena_usamo_2026_p2.chain_b.proof\",\n          \"combinator\": \"one_of\",\n          \"points\": 5,\n          \"children\": [\n            {\n              \"id\": \"matharena_usamo_2026_p2.chain_b.proof.full\",\n              \"points\": 5,\n              \"selection_signal\": \"Flawless existence proof\",\n              \"description\": \"Rigorously proving the existence of a valid structure that satisfies these constraints without violating game rules (e.g., applying the Kraft-McMillan inequality and proving prefix domains are strictly disjoint), concluding that F < 4S.\"\n            },\n            {\n              \"id\": \"matharena_usamo_2026_p2.chain_b.proof.partial_4\",\n              \"points\": 4,\n              \"selection_signal\": \"Existence proof with minor gap\",\n              \"description\": \"The existence proof is mathematically valid, but lacks a rigorous verification of one specific structural rule (e.g., proving the total volume fits, but failing to formally prove strict left-to-right ordering).\"\n            },\n            {\n              \"id\": \"matharena_usamo_2026_p2.chain_b.proof.partial_2\",\n              \"points\": 2,\n              \"selection_signal\": \"Incomplete existence proof\",\n              \"description\": \"Sets up the correct system of prefix code intervals or spatial domains, but fails to mathematically prove the Kraft-McMillan sum evaluates to <= 1 for this game, OR calculates the sum correctly but fails to map it to a valid geometric/structural existence proof.\"\n            }\n          ]\n        }\n      ]\n    }\n  ]\n}",
+  "rubric": {
+    "rubric_version": "1.0",
+    "id": "matharena_usamo_2026_p2",
+    "description": "Grading rubric for USAMO 2026 Problem 2: Annie's power of 2 game.",
+    "points": 7,
+    "combinator": "one_of",
+    "guidelines": [
+      "Score exactly one chain: take the maximum subtotal among chains; do not add points across chains.",
+      "Zero-Credit Items: Conjecturing that Annie can always win without providing a mathematical proof.",
+      "Zero-Credit Items: Testing small sequences or specific initial board states and concluding the result holds generally.",
+      "Zero-Credit Items: Outlining a valid conceptual approach but failing to execute any formal mathematics.",
+      "Deductions: Subtract 1 point for minor arithmetic, algebraic, or indexing errors that do not invalidate the overall logic of the proof (can be applied up to 2 times; cap at -2).",
+      "Caps: Cap at 2/7 if the proof states the correct bounds (2 pts) but the execution relies on a fundamental mathematical fallacy (e.g., circular reasoning, or assuming a tree exists without checking total 'volume' constraints)."
+    ],
+    "children": [
+      {
+        "id": "matharena_usamo_2026_p2.chain_a",
+        "selection_signal": "Constructive / Algorithmic / Invariant-Based Approach",
+        "combinator": "sum",
+        "points": 7,
+        "children": [
+          {
+            "id": "matharena_usamo_2026_p2.chain_a.setup",
+            "points": 2,
+            "satisfied_when": "all",
+            "guidelines": [
+              "This is all-or-nothing. 0 points if the strict inequality or formulation is mathematically incorrect, even if the strategy/framework is mentioned."
+            ],
+            "children": [
+              {
+                "id": "matharena_usamo_2026_p2.chain_a.setup.strategy",
+                "description": "Defining a deterministic strategy (forward or reverse)"
+              },
+              {
+                "id": "matharena_usamo_2026_p2.chain_a.setup.invariant",
+                "description": "Accurately stating a precise mathematical invariant/bound that tracks the sequence's sum. The claim must explicitly formulate a strict lower bound on the initial sum required to generate a localized configuration of elements."
+              }
+            ],
+            "description": "matharena_usamo_2026_p2.chain_a.setup"
+          },
+          {
+            "id": "matharena_usamo_2026_p2.chain_a.proof",
+            "combinator": "one_of",
+            "points": 5,
+            "children": [
+              {
+                "id": "matharena_usamo_2026_p2.chain_a.proof.full",
+                "points": 5,
+                "selection_signal": "Flawless proof",
+                "description": "Rigorously proving that this bound holds globally via a flawless inductive, recursive, or telescoping algebraic argument, concluding that F < 4S."
+              },
+              {
+                "id": "matharena_usamo_2026_p2.chain_a.proof.partial_4",
+                "points": 4,
+                "selection_signal": "Proof with minor gap",
+                "description": "The proof is logically complete and mathematically sound, but contains a localized, non-trivial gap (e.g., failing to explicitly address boundary edge cases, such as adjacent elements that do not merge)."
+              },
+              {
+                "id": "matharena_usamo_2026_p2.chain_a.proof.partial_2",
+                "points": 2,
+                "selection_signal": "Proof for sub-case or incomplete reduction",
+                "description": "Provides a complete and rigorous proof of the bound for a highly restricted but meaningful sub-case (e.g., perfectly proving the bound for a starting board consisting only of 1s and 2s), or flawlessly executes the base cases and sets up the inductive gaps but fails the final algebraic reduction."
+              }
+            ],
+            "description": "matharena_usamo_2026_p2.chain_a.proof"
+          }
+        ],
+        "description": "Constructive / Algorithmic / Invariant-Based Approach"
+      },
+      {
+        "id": "matharena_usamo_2026_p2.chain_b",
+        "selection_signal": "Existential / Structural / Information-Theoretic Approach",
+        "combinator": "sum",
+        "points": 7,
+        "children": [
+          {
+            "id": "matharena_usamo_2026_p2.chain_b.setup",
+            "points": 2,
+            "satisfied_when": "all",
+            "guidelines": [
+              "This is all-or-nothing. 0 points for merely stating the game is a binary tree without the precise depth and volume limits."
+            ],
+            "children": [
+              {
+                "id": "matharena_usamo_2026_p2.chain_b.setup.structure",
+                "description": "Translating the game into a global structure (e.g., a binary tree)"
+              },
+              {
+                "id": "matharena_usamo_2026_p2.chain_b.setup.constraints",
+                "description": "Identifying the strict mathematical constraints required for a winning structure to exist (e.g., defining the target V < 4S, the depth limits, and identifying the required inverse-power sum)."
+              }
+            ],
+            "description": "matharena_usamo_2026_p2.chain_b.setup"
+          },
+          {
+            "id": "matharena_usamo_2026_p2.chain_b.proof",
+            "combinator": "one_of",
+            "points": 5,
+            "children": [
+              {
+                "id": "matharena_usamo_2026_p2.chain_b.proof.full",
+                "points": 5,
+                "selection_signal": "Flawless existence proof",
+                "description": "Rigorously proving the existence of a valid structure that satisfies these constraints without violating game rules (e.g., applying the Kraft-McMillan inequality and proving prefix domains are strictly disjoint), concluding that F < 4S."
+              },
+              {
+                "id": "matharena_usamo_2026_p2.chain_b.proof.partial_4",
+                "points": 4,
+                "selection_signal": "Existence proof with minor gap",
+                "description": "The existence proof is mathematically valid, but lacks a rigorous verification of one specific structural rule (e.g., proving the total volume fits, but failing to formally prove strict left-to-right ordering)."
+              },
+              {
+                "id": "matharena_usamo_2026_p2.chain_b.proof.partial_2",
+                "points": 2,
+                "selection_signal": "Incomplete existence proof",
+                "description": "Sets up the correct system of prefix code intervals or spatial domains, but fails to mathematically prove the Kraft-McMillan sum evaluates to <= 1 for this game, OR calculates the sum correctly but fails to map it to a valid geometric/structural existence proof."
+              }
+            ],
+            "description": "matharena_usamo_2026_p2.chain_b.proof"
+          }
+        ],
+        "description": "Existential / Structural / Information-Theoretic Approach"
+      }
+    ]
+  }
+}

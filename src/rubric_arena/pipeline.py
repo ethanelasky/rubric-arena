@@ -157,7 +157,7 @@ def grade_structured(
     raw = llm_call(prompt)
     parsed = rubric_grading.grade_from_model_output(rubric=rubric, raw_model_output=raw)
     return {
-        "method": "structured_v4",
+        "method": "structured",
         "candidate_id": row.get("id"),
         "problem_id": row.get("problem_id"),
         "model_name": row.get("model_name"),
@@ -248,7 +248,7 @@ def build_final_score_rows(results: list[dict[str, Any]]) -> list[dict[str, Any]
             "structured_positive_atoms": None,
             "validation_warning_count": len(result.get("validation_warnings") or []),
         }
-        if result.get("method") == "structured_v4" and isinstance(result.get("judgment"), dict):
+        if result.get("method") == "structured" and isinstance(result.get("judgment"), dict):
             atoms = flatten_structured_judgment(result)
             row["structured_selected_regime"] = result["judgment"].get("selected")
             row["structured_atom_count"] = len(atoms)
@@ -310,7 +310,7 @@ def flatten_structured_judgment(result: dict[str, Any]) -> list[dict[str, Any]]:
 def flatten_all_structured_judgments(results: list[dict[str, Any]]) -> list[dict[str, Any]]:
     atoms: list[dict[str, Any]] = []
     for result in results:
-        if result.get("method") == "structured_v4":
+        if result.get("method") == "structured":
             atoms.extend(flatten_structured_judgment(result))
     return atoms
 
@@ -382,7 +382,7 @@ def holistic_vs_structured_diagnostics(results: list[dict[str, Any]]) -> list[di
 
     rows: list[dict[str, Any]] = []
     for (candidate_id, grader_model), methods in grouped.items():
-        structured = methods.get("structured_v4")
+        structured = methods.get("structured")
         free_text = methods.get("free_text")
         if not structured or not free_text:
             continue

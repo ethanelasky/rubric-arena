@@ -1,5 +1,5 @@
 
-# USEMO Rubric Schema v4 — Specification
+# USEMO Rubric Schema — Specification
 
 ## 1. Overview
 
@@ -38,7 +38,6 @@ The schema reflects the following commitments, in priority order:
 
 ```json
 {
-  "schema_version": "v4",
   "rubric_version": "<author's version of this specific rubric>",
   "id": "<problem identifier>",
   "description": "<problem statement summary>",
@@ -167,7 +166,6 @@ A rubric is valid iff all of the following hold.
 
 ### Structural
 
-1. **Schema version.** `schema_version` is `"v4"`.
 2. **Root.** Root has `id`, `description`, `points`, and either `combinator` or `satisfied_when`.
 3. **ID uniqueness.** Every node's `id` is unique within the tree.
 4. **ID hierarchy convention.** Each child's `id` begins with its parent's `id` followed by `.` and a local segment. (Convention; soft check.)
@@ -325,7 +323,7 @@ A judgment is valid against a rubric iff:
 
 ## 6. Authoring Patterns
 
-These are recurring patterns observed in source olympiad rubrics, with their canonical encoding under v4. A translation pipeline (free-text rubric → v4 JSON) should be primed to recognize these.
+These are recurring patterns observed in source olympiad rubrics, with their canonical encoding. A translation pipeline (free-text rubric → rubric JSON) should be primed to recognize these.
 
 ### 6.1 Completeness as its own regime
 
@@ -399,8 +397,8 @@ Source rubric signals: "0 points for [observation/statement]," "no points for [t
 
 The intended pipeline:
 
-1. **Authoring.** A rubric is authored once per problem, encoded as a v4 rubric document, validated.
-2. **Translation (optional).** A free-text source rubric (e.g., from a contest report) is translated to v4 JSON by an LLM with a translation prompt seeded with the patterns in §6, then validated.
+1. **Authoring.** A rubric is authored once per problem, encoded as a rubric document, validated.
+2. **Translation (optional).** A free-text source rubric (e.g., from a contest report) is translated to rubric JSON by an LLM with a translation prompt seeded with the patterns in §6, then validated.
 3. **Grading.** A grading LLM receives the rubric, the problem statement, the reference solution(s), and the contestant's paper. It emits a judgment tree in a single pass.
 4. **Validation.** The judgment is validated against the rubric (§5).
 5. **Score computation.** The final score is computed structurally from the judgment tree (§4.3).
@@ -410,12 +408,9 @@ The schema supports both single-pass (whole-paper) grading and per-criterion gra
 
 ---
 
-## 8. Versioning
+## 8. Rubric Versioning
 
-- `schema_version`: identifies which version of this specification a rubric/judgment conforms to. v4 is current.
 - `rubric_version`: the rubric author's version of a specific problem's rubric (e.g., "1.0", "1.1"). Allows iteration on a specific rubric without confusion.
-
-When the schema specification changes, `schema_version` increments. Past rubrics may need migration. 
 
 ## Appendix A — Design decisions
 
@@ -423,7 +418,7 @@ This appendix records the reasoning behind the schema's main shape choices. It e
 
 ### A.1 Why `one_of` instead of `max`
 
-Earlier iterations of this schema had a `max` combinator: a parent's score was the maximum of its children's scores, with each child scored independently and the highest taken. v4 replaces `max` with `one_of`, where a parent's score is the score of a single child explicitly selected by the grader.
+Earlier iterations of this schema had a `max` combinator: a parent's score was the maximum of its children's scores, with each child scored independently and the highest taken. This schema replaces `max` with `one_of`, where a parent's score is the score of a single child explicitly selected by the grader.
 
 The substantive arguments for the change:
 
@@ -443,7 +438,7 @@ The argument from honest modeling: rubrics where the source author explicitly sa
 
 ### A.2 Why no deductions
 
-Earlier iterations had a separate concept of deductions: rules outside the rubric tree that subtracted points based on `applies_if` predicates over computed score or named criterion satisfaction. v4 removes deductions entirely; all observed deduction patterns dissolve into either nested regime alternatives (under `one_of`) or pure grader guidance (in `guidelines`).
+Earlier iterations had a separate concept of deductions: rules outside the rubric tree that subtracted points based on `applies_if` predicates over computed score or named criterion satisfaction. This schema removes deductions entirely; all observed deduction patterns dissolve into either nested regime alternatives (under `one_of`) or pure grader guidance (in `guidelines`).
 
 The argument is empirical: across the rubrics encoded in development, every "deduction" in source rubric prose fell into one of three categories:
 
@@ -459,7 +454,7 @@ The risk to monitor: if a future olympiad rubric introduces genuinely stackable 
 
 ### A.3 Why ranges over regime-splitting
 
-When the source rubric grants the grader discretion within a regime ("5–6 points for any tiny slip"), v4 encodes this as a `points` range with a required `scale` array. An alternative would be to split the range into multiple regimes (5pt and 6pt as distinct `one_of` siblings).
+When the source rubric grants the grader discretion within a regime ("5–6 points for any tiny slip"), The schema encodes this as a `points` range with a required `scale` array. An alternative would be to split the range into multiple regimes (5pt and 6pt as distinct `one_of` siblings).
 
 The argument for ranges:
 
@@ -481,7 +476,7 @@ It also matches `description`'s placement: every node has a `description` of its
 
 ### A.5 Why duplication over cross-references
 
-When the same condition appears in multiple regimes (e.g., "claim B is required for both partial-credit branch X and partial-credit branch Y"), v4 prefers duplicating the criterion under both regimes (with distinct IDs) over introducing cross-references between nodes.
+When the same condition appears in multiple regimes (e.g., "claim B is required for both partial-credit branch X and partial-credit branch Y"), The schema prefers duplicating the criterion under both regimes (with distinct IDs) over introducing cross-references between nodes.
 
 The argument:
 
@@ -509,17 +504,15 @@ The cost: one additional case in the satisfaction-condition validator and judgme
 
 ### A.7 What the schema does not solve
 
-Worth being explicit about what v4 does *not* address, so future iterations don't reinvent these concerns:
+Worth being explicit about what the schema does *not* address, so future iterations don't reinvent these concerns:
 
-**Translation from free text.** The schema is a target representation, not a translation pipeline. The translation prompt (separate document) is where the work of going from prose rubrics to v4 JSON happens. Schema changes that make translation easier are valuable, but the schema is not designed *for* translation specifically.
+**Translation from free text.** The schema is a target representation, not a translation pipeline. The translation prompt (separate document) is where the work of going from prose rubrics to rubric JSON happens. Schema changes that make translation easier are valuable, but the schema is not designed *for* translation specifically.
 
 **Grading prompt design.** Likewise, the grading prompt is separate. The schema specifies what a judgment looks like; how a model is induced to produce that judgment is a prompting concern.
 
 **Inter-grader agreement metrics.** Two judgments over the same rubric are diffable, but the schema doesn't specify how to weight or aggregate disagreements. That's a debate-protocol concern, not a schema concern.
 
 **Authoring tooling.** No schema-aware editor, syntax-highlight, or interactive validator is specified. These are valuable but downstream of the schema being stable.
-
-**Versioning of the schema itself beyond `schema_version`.** v4 commits to a structural shape; if v5 changes the shape, migration tooling is a separate problem. The current `schema_version` field exists to detect mismatch, not to drive migration.
 
 ## Appendix B - Examples
 
@@ -539,7 +532,6 @@ radical center.
 Corresponding rubric: 
 
 {
-  "schema_version": "v4",
   "rubric_version": "1.0",
   "id": "usemo-2025-p2",
   "description": "Show that as P varies inside fixed triangle ABC, the circumcircles of triangle QPK have a common radical center.",

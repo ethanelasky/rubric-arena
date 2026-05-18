@@ -53,7 +53,7 @@ def main() -> None:
     rubric_call = anthropic_text_call(model=rubric_model, temperature=0.0)
 
     rubric = None
-    rubric_path = args.data_root / "rubrics" / f"matharena_usamo_2026_p{args.problem_idx}.{safe_id(rubric_model)}.rubric.v4.json"
+    rubric_path = args.data_root / "rubrics" / f"matharena_usamo_2026_p{args.problem_idx}.{safe_id(rubric_model)}.rubric.json"
     if args.method in {"structured", "both"}:
         if args.reuse_rubric and rubric_path.exists():
             rubric = json.loads(rubric_path.read_text())
