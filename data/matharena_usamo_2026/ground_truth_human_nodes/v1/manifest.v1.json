@@ -1,0 +1,30 @@
+{
+  "version": "v1",
+  "created_at": "2026-05-20T20:39:43.524655+00:00",
+  "description": "Finalized human node ground truth from high-confidence MathArena human labels. Includes audit pass rows plus repaired audit warn rows; excludes conversion failures and audit fail rows.",
+  "source_conversion_path": "data/matharena_usamo_2026/grading_runs/human_node_conversions/gemini-3.1-pro-preview.hc48_human_nodes_v1.20260520T161039Z.jsonl",
+  "source_conversion_failures_path": "data/matharena_usamo_2026/grading_runs/human_node_conversions/gemini-3.1-pro-preview.hc48_human_nodes_v1.20260520T161039Z.failures.jsonl",
+  "source_audit_path": "data/matharena_usamo_2026/grading_runs/human_node_conversion_audits/gemini-3.1-pro-preview.hc45_human_node_audit_v1.20260520T162944Z.jsonl",
+  "approved_rows": 44,
+  "excluded_rows": 4,
+  "atom_rows": 334,
+  "approved_by_problem": {
+    "matharena_usamo_2026_p1": 10,
+    "matharena_usamo_2026_p2": 8,
+    "matharena_usamo_2026_p3": 10,
+    "matharena_usamo_2026_p5": 13,
+    "matharena_usamo_2026_p6": 3
+  },
+  "excluded_by_reason": {
+    "audit_fail": 1,
+    "conversion_failed": 3
+  },
+  "repairs_applied": {
+    "set_selected_no_progress_satisfied_true": 3
+  },
+  "policy": {
+    "included": "audit verdict pass, plus audit verdict warn when the warning is a non-score-changing semantic repair that can be applied and revalidated",
+    "excluded": "conversion failures, audit failures, missing audit verdicts, or post-repair validation/score mismatch",
+    "score_requirement": "compute_score(judgment) must equal MathArena human score"
+  }
+}
