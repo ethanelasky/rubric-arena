@@ -1,8 +1,8 @@
 {
   "n": 2,
   "exact_match": 0.0,
-  "mae": 2.0,
-  "rmse": 2.0,
+  "mae": 1.5,
+  "rmse": 1.5811388300841898,
   "by_method": {
     "free_text": {
       "n": 1,
@@ -13,19 +13,19 @@
     "structured": {
       "n": 1,
       "exact_match": 0.0,
-      "mae": 2.0,
-      "rmse": 2.0
+      "mae": 1.0,
+      "rmse": 1.0
     }
   },
   "score_distributions": {
     "structured": {
       "n": 1,
-      "mean": 7.0,
+      "mean": 6.0,
       "unique_scores": [
-        "7"
+        "6"
       ],
       "score_counts": {
-        "7": 1
+        "6": 1
       },
       "clustering_rate": 1.0
     },
@@ -42,12 +42,22 @@
     }
   },
   "structured_atoms": {
-    "n_atoms": 4,
-    "n_binary_decisions": 2,
+    "n_atoms": 6,
+    "n_binary_decisions": 4,
     "n_selection_decisions": 1,
-    "positive_rate": 1.0,
+    "positive_rate": 0.5,
     "by_node": {
       "matharena_usamo_2026_p3.chain-b.setup": {
+        "n": 1,
+        "positive": 0,
+        "positive_rate": 0.0
+      },
+      "matharena_usamo_2026_p3.chain-b.setup.identifies": {
+        "n": 1,
+        "positive": 0,
+        "positive_rate": 0.0
+      },
+      "matharena_usamo_2026_p3.chain-b.setup.calculates": {
         "n": 1,
         "positive": 1,
         "positive_rate": 1.0

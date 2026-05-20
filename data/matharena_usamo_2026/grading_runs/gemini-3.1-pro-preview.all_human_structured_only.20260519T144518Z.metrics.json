@@ -1,0 +1,269 @@
+{
+  "n": 65,
+  "exact_match": 0.3384615384615385,
+  "mae": 1.4,
+  "rmse": 2.1447610589527217,
+  "by_method": {
+    "structured": {
+      "n": 65,
+      "exact_match": 0.3384615384615385,
+      "mae": 1.4,
+      "rmse": 2.1447610589527217
+    }
+  },
+  "structured_atoms": {
+    "n_atoms": 545,
+    "n_binary_decisions": 398,
+    "n_selection_decisions": 68,
+    "positive_rate": 0.6934673366834171,
+    "by_node": {
+      "matharena_usamo_2026_p1.periodicity": {
+        "n": 11,
+        "positive": 9,
+        "positive_rate": 0.8181818181818182
+      },
+      "matharena_usamo_2026_p1.non-increasing": {
+        "n": 11,
+        "positive": 6,
+        "positive_rate": 0.5454545454545454
+      },
+      "matharena_usamo_2026_p1.evaluation": {
+        "n": 11,
+        "positive": 11,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p1.evaluation.optimal-range": {
+        "n": 11,
+        "positive": 11,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p1.evaluation.maximum-value": {
+        "n": 11,
+        "positive": 11,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p1.fractional-parts": {
+        "n": 11,
+        "positive": 9,
+        "positive_rate": 0.8181818181818182
+      },
+      "matharena_usamo_2026_p1.upper-bound.general": {
+        "n": 4,
+        "positive": 4,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p1.upper-bound.general.proof": {
+        "n": 4,
+        "positive": 4,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p1.equality-cases": {
+        "n": 11,
+        "positive": 11,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p1.equality-cases.identify": {
+        "n": 11,
+        "positive": 11,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p1.equality-cases.conclude": {
+        "n": 11,
+        "positive": 11,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p1.upper-bound.no-progress": {
+        "n": 5,
+        "positive": 5,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p2.chain_b.setup": {
+        "n": 5,
+        "positive": 5,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p2.chain_b.setup.structure": {
+        "n": 5,
+        "positive": 5,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p2.chain_b.setup.constraints": {
+        "n": 5,
+        "positive": 5,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p2.chain_b.proof.partial_2": {
+        "n": 4,
+        "positive": 3,
+        "positive_rate": 0.75
+      },
+      "matharena_usamo_2026_p2.chain_a.setup": {
+        "n": 6,
+        "positive": 5,
+        "positive_rate": 0.8333333333333334
+      },
+      "matharena_usamo_2026_p2.chain_a.setup.strategy": {
+        "n": 6,
+        "positive": 6,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p2.chain_a.setup.invariant": {
+        "n": 6,
+        "positive": 5,
+        "positive_rate": 0.8333333333333334
+      },
+      "matharena_usamo_2026_p2.chain_a.proof.partial_2": {
+        "n": 6,
+        "positive": 1,
+        "positive_rate": 0.16666666666666666
+      },
+      "matharena_usamo_2026_p3.chain-b.complete": {
+        "n": 4,
+        "positive": 4,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p3.chain-b.complete.proof": {
+        "n": 4,
+        "positive": 4,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p3.chain-b.setup": {
+        "n": 4,
+        "positive": 4,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p3.chain-b.setup.inversion": {
+        "n": 4,
+        "positive": 4,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p5.complex-complete": {
+        "n": 3,
+        "positive": 3,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p5.complex-complete.proof": {
+        "n": 3,
+        "positive": 3,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p5.synthetic-chain.abc-efd": {
+        "n": 9,
+        "positive": 6,
+        "positive_rate": 0.6666666666666666
+      },
+      "matharena_usamo_2026_p5.synthetic-chain.miquel-point": {
+        "n": 9,
+        "positive": 6,
+        "positive_rate": 0.6666666666666666
+      },
+      "matharena_usamo_2026_p5.synthetic-chain.spiral-abc-efd": {
+        "n": 9,
+        "positive": 4,
+        "positive_rate": 0.4444444444444444
+      },
+      "matharena_usamo_2026_p5.synthetic-chain.abc-ooo": {
+        "n": 9,
+        "positive": 5,
+        "positive_rate": 0.5555555555555556
+      },
+      "matharena_usamo_2026_p5.synthetic-chain.spiral-efd-ooo": {
+        "n": 9,
+        "positive": 2,
+        "positive_rate": 0.2222222222222222
+      },
+      "matharena_usamo_2026_p5.synthetic-chain.spiral-mno": {
+        "n": 9,
+        "positive": 3,
+        "positive_rate": 0.3333333333333333
+      },
+      "matharena_usamo_2026_p5.synthetic-chain.conclude": {
+        "n": 9,
+        "positive": 3,
+        "positive_rate": 0.3333333333333333
+      },
+      "matharena_usamo_2026_p6.prime-power": {
+        "n": 16,
+        "positive": 8,
+        "positive_rate": 0.5
+      },
+      "matharena_usamo_2026_p6.prime-power.form": {
+        "n": 16,
+        "positive": 10,
+        "positive_rate": 0.625
+      },
+      "matharena_usamo_2026_p6.prime-power.mod-4": {
+        "n": 16,
+        "positive": 8,
+        "positive_rate": 0.5
+      },
+      "matharena_usamo_2026_p6.vieta-jumping.k-3": {
+        "n": 16,
+        "positive": 8,
+        "positive_rate": 0.5
+      },
+      "matharena_usamo_2026_p6.vieta-jumping.characterization": {
+        "n": 16,
+        "positive": 11,
+        "positive_rate": 0.6875
+      },
+      "matharena_usamo_2026_p6.higher-powers.p-mod-3": {
+        "n": 16,
+        "positive": 7,
+        "positive_rate": 0.4375
+      },
+      "matharena_usamo_2026_p6.higher-powers.p-1-mod-3-impossible": {
+        "n": 16,
+        "positive": 4,
+        "positive_rate": 0.25
+      },
+      "matharena_usamo_2026_p6.higher-powers.t-gt-2-impossible": {
+        "n": 16,
+        "positive": 5,
+        "positive_rate": 0.3125
+      },
+      "matharena_usamo_2026_p6.higher-powers.t-2-p-3": {
+        "n": 16,
+        "positive": 12,
+        "positive_rate": 0.75
+      },
+      "matharena_usamo_2026_p5.no-progress": {
+        "n": 1,
+        "positive": 1,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p1.upper-bound.coprime": {
+        "n": 2,
+        "positive": 2,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p1.upper-bound.coprime.proof": {
+        "n": 2,
+        "positive": 2,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p2.chain_b.proof.partial_4": {
+        "n": 1,
+        "positive": 1,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p3.no-progress": {
+        "n": 4,
+        "positive": 4,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p5.complex-trivialized": {
+        "n": 2,
+        "positive": 2,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p5.complex-trivialized.proof": {
+        "n": 2,
+        "positive": 2,
+        "positive_rate": 1.0
+      }
+    }
+  },
+  "selected_rows": 65,
+  "missing_tasks_remaining": 0
+}

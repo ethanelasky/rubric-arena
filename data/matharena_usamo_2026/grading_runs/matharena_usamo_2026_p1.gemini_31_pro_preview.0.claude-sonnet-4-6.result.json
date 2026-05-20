@@ -1,0 +1,67 @@
+{
+  "candidate_id": "matharena_usamo_2026_p1.gemini_31_pro_preview.0",
+  "problem_id": "matharena_usamo_2026_p1",
+  "grader_model": "claude-sonnet-4-6",
+  "ground_truth_score": 7,
+  "computed_score": 6,
+  "model_declared_score": null,
+  "score_consistent": null,
+  "judgment": {
+    "id": "matharena_usamo_2026_p1",
+    "reasoning": "Paper proves periodicity, bounds f(x) via floor inequalities and a gcd-based counting argument, applies Rearrangement Inequality for the upper bound, and correctly identifies equality cases. CP2 is not present (different approach used). All other steps are essentially correct.",
+    "children": [
+      {
+        "id": "matharena_usamo_2026_p1.cp1",
+        "reasoning": "Step 1 explicitly computes f(x+1) = f(x) using floor(kx+k) = floor(kx)+k, showing the +n and -n cancel. The argument is complete and correct.",
+        "satisfied": true
+      },
+      {
+        "id": "matharena_usamo_2026_p1.cp2",
+        "reasoning": "The paper never makes this argument. It bypasses the [ℓ/n,(ℓ+1)/n) monotonicity step entirely, instead bounding f(x) ≤ S(a_n) via the inequality a_k ≥ ⌊ka_n/n⌋ and maximizing over integer values of a_n = m. Neither the constancy of ⌊nx⌋ on such intervals nor the non-increasing property of the sum is mentioned.",
+        "satisfied": false,
+        "children": [
+          {
+            "id": "matharena_usamo_2026_p1.cp2.constant-floor-nx",
+            "reasoning": "Not observed or stated anywhere in the paper.",
+            "satisfied": false
+          },
+          {
+            "id": "matharena_usamo_2026_p1.cp2.sum-nonincreasing",
+            "reasoning": "Not observed or stated anywhere in the paper.",
+            "satisfied": false
+          }
+        ]
+      },
+      {
+        "id": "matharena_usamo_2026_p1.cp3",
+        "reasoning": "The paper computes the maximum as ∑_{k=2}^n 1/k = ∑_{k=1}^{n-1}(1/k) - (n-1)/n = ∑_{k=2}^n 1/k in Step 3. This equals -1 + ∑_{k=1}^n 1/k. The arithmetic is correct: ∑_{k=1}^{n-1}(1/k - 1/n) = ∑_{k=1}^{n-1}1/k - (n-1)/n = 1 + ∑_{k=2}^{n-1}1/k - 1 + 1/n = ∑_{k=2}^n 1/k. No arithmetic errors.",
+        "satisfied": true,
+        "points_awarded": 1
+      },
+      {
+        "id": "matharena_usamo_2026_p1.cp4",
+        "reasoning": "The paper derives f(x) = ∑(ka_n - na_k)/(nk) ≤ ∑(ka_n mod n)/(nk) = S(a_n) where S(m) = (1/n)∑_{k=1}^{n-1}(km mod n)/k. Since (km mod n)/n = {km/n}, this is equivalent to the fractional-parts reformulation f ≤ ∑{km/n}/k. The algebraic content of the fractional-parts identity is present, even though the notation {·} is not used. The bound f(x) ≤ S(a_n) combined with the equality analysis in Step 4 (where f(x) = S(a_n) when a_k = ⌊ka_n/n⌋) gives the full identity at the optimal point.",
+        "satisfied": true
+      },
+      {
+        "id": "matharena_usamo_2026_p1.cp5",
+        "reasoning": "The paper proves c_{(k)} ≤ n-k for all k via a gcd counting argument that explicitly handles all values of d = gcd(m,n). The argument: positive values of (km mod n) are multiples of d, each appearing d times; elements ≥ v number exactly n-j ≤ n-v where j = d⌈v/d⌉. This covers gcd(m,n) = 1 and gcd(m,n) > 1 uniformly. Then Rearrangement gives ∑c_k/k ≤ ∑c_{(k)}/k ≤ ∑(n-k)/k. This is a full proof in generality, selecting 'full' (2 points).",
+        "selected": "matharena_usamo_2026_p1.cp5.full",
+        "children": [
+          {
+            "id": "matharena_usamo_2026_p1.cp5.full",
+            "satisfied": true,
+            "reasoning": "The gcd counting argument in Step 3 correctly handles all d = gcd(m,n). The claim that elements ≥ v number at most n-v is proved by: identifying the multiples of d that are ≥ v (there are (n-j)/d of them, each appearing d times, giving n-j ≤ n-v total). This applies for any d | n, covering the general case. The Rearrangement Inequality application is then valid and complete."
+          }
+        ]
+      },
+      {
+        "id": "matharena_usamo_2026_p1.cp6",
+        "reasoning": "Step 4 correctly identifies that equality requires: (1) c_k = n-k for all k, which forces km ≡ -k (mod n) hence m = n-1; (2) a_k = k-1 for all k, which requires x ≥ 1-1/k for all k, tightest at k=n giving x ≥ 1-1/n. Combined with x < 1, this gives x ∈ [1-1/n, 1). Periodicity extends to ∪_m [m+1-1/n, m+1). This matches the correct answer.",
+        "satisfied": true
+      }
+    ]
+  },
+  "validation_warnings": [],
+  "raw_model_output": "I'll read the paper carefully before grading.\n\n## Grading Summary\n\n**What the paper attempts.** The contestant defines f(x), proves periodicity to reduce to [0,1), then rewrites f(x) as a sum involving floor expressions. They bound f(x) by an expression involving (km mod n)/k, then use a counting argument to show the sorted remainders satisfy c_{(k)} ≤ n-k, apply the Rearrangement Inequality to bound the sum, compute the maximum value, and identify equality conditions.\n\n**What the paper achieves.** The paper is largely complete and correct. Step 1 (periodicity) is clean. Step 2 establishes f(x) ≤ S(a_n) via floor inequalities — this is an alternative route to the fractional-parts reformulation. The key claim in Step 3 (that c_{(k)} ≤ n-k) is proved via a counting argument about multiples of gcd(m,n), and the Rearrangement Inequality gives the bound. The maximum value is computed as ∑_{k=2}^n 1/k = -1 + ∑_{k=1}^n 1/k. Step 4 identifies equality conditions correctly.\n\n**CP1 (Periodicity):** Fully proved with explicit calculation. ✓\n\n**CP2 (f non-increasing on [ℓ/n, (ℓ+1)/n)):** The paper does NOT explicitly argue this. Instead, the paper takes a different approach — it bounds f(x) ≤ S(a_n) using the floor inequality a_k ≥ ⌊ka_n/n⌋, and then maximizes over integer values of a_n. The paper never explicitly observes that ⌊nx⌋ is constant on [ℓ/n, (ℓ+1)/n) or that the sum is non-increasing there. This step is not present.\n\n**CP3 (Evaluating f at the optimal point):** The paper computes the maximum value as ∑_{k=2}^n 1/k. This equals -1 + ∑_{k=1}^n 1/k (since 1/1 = 1, so ∑_{k=2}^n 1/k = ∑_{k=1}^n 1/k - 1). The value is correctly computed. ✓\n\n**CP4 (Fractional parts reformulation):** The paper does NOT derive the identity f(ℓ/n) = ∑_{k=1}^n {kℓ/n}/k. Instead, it uses a different algebraic path: f(x) = ∑ (ka_n - na_k)/(nk) ≤ ∑ (ka_n mod n)/(nk). This is a valid alternative reformulation, but it's not the fractional-parts identity. The rubric asks specifically for the fractional-parts reformulation. However, the contestant's reformulation is equivalent in spirit — they write f(x) ≤ ∑ (km mod n)/(nk) where m = a_n, and this is essentially the same as the fractional-parts approach (since (km mod n)/n = {km/n}). The expression S(m) = (1/n)∑_{k=1}^{n-1} (km mod n)/k = ∑_{k=1}^{n-1} {km/n}/k is exactly the fractional-parts sum. So while the notation differs, the substance is equivalent. I'll award this point.\n\n**CP5 (Upper bound proof):** The contestant proves c_{(k)} ≤ n-k for all k (via the gcd counting argument), then applies Rearrangement to get ∑ c_k/k ≤ ∑ (n-k)/k. The gcd argument handles all values of gcd(m,n) — the claim is proved for all m, not just gcd=1. The counting argument correctly identifies that multiples of d = gcd(m,n) appear d times each, giving n-j ≤ n-v total elements ≥ v. This covers the general case. This deserves the \"full\" credit (2 points).\n\n**CP6 (Equality cases):** The paper correctly identifies that equality requires m = n-1 (so ⌊nx⌋ = n-1) and a_k = k-1 for all k, leading to x ∈ [1-1/n, 1). With periodicity, this gives the correct union of intervals. ✓\n\n**Score breakdown:** CP1(1) + CP2(0) + CP3(1) + CP4(1) + CP5(2) + CP6(1) = 6 points.\n\n**Fuzzy call on CP4:** The contestant doesn't write the fractional-parts identity explicitly, but their reformulation S(m) = (1/n)∑(km mod n)/k is equivalent to ∑{km/n}/k. I'm treating this as satisfying CP4 since the algebraic content is the same. A debater could argue the specific fractional-parts notation wasn't used, but the mathematical content is present.\n\n**CP2 is clearly not satisfied:** The paper never argues that f is non-increasing on [ℓ/n, (ℓ+1)/n). It uses a different (valid) approach that bypasses this step.\n\n```json\n{\n  \"id\": \"matharena_usamo_2026_p1\",\n  \"reasoning\": \"Paper proves periodicity, bounds f(x) via floor inequalities and a gcd-based counting argument, applies Rearrangement Inequality for the upper bound, and correctly identifies equality cases. CP2 is not present (different approach used). All other steps are essentially correct.\",\n  \"children\": [\n    {\n      \"id\": \"matharena_usamo_2026_p1.cp1\",\n      \"reasoning\": \"Step 1 explicitly computes f(x+1) = f(x) using floor(kx+k) = floor(kx)+k, showing the +n and -n cancel. The argument is complete and correct.\",\n      \"satisfied\": true\n    },\n    {\n      \"id\": \"matharena_usamo_2026_p1.cp2\",\n      \"reasoning\": \"The paper never makes this argument. It bypasses the [ℓ/n,(ℓ+1)/n) monotonicity step entirely, instead bounding f(x) ≤ S(a_n) via the inequality a_k ≥ ⌊ka_n/n⌋ and maximizing over integer values of a_n = m. Neither the constancy of ⌊nx⌋ on such intervals nor the non-increasing property of the sum is mentioned.\",\n      \"satisfied\": false,\n      \"children\": [\n        {\n          \"id\": \"matharena_usamo_2026_p1.cp2.constant-floor-nx\",\n          \"reasoning\": \"Not observed or stated anywhere in the paper.\",\n          \"satisfied\": false\n        },\n        {\n          \"id\": \"matharena_usamo_2026_p1.cp2.sum-nonincreasing\",\n          \"reasoning\": \"Not observed or stated anywhere in the paper.\",\n          \"satisfied\": false\n        }\n      ]\n    },\n    {\n      \"id\": \"matharena_usamo_2026_p1.cp3\",\n      \"reasoning\": \"The paper computes the maximum as ∑_{k=2}^n 1/k = ∑_{k=1}^{n-1}(1/k) - (n-1)/n = ∑_{k=2}^n 1/k in Step 3. This equals -1 + ∑_{k=1}^n 1/k. The arithmetic is correct: ∑_{k=1}^{n-1}(1/k - 1/n) = ∑_{k=1}^{n-1}1/k - (n-1)/n = 1 + ∑_{k=2}^{n-1}1/k - 1 + 1/n = ∑_{k=2}^n 1/k. No arithmetic errors.\",\n      \"satisfied\": true,\n      \"points_awarded\": 1\n    },\n    {\n      \"id\": \"matharena_usamo_2026_p1.cp4\",\n      \"reasoning\": \"The paper derives f(x) = ∑(ka_n - na_k)/(nk) ≤ ∑(ka_n mod n)/(nk) = S(a_n) where S(m) = (1/n)∑_{k=1}^{n-1}(km mod n)/k. Since (km mod n)/n = {km/n}, this is equivalent to the fractional-parts reformulation f ≤ ∑{km/n}/k. The algebraic content of the fractional-parts identity is present, even though the notation {·} is not used. The bound f(x) ≤ S(a_n) combined with the equality analysis in Step 4 (where f(x) = S(a_n) when a_k = ⌊ka_n/n⌋) gives the full identity at the optimal point.\",\n      \"satisfied\": true\n    },\n    {\n      \"id\": \"matharena_usamo_2026_p1.cp5\",\n      \"reasoning\": \"The paper proves c_{(k)} ≤ n-k for all k via a gcd counting argument that explicitly handles all values of d = gcd(m,n). The argument: positive values of (km mod n) are multiples of d, each appearing d times; elements ≥ v number exactly n-j ≤ n-v where j = d⌈v/d⌉. This covers gcd(m,n) = 1 and gcd(m,n) > 1 uniformly. Then Rearrangement gives ∑c_k/k ≤ ∑c_{(k)}/k ≤ ∑(n-k)/k. This is a full proof in generality, selecting 'full' (2 points).\",\n      \"selected\": \"matharena_usamo_2026_p1.cp5.full\",\n      \"children\": [\n        {\n          \"id\": \"matharena_usamo_2026_p1.cp5.full\",\n          \"satisfied\": true,\n          \"reasoning\": \"The gcd counting argument in Step 3 correctly handles all d = gcd(m,n). The claim that elements ≥ v number at most n-v is proved by: identifying the multiples of d that are ≥ v (there are (n-j)/d of them, each appearing d times, giving n-j ≤ n-v total). This applies for any d | n, covering the general case. The Rearrangement Inequality application is then valid and complete.\",\n          \"points_awarded\": 2\n        }\n      ]\n    },\n    {\n      \"id\": \"matharena_usamo_2026_p1.cp6\",\n      \"reasoning\": \"Step 4 correctly identifies that equality requires: (1) c_k = n-k for all k, which forces km ≡ -k (mod n) hence m = n-1; (2) a_k = k-1 for all k, which requires x ≥ 1-1/k for all k, tightest at k=n giving x ≥ 1-1/n. Combined with x < 1, this gives x ∈ [1-1/n, 1). Periodicity extends to ∪_m [m+1-1/n, m+1). This matches the correct answer.\",\n      \"satisfied\": true\n    }\n  ]\n}\n```"
+}

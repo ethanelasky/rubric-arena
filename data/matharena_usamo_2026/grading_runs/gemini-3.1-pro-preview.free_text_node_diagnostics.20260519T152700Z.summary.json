@@ -1,0 +1,7 @@
+{
+  "human_structured_valid": 50,
+  "structured_valid": 65,
+  "free_text_structured_valid": 54,
+  "free_text_structured_failures": 11,
+  "node_rows": 907
+}

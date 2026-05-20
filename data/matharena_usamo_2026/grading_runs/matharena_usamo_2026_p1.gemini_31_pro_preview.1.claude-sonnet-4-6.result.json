@@ -1,0 +1,67 @@
+{
+  "candidate_id": "matharena_usamo_2026_p1.gemini_31_pro_preview.1",
+  "problem_id": "matharena_usamo_2026_p1",
+  "grader_model": "claude-sonnet-4-6",
+  "ground_truth_score": 7,
+  "computed_score": 7,
+  "model_declared_score": null,
+  "score_consistent": null,
+  "judgment": {
+    "id": "matharena_usamo_2026_p1",
+    "reasoning": "The paper proceeds through all major steps: periodicity, restriction to rational points, fractional-part reformulation, majorization+rearrangement bound, equality case. All steps are correct and complete.",
+    "children": [
+      {
+        "id": "matharena_usamo_2026_p1.cp1",
+        "reasoning": "Step 1 explicitly computes f_n(x+1) = floor(nx)+n - sum(floor(kx)+k)/k = floor(nx)+n - sum floor(kx)/k - n = f_n(x). The algebra is correct and the conclusion that f is period-1 is clearly stated.",
+        "satisfied": true
+      },
+      {
+        "id": "matharena_usamo_2026_p1.cp2",
+        "reasoning": "Step 2 correctly identifies both sub-criteria: floor(nx) is constant on [m/n,(m+1)/n) (since nx in [m,m+1) there), and floor(kx)/k can only increase as x increases within the interval, so -sum floor(kx)/k is non-increasing, making f non-increasing. The bound f(x) <= S_n(m) = f(m/n) is explicitly stated.",
+        "satisfied": true,
+        "children": [
+          {
+            "id": "matharena_usamo_2026_p1.cp2.constant-floor-nx",
+            "reasoning": "The paper states 'let m = floor(nx), which implies m in {0,...,n-1} and m/n <= x < (m+1)/n' and uses m as a constant throughout the interval. The constancy of floor(nx) on [m/n,(m+1)/n) is implicit and correctly used.",
+            "satisfied": true
+          },
+          {
+            "id": "matharena_usamo_2026_p1.cp2.sum-nonincreasing",
+            "reasoning": "The paper notes 'kx >= km/n implies floor(kx) >= floor(km/n)', so the sum sum floor(kx)/k >= sum floor(km/n)/k, meaning -sum floor(kx)/k <= -sum floor(km/n)/k. This establishes f(x) <= S_n(m), i.e., f is non-increasing on the interval. Correctly argued.",
+            "satisfied": true
+          }
+        ]
+      },
+      {
+        "id": "matharena_usamo_2026_p1.cp3",
+        "reasoning": "Step 5 computes f_n(x) for x in [n-1/n,1): floor(kx)=k-1 for k=1,...,n-1 and floor(nx)=n-1. The arithmetic is f_n(x) = (n-1) - sum_{k=1}^{n-1}(k-1)/k - (n-1)/n = sum_{k=1}^n 1/k - 1 = sum_{k=2}^n 1/k. No arithmetic errors; matches the correct answer.",
+        "satisfied": true,
+        "points_awarded": 1
+      },
+      {
+        "id": "matharena_usamo_2026_p1.cp4",
+        "reasoning": "Step 3 derives S_n(m) = (1/n) sum_{k=1}^{n-1} (km mod n)/k using floor(km/n) = km/n - (km mod n)/n. This is equivalent to sum_{k=1}^n {km/n}/k (since the k=n term is 0 and {km/n} = (km mod n)/n). The fractional-part reformulation is correctly established.",
+        "satisfied": true
+      },
+      {
+        "id": "matharena_usamo_2026_p1.cp5",
+        "reasoning": "The contestant proves the upper bound for all m (all values of gcd(m,n)). They show N(p) = n - d*ceil(p/d) <= n-p for all d=gcd(m,n), establishing c_(k) <= n-k for all k. Then they apply rearrangement to get sum c_k/k <= sum c_(k)/k <= sum (n-k)/k. This argument is valid for all gcd values, not just gcd=1. Routing to cp5.full.",
+        "selected": "matharena_usamo_2026_p1.cp5.full",
+        "children": [
+          {
+            "id": "matharena_usamo_2026_p1.cp5.full",
+            "reasoning": "The majorization argument via N(p) <= n-p is proved for general d=gcd(m,n) (not just d=1). The bound c_(k) <= n-k holds for all m, and the rearrangement inequality then gives S_n(m) <= (1/n) sum_{k=1}^{n-1} (n-k)/k for all m. This constitutes a full proof in generality. The rearrangement step is valid since 1/1 >= 1/2 >= ... >= 1/(n-1) and c_(k) <= n-k provides the majorization needed.",
+            "satisfied": true
+          }
+        ]
+      },
+      {
+        "id": "matharena_usamo_2026_p1.cp6",
+        "reasoning": "The paper identifies equality in the rearrangement requires c_k = n-k for all k, checks that c_1 = m mod n = n-1 forces m = n-1, verifies the full interval [n-1/n, 1) achieves the maximum (Step 5 confirms floor(kx)=k-1 for all k in {1,...,n-1} throughout the interval), and states the periodic extension as unions of [j+1-1/n, j+1). The equality characterization is complete and correct.",
+        "satisfied": true
+      }
+    ]
+  },
+  "validation_warnings": [],
+  "raw_model_output": "I'll read the paper carefully before grading.\n\n## Grading Summary\n\n**What the paper attempts.** The contestant defines f_n(x) and proceeds through a structured argument: (1) prove period-1 periodicity, (2) restrict to [0,1) and show the maximum on each sub-interval [m/n, (m+1)/n) is achieved at the left endpoint, (3) express S_n(m) in terms of residues c_k = km mod n, (4) use a majorization/rearrangement argument to bound the sum, and (5) verify equality at m = n-1.\n\n**What the paper achieves.** The periodicity argument (Step 1) is correct. Step 2 correctly observes that floor(nx) is constant on [m/n, (m+1)/n) and that the sum can only decrease as x increases within the interval, establishing that f(x) ≤ S_n(m) = f(m/n). Step 3 correctly derives S_n(m) = (1/n) Σ_{k=1}^{n-1} (km mod n)/k. Step 4 attempts to bound this sum via majorization: showing c_(k) ≤ n-k (the sorted sequence is majorized by n-1, n-2, ..., 1), then applying the rearrangement inequality. Step 5 verifies the exact value at m = n-1 and confirms equality throughout [n-1/n, 1).\n\n**CP4 assessment.** The contestant derives f(ℓ/n) = (1/n) Σ_{k=1}^{n-1} (kℓ mod n)/k. This is equivalent to Σ_{k=1}^n {kℓ/n}/k since {kℓ/n} = (kℓ mod n)/n and the k=n term is 0. This satisfies CP4.\n\n**CP5 assessment.** The key question is whether the bound is proved in full generality. The contestant shows c_(k) ≤ n-k for all k using N(p) ≤ n-p (which holds for any gcd(m,n) = d). Then they apply the rearrangement inequality: Σ c_k/k ≤ Σ c_(k)/k ≤ Σ (n-k)/k. The first inequality (rearrangement) requires that 1/1 ≥ 1/2 ≥ ... ≥ 1/(n-1) (true) and that pairing largest c with largest weight maximizes the sum. The second inequality uses c_(k) ≤ n-k. This argument is valid for all m (any gcd), not just the coprime case. The majorization bound N(p) ≤ n-p is proved for all d = gcd(m,n). This constitutes a full proof of the upper bound in full generality, earning the cp5.full regime (2 points).\n\n**CP6 assessment.** The contestant identifies equality requires c_k = n-k for all k, checks k=1 forces m = n-1, and verifies the full interval [n-1/n, 1) achieves the maximum. The equality case characterization is correct and complete, including the periodic extension.\n\n**CP3 assessment.** The value is correctly computed as Σ_{k=2}^n 1/k = -1 + Σ_{k=1}^n 1/k with no arithmetic errors.\n\n**Final score.** CP1: 1pt, CP2: 1pt, CP3: 1pt, CP4: 1pt, CP5 (full): 2pt, CP6: 1pt. Total: 7 points.\n\n```json\n{\n  \"id\": \"matharena_usamo_2026_p1\",\n  \"reasoning\": \"The paper proceeds through all major steps: periodicity, restriction to rational points, fractional-part reformulation, majorization+rearrangement bound, equality case. All steps are correct and complete.\",\n  \"children\": [\n    {\n      \"id\": \"matharena_usamo_2026_p1.cp1\",\n      \"reasoning\": \"Step 1 explicitly computes f_n(x+1) = floor(nx)+n - sum(floor(kx)+k)/k = floor(nx)+n - sum floor(kx)/k - n = f_n(x). The algebra is correct and the conclusion that f is period-1 is clearly stated.\",\n      \"satisfied\": true\n    },\n    {\n      \"id\": \"matharena_usamo_2026_p1.cp2\",\n      \"reasoning\": \"Step 2 correctly identifies both sub-criteria: floor(nx) is constant on [m/n,(m+1)/n) (since nx in [m,m+1) there), and floor(kx)/k can only increase as x increases within the interval, so -sum floor(kx)/k is non-increasing, making f non-increasing. The bound f(x) <= S_n(m) = f(m/n) is explicitly stated.\",\n      \"satisfied\": true,\n      \"children\": [\n        {\n          \"id\": \"matharena_usamo_2026_p1.cp2.constant-floor-nx\",\n          \"reasoning\": \"The paper states 'let m = floor(nx), which implies m in {0,...,n-1} and m/n <= x < (m+1)/n' and uses m as a constant throughout the interval. The constancy of floor(nx) on [m/n,(m+1)/n) is implicit and correctly used.\",\n          \"satisfied\": true\n        },\n        {\n          \"id\": \"matharena_usamo_2026_p1.cp2.sum-nonincreasing\",\n          \"reasoning\": \"The paper notes 'kx >= km/n implies floor(kx) >= floor(km/n)', so the sum sum floor(kx)/k >= sum floor(km/n)/k, meaning -sum floor(kx)/k <= -sum floor(km/n)/k. This establishes f(x) <= S_n(m), i.e., f is non-increasing on the interval. Correctly argued.\",\n          \"satisfied\": true\n        }\n      ]\n    },\n    {\n      \"id\": \"matharena_usamo_2026_p1.cp3\",\n      \"reasoning\": \"Step 5 computes f_n(x) for x in [n-1/n,1): floor(kx)=k-1 for k=1,...,n-1 and floor(nx)=n-1. The arithmetic is f_n(x) = (n-1) - sum_{k=1}^{n-1}(k-1)/k - (n-1)/n = sum_{k=1}^n 1/k - 1 = sum_{k=2}^n 1/k. No arithmetic errors; matches the correct answer.\",\n      \"satisfied\": true,\n      \"points_awarded\": 1\n    },\n    {\n      \"id\": \"matharena_usamo_2026_p1.cp4\",\n      \"reasoning\": \"Step 3 derives S_n(m) = (1/n) sum_{k=1}^{n-1} (km mod n)/k using floor(km/n) = km/n - (km mod n)/n. This is equivalent to sum_{k=1}^n {km/n}/k (since the k=n term is 0 and {km/n} = (km mod n)/n). The fractional-part reformulation is correctly established.\",\n      \"satisfied\": true\n    },\n    {\n      \"id\": \"matharena_usamo_2026_p1.cp5\",\n      \"reasoning\": \"The contestant proves the upper bound for all m (all values of gcd(m,n)). They show N(p) = n - d*ceil(p/d) <= n-p for all d=gcd(m,n), establishing c_(k) <= n-k for all k. Then they apply rearrangement to get sum c_k/k <= sum c_(k)/k <= sum (n-k)/k. This argument is valid for all gcd values, not just gcd=1. Routing to cp5.full.\",\n      \"selected\": \"matharena_usamo_2026_p1.cp5.full\",\n      \"children\": [\n        {\n          \"id\": \"matharena_usamo_2026_p1.cp5.full\",\n          \"reasoning\": \"The majorization argument via N(p) <= n-p is proved for general d=gcd(m,n) (not just d=1). The bound c_(k) <= n-k holds for all m, and the rearrangement inequality then gives S_n(m) <= (1/n) sum_{k=1}^{n-1} (n-k)/k for all m. This constitutes a full proof in generality. The rearrangement step is valid since 1/1 >= 1/2 >= ... >= 1/(n-1) and c_(k) <= n-k provides the majorization needed.\",\n          \"satisfied\": true,\n          \"points_awarded\": 2\n        }\n      ]\n    },\n    {\n      \"id\": \"matharena_usamo_2026_p1.cp6\",\n      \"reasoning\": \"The paper identifies equality in the rearrangement requires c_k = n-k for all k, checks that c_1 = m mod n = n-1 forces m = n-1, verifies the full interval [n-1/n, 1) achieves the maximum (Step 5 confirms floor(kx)=k-1 for all k in {1,...,n-1} throughout the interval), and states the periodic extension as unions of [j+1-1/n, j+1). The equality characterization is complete and correct.\",\n      \"satisfied\": true\n    }\n  ]\n}\n```"
+}

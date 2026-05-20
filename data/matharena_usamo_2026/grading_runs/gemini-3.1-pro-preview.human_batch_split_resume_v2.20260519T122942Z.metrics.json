@@ -1,0 +1,388 @@
+{
+  "n": 92,
+  "exact_match": 0.34782608695652173,
+  "mae": 1.3043478260869565,
+  "rmse": 2.0376883748609544,
+  "by_method": {
+    "free_text": {
+      "n": 48,
+      "exact_match": 0.3541666666666667,
+      "mae": 1.2291666666666667,
+      "rmse": 1.920286436967152
+    },
+    "structured": {
+      "n": 44,
+      "exact_match": 0.3409090909090909,
+      "mae": 1.3863636363636365,
+      "rmse": 2.1584927401061393
+    }
+  },
+  "score_distributions": {
+    "free_text": {
+      "n": 48,
+      "mean": 3.0,
+      "unique_scores": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "6",
+        "7"
+      ],
+      "score_counts": {
+        "7": 12,
+        "6": 2,
+        "0": 15,
+        "2": 2,
+        "4": 5,
+        "1": 6,
+        "3": 6
+      },
+      "clustering_rate": 0.3125
+    },
+    "structured": {
+      "n": 44,
+      "mean": 3.3863636363636362,
+      "unique_scores": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7"
+      ],
+      "score_counts": {
+        "7": 10,
+        "5": 1,
+        "4": 8,
+        "0": 8,
+        "1": 6,
+        "3": 6,
+        "2": 3,
+        "6": 2
+      },
+      "clustering_rate": 0.22727272727272727
+    }
+  },
+  "structured_atoms": {
+    "n_atoms": 358,
+    "n_binary_decisions": 254,
+    "n_selection_decisions": 42,
+    "positive_rate": 0.6259842519685039,
+    "by_node": {
+      "matharena_usamo_2026_p1.periodicity": {
+        "n": 2,
+        "positive": 2,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p1.non-increasing": {
+        "n": 2,
+        "positive": 1,
+        "positive_rate": 0.5
+      },
+      "matharena_usamo_2026_p1.evaluation": {
+        "n": 2,
+        "positive": 2,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p1.evaluation.optimal-range": {
+        "n": 2,
+        "positive": 2,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p1.evaluation.maximum-value": {
+        "n": 2,
+        "positive": 2,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p1.fractional-parts": {
+        "n": 2,
+        "positive": 2,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p1.upper-bound.general": {
+        "n": 1,
+        "positive": 1,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p1.upper-bound.general.proof": {
+        "n": 1,
+        "positive": 1,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p1.equality-cases": {
+        "n": 2,
+        "positive": 2,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p1.equality-cases.identify": {
+        "n": 2,
+        "positive": 2,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p1.equality-cases.conclude": {
+        "n": 2,
+        "positive": 2,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p1.upper-bound.coprime": {
+        "n": 1,
+        "positive": 1,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p1.upper-bound.coprime.proof": {
+        "n": 1,
+        "positive": 1,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p2.chain_b.setup": {
+        "n": 3,
+        "positive": 3,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p2.chain_b.setup.structure": {
+        "n": 3,
+        "positive": 3,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p2.chain_b.setup.constraints": {
+        "n": 3,
+        "positive": 3,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p2.chain_b.proof.partial_2": {
+        "n": 3,
+        "positive": 3,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p2.chain_a.setup": {
+        "n": 4,
+        "positive": 3,
+        "positive_rate": 0.75
+      },
+      "matharena_usamo_2026_p2.chain_a.setup.strategy": {
+        "n": 4,
+        "positive": 4,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p2.chain_a.setup.invariant": {
+        "n": 4,
+        "positive": 3,
+        "positive_rate": 0.75
+      },
+      "matharena_usamo_2026_p2.chain_a.proof.partial_2": {
+        "n": 4,
+        "positive": 1,
+        "positive_rate": 0.25
+      },
+      "matharena_usamo_2026_p3.no-progress": {
+        "n": 3,
+        "positive": 3,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p3.chain-b.setup": {
+        "n": 4,
+        "positive": 4,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p3.chain-b.setup.inversion": {
+        "n": 4,
+        "positive": 4,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p3.chain-b.complete": {
+        "n": 3,
+        "positive": 3,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p3.chain-b.complete.proof": {
+        "n": 3,
+        "positive": 3,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p5.complex-complete": {
+        "n": 2,
+        "positive": 2,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p5.complex-complete.proof": {
+        "n": 2,
+        "positive": 2,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p5.synthetic-chain.abc-efd": {
+        "n": 5,
+        "positive": 4,
+        "positive_rate": 0.8
+      },
+      "matharena_usamo_2026_p5.synthetic-chain.miquel-point": {
+        "n": 5,
+        "positive": 4,
+        "positive_rate": 0.8
+      },
+      "matharena_usamo_2026_p5.synthetic-chain.spiral-abc-efd": {
+        "n": 5,
+        "positive": 2,
+        "positive_rate": 0.4
+      },
+      "matharena_usamo_2026_p5.synthetic-chain.abc-ooo": {
+        "n": 5,
+        "positive": 4,
+        "positive_rate": 0.8
+      },
+      "matharena_usamo_2026_p5.synthetic-chain.spiral-efd-ooo": {
+        "n": 5,
+        "positive": 1,
+        "positive_rate": 0.2
+      },
+      "matharena_usamo_2026_p5.synthetic-chain.spiral-mno": {
+        "n": 5,
+        "positive": 1,
+        "positive_rate": 0.2
+      },
+      "matharena_usamo_2026_p5.synthetic-chain.conclude": {
+        "n": 5,
+        "positive": 1,
+        "positive_rate": 0.2
+      },
+      "matharena_usamo_2026_p5.complex-trivialized": {
+        "n": 2,
+        "positive": 2,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p5.complex-trivialized.proof": {
+        "n": 2,
+        "positive": 2,
+        "positive_rate": 1.0
+      },
+      "matharena_usamo_2026_p6.prime-power": {
+        "n": 16,
+        "positive": 8,
+        "positive_rate": 0.5
+      },
+      "matharena_usamo_2026_p6.prime-power.form": {
+        "n": 16,
+        "positive": 10,
+        "positive_rate": 0.625
+      },
+      "matharena_usamo_2026_p6.prime-power.mod-4": {
+        "n": 16,
+        "positive": 8,
+        "positive_rate": 0.5
+      },
+      "matharena_usamo_2026_p6.vieta-jumping.k-3": {
+        "n": 16,
+        "positive": 8,
+        "positive_rate": 0.5
+      },
+      "matharena_usamo_2026_p6.vieta-jumping.characterization": {
+        "n": 16,
+        "positive": 11,
+        "positive_rate": 0.6875
+      },
+      "matharena_usamo_2026_p6.higher-powers.p-mod-3": {
+        "n": 16,
+        "positive": 7,
+        "positive_rate": 0.4375
+      },
+      "matharena_usamo_2026_p6.higher-powers.p-1-mod-3-impossible": {
+        "n": 16,
+        "positive": 4,
+        "positive_rate": 0.25
+      },
+      "matharena_usamo_2026_p6.higher-powers.t-gt-2-impossible": {
+        "n": 16,
+        "positive": 5,
+        "positive_rate": 0.3125
+      },
+      "matharena_usamo_2026_p6.higher-powers.t-2-p-3": {
+        "n": 16,
+        "positive": 12,
+        "positive_rate": 0.75
+      }
+    }
+  },
+  "structured_comparison": {
+    "n_pairs": 0,
+    "atom_difference_n": 0,
+    "average_atom_difference": null,
+    "binary_n": 0,
+    "binary_disagreement_rate": null,
+    "selection_n": 0,
+    "selection_disagreement_rate": null,
+    "points_n": 0,
+    "points_mae": null,
+    "by_node": {}
+  },
+  "structured_failures": [
+    {
+      "candidate_id": "matharena_usamo_2026_p5_Claude-Opus-4.6_(High)_2",
+      "problem_id": "matharena_usamo_2026_p5",
+      "model_name": "Claude-Opus-4.6 (High)",
+      "idx_answer": 2,
+      "method": "structured",
+      "repeat_idx": 0,
+      "ground_truth_score": 2,
+      "error": "JudgmentError: judgment.children[0].satisfied is not allowed for combinator nodes"
+    },
+    {
+      "candidate_id": "matharena_usamo_2026_p5_Step_3.5_Flash_1",
+      "problem_id": "matharena_usamo_2026_p5",
+      "model_name": "Step 3.5 Flash",
+      "idx_answer": 1,
+      "method": "structured",
+      "repeat_idx": 0,
+      "ground_truth_score": 0,
+      "error": "JudgmentError: judgment.children[0].satisfied is not allowed for combinator nodes"
+    },
+    {
+      "candidate_id": "matharena_usamo_2026_p5_Step_3.5_Flash_2",
+      "problem_id": "matharena_usamo_2026_p5",
+      "model_name": "Step 3.5 Flash",
+      "idx_answer": 2,
+      "method": "structured",
+      "repeat_idx": 0,
+      "ground_truth_score": 6,
+      "error": "JudgmentError: judgment.children[0].satisfied is not allowed for combinator nodes"
+    },
+    {
+      "candidate_id": "matharena_usamo_2026_p5_Claude-Opus-4.6_(High)_3",
+      "problem_id": "matharena_usamo_2026_p5",
+      "model_name": "Claude-Opus-4.6 (High)",
+      "idx_answer": 3,
+      "method": "structured",
+      "repeat_idx": 0,
+      "ground_truth_score": 3,
+      "error": "ServerError: 504 DEADLINE_EXCEEDED. {'error': {'code': 504, 'message': 'Deadline expired before operation could complete.', 'status': 'DEADLINE_EXCEEDED'}}"
+    }
+  ],
+  "selected_rows": 48,
+  "repeats": 1,
+  "selected": {
+    "Gemini 3.1 Pro Preview": [
+      1,
+      3,
+      5,
+      6
+    ],
+    "Claude-Opus-4.6 (High)": [
+      2,
+      3,
+      5,
+      6
+    ],
+    "Step 3.5 Flash": [
+      2,
+      3,
+      5,
+      6
+    ],
+    "Qwen3.5-397b-a17b": [
+      5,
+      6
+    ]
+  }
+}

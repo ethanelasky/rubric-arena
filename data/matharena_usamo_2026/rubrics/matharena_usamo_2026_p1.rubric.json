@@ -1,0 +1,91 @@
+{
+  "rubric_version": "1.0",
+  "id": "matharena_usamo_2026_p1",
+  "description": "For which real x is floor(nx) - sum_{k=1}^n floor(kx)/k maximal, and what is the maximal value?",
+  "points": 7,
+  "combinator": "sum",
+  "guidelines": [
+    "The correct answer is: maximum value is -1 + sum_{k=1}^n 1/k, achieved for all x in the union over integers m of [m + 1 - 1/n, m + 1).",
+    "0 points for conjecturing the maximum value or the optimal intervals without any proof.",
+    "0 points for computing f(x) for small specific values of n without generalizing the algebraic step.",
+    "0 points for restating the problem in an equivalent form without making any tangible progress toward bounding the sum."
+  ],
+  "children": [
+    {
+      "id": "matharena_usamo_2026_p1.cp1",
+      "description": "Proves that f(x) is periodic with period 1 (i.e., f(x+1) = f(x)), allowing the domain to be restricted WLOG to an interval of length 1 such as [0,1).",
+      "points": 1
+    },
+    {
+      "id": "matharena_usamo_2026_p1.cp2",
+      "description": "Shows that f(x) is non-increasing on each interval [ℓ/n, (ℓ+1)/n) for integer ℓ, thereby restricting the search for the maximum to points of the form x = ℓ/n.",
+      "points": 1,
+      "satisfied_when": "all",
+      "children": [
+        {
+          "id": "matharena_usamo_2026_p1.cp2.constant-floor-nx",
+          "description": "Observes that floor(nx) is constant on [ℓ/n, (ℓ+1)/n)."
+        },
+        {
+          "id": "matharena_usamo_2026_p1.cp2.sum-nonincreasing",
+          "description": "Observes that -sum floor(kx)/k can only decrease as x increases within such an interval, so f is non-increasing there."
+        }
+      ]
+    },
+    {
+      "id": "matharena_usamo_2026_p1.cp3",
+      "description": "Evaluates f(x) for the optimal range (e.g., x in [1-1/n, 1) or x = (n-1)/n) and explicitly computes the candidate maximum value -1 + sum_{k=1}^n 1/k.",
+      "points": {
+        "min": 0,
+        "max": 1,
+        "default": 1,
+        "scale": [
+          {
+            "value": 1,
+            "criterion": "The candidate maximum value -1 + sum_{k=1}^n 1/k is correctly computed with no arithmetic errors."
+          },
+          {
+            "value": 0,
+            "criterion": "The evaluation contains a minor arithmetic or off-by-one slip in the sum bounds or final value, despite otherwise correct reasoning for this step."
+          }
+        ]
+      }
+    },
+    {
+      "id": "matharena_usamo_2026_p1.cp4",
+      "description": "Expresses f(ℓ/n) algebraically in terms of fractional parts, deriving the identity f(ℓ/n) = sum_{k=1}^n {kℓ/n}/k (or an equivalent fractional-part reformulation).",
+      "points": 1
+    },
+    {
+      "id": "matharena_usamo_2026_p1.cp5",
+      "description": "Proves the general upper bound sum_{k=1}^n {kℓ/n}/k ≤ sum_{k=1}^n (n-k)/(nk) for all integers ℓ.",
+      "points": 2,
+      "combinator": "one_of",
+      "children": [
+        {
+          "id": "matharena_usamo_2026_p1.cp5.full",
+          "description": "Proves the upper bound in full generality, correctly handling both the coprime case gcd(ℓ,n)=1 and the case gcd(ℓ,n)>1.",
+          "selection_signal": "Solution proves the bound for all integers ℓ, with a rigorous argument covering gcd(ℓ,n)>1 (not merely asserting it follows from the coprime case).",
+          "points": 2
+        },
+        {
+          "id": "matharena_usamo_2026_p1.cp5.coprime-only",
+          "description": "Proves the upper bound only for the coprime case gcd(ℓ,n)=1, or claims the gcd>1 case follows trivially from the coprime case without proof.",
+          "selection_signal": "Solution proves the bound when gcd(ℓ,n)=1 (e.g., via rearrangement inequality on the permuted fractional parts) but does not rigorously handle gcd(ℓ,n)>1, or assumes without proof that the gcd>1 case is majorized by the coprime case.",
+          "points": 1
+        },
+        {
+          "id": "matharena_usamo_2026_p1.cp5.no-progress",
+          "description": "No meaningful progress toward proving the upper bound.",
+          "selection_signal": "Solution does not prove or seriously attempt the upper bound in any case.",
+          "points": 0
+        }
+      ]
+    },
+    {
+      "id": "matharena_usamo_2026_p1.cp6",
+      "description": "Identifies the correct equality cases of the upper bound and concludes that the maximum is achieved for exactly x in the union over integers m of [m + 1 - 1/n, m + 1).",
+      "points": 1
+    }
+  ]
+}
