@@ -1,0 +1,35 @@
+{
+  "candidate_id": "construction_plus_one_v2_case",
+  "problem_id": "usemo_2020_p1",
+  "rubric_path": "data/usemo_2020/rubrics/usemo_2020_p1.rubric.json",
+  "grader_model": "claude-sonnet-4-6",
+  "expected_score": 2,
+  "computed_score": 2,
+  "model_declared_score": null,
+  "score_consistent": null,
+  "judgment": {
+    "id": "usemo_2020_p1",
+    "reasoning": "The paper provides the standard even construction and attempts the 2-adic valuation route for odd impossibility, explicitly resolving one case (B > max(A,C)) correctly but acknowledging the other cases are unchecked. This fits the partial_v2 regime: even construction is present and at least one substantial valuation case is resolved.",
+    "selected": "usemo_2020_p1.partial_v2",
+    "children": [
+      {
+        "id": "usemo_2020_p1.partial_v2",
+        "reasoning": "Both children are satisfied: the even construction is correct, and the 2-adic case B > max(A,C) is correctly analyzed. The paper explicitly says 'I have not checked the other cases,' confirming incompleteness and ruling out the complete regime.",
+        "children": [
+          {
+            "id": "usemo_2020_p1.partial_v2.even_construction",
+            "satisfied": true,
+            "reasoning": "Contestant sets x=1, z=1, y=n and correctly computes lcm(1,n)=n, lcm(n,1)=n, lcm(1,1)=1, giving the expression value 2n. This correctly shows every even positive integer k=2n is attainable."
+          },
+          {
+            "id": "usemo_2020_p1.partial_v2.substantial_case",
+            "satisfied": true,
+            "reasoning": "Contestant introduces A=v₂(x), B=v₂(y), C=v₂(z) and analyzes the case B > A and B > C. They correctly compute v₂(lcm(x,y))=B, v₂(lcm(y,z))=B, and v₂(k·lcm(x,z))=max(A,C) < B, and conclude this case is impossible because two equal-valuation terms cannot be cancelled by a strictly-smaller-valuation term. This is a correct and substantive use of 2-adic valuations for one case of the odd-impossibility argument. The contestant explicitly states the other cases are unchecked, confirming this is partial work."
+          }
+        ]
+      }
+    ]
+  },
+  "validation_warnings": [],
+  "raw_model_output": "## Grading Summary\n\n**What the paper attempts.** The contestant claims the answer is the even positive integers. They provide the standard construction (x=1, y=n, z=1 for k=2n), then attempt to prove odd integers are impossible via 2-adic valuations. They analyze one specific case — where v₂(y) > v₂(x) and v₂(y) > v₂(z) — and explicitly acknowledge they have not checked the remaining cases.\n\n**What the paper achieves.** The construction is correct and complete: the contestant correctly computes lcm(1,n)=n, lcm(n,1)=n, lcm(1,1)=1, giving 2n. This earns the even-construction credit. For the odd-impossibility direction, the contestant correctly analyzes one case of the 2-adic valuation argument — the case B > A and B > C — and correctly concludes it is impossible because v₂(lcm(x,y)) = v₂(lcm(y,z)) = B while v₂(k·lcm(x,z)) = max(A,C) < B, making the equation -k·lcm(x,z) + lcm(x,y) + lcm(y,z) = 0 impossible (two terms of equal valuation B cannot cancel against a term of strictly smaller valuation). However, the contestant explicitly states \"I have not checked the other cases,\" leaving the bulk of the valuation analysis unfinished.\n\n**Top-level regime selection.** The paper is incomplete — the odd-impossibility proof covers only one of several cases. The relevant routing question is whether this qualifies for `partial_v2` (2 points) or `no_progress` (0 points). The paper clearly uses 2-adic valuations and resolves at least one substantial case (the B > max(A,C) case), which is exactly what `partial_v2.substantial_case` requires. The even construction is also valid. So `partial_v2` is the correct regime.\n\n**Fuzzy calls.** The only question is whether the single case analyzed counts as \"at least one substantial odd-impossibility case\" under `partial_v2.substantial_case`. The case B > max(A,C) is a genuine case in the valuation analysis — it's not a trivial edge case — and the contestant's reasoning for why it's impossible is correct. I read this as satisfying the criterion, though a debater might argue that a single case out of several (e.g., the cases A > B, A = B, etc. remain unaddressed) is too little to be \"substantial.\" I find the case itself is substantial even if the coverage is incomplete.\n\n**Score and breakdown.** The paper scores 2 points under `partial_v2`: 1 point for `even_construction` (valid x=1,y=n,z=1 construction) and 1 point for `substantial_case` (correct 2-adic analysis of the B > max(A,C) case, with explicit acknowledgment of incompleteness).\n\n---\n\n```json\n{\n  \"id\": \"usemo_2020_p1\",\n  \"reasoning\": \"The paper provides the standard even construction and attempts the 2-adic valuation route for odd impossibility, explicitly resolving one case (B > max(A,C)) correctly but acknowledging the other cases are unchecked. This fits the partial_v2 regime: even construction is present and at least one substantial valuation case is resolved.\",\n  \"selected\": \"usemo_2020_p1.partial_v2\",\n  \"children\": [\n    {\n      \"id\": \"usemo_2020_p1.partial_v2\",\n      \"reasoning\": \"Both children are satisfied: the even construction is correct, and the 2-adic case B > max(A,C) is correctly analyzed. The paper explicitly says 'I have not checked the other cases,' confirming incompleteness and ruling out the complete regime.\",\n      \"children\": [\n        {\n          \"id\": \"usemo_2020_p1.partial_v2.even_construction\",\n          \"satisfied\": true,\n          \"reasoning\": \"Contestant sets x=1, z=1, y=n and correctly computes lcm(1,n)=n, lcm(n,1)=n, lcm(1,1)=1, giving the expression value 2n. This correctly shows every even positive integer k=2n is attainable.\",\n          \"points_awarded\": 1\n        },\n        {\n          \"id\": \"usemo_2020_p1.partial_v2.substantial_case\",\n          \"satisfied\": true,\n          \"reasoning\": \"Contestant introduces A=v₂(x), B=v₂(y), C=v₂(z) and analyzes the case B > A and B > C. They correctly compute v₂(lcm(x,y))=B, v₂(lcm(y,z))=B, and v₂(k·lcm(x,z))=max(A,C) < B, and conclude this case is impossible because two equal-valuation terms cannot be cancelled by a strictly-smaller-valuation term. This is a correct and substantive use of 2-adic valuations for one case of the odd-impossibility argument. The contestant explicitly states the other cases are unchecked, confirming this is partial work.\",\n          \"points_awarded\": 1\n        }\n      ]\n    }\n  ]\n}\n```"
+}

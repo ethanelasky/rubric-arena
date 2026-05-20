@@ -1,0 +1,24 @@
+{
+  "candidate_id": "answer_only_even",
+  "problem_id": "usemo_2020_p1",
+  "rubric_path": "data/usemo_2020/rubrics/usemo_2020_p1.rubric.json",
+  "grader_model": "claude-sonnet-4-6",
+  "expected_score": 0,
+  "computed_score": 0,
+  "model_declared_score": null,
+  "score_consistent": null,
+  "judgment": {
+    "id": "usemo_2020_p1",
+    "reasoning": "The paper contains only the sentence 'The answer is exactly the even positive integers.' The rubric explicitly states '0 points for only stating that the even positive integers are the answer.' There is no construction showing every even integer is attainable, no impossibility argument for odd integers, and no partial work of any kind toward either direction. No partial-credit regime is applicable since all three require at minimum a valid even construction plus additional mathematical work. The no_progress regime applies.",
+    "selected": "usemo_2020_p1.no_progress",
+    "children": [
+      {
+        "id": "usemo_2020_p1.no_progress",
+        "satisfied": true,
+        "reasoning": "The paper states only the answer ('The answer is exactly the even positive integers') with zero supporting argument. The rubric guideline explicitly assigns 0 points for this case. No construction, no impossibility proof, no valuation work, no factoring, no lcm divisibility claim — nothing beyond the bare answer claim is present."
+      }
+    ]
+  },
+  "validation_warnings": [],
+  "raw_model_output": "## Grading Summary\n\nThe contestant's paper consists of exactly one sentence: \"The answer is exactly the even positive integers.\" There is no construction, no proof, no argument of any kind — just the answer stated baldly.\n\nThe rubric guidelines are explicit: \"0 points for only stating that the even positive integers are the answer.\" This paper does precisely and only that.\n\nThere is no construction demonstrating that every even positive integer is attainable (which would require exhibiting specific x, y, z or a parametric family). There is no argument that odd positive integers are impossible. There is no partial work toward either direction — no valuation analysis, no pairwise-gcd factoring, no lcm divisibility claim, nothing.\n\nRouting is straightforward: `no_progress` is the only applicable regime. The `complete` regime requires both a construction and an impossibility proof. All three partial-credit regimes require at least a valid construction for even integers plus some additional work. None of those criteria are met. The `no_progress` regime's selection signal — \"none of the above applies\" — fits exactly, and the rubric's own guideline confirms this case earns 0 points.\n\nThere are no fuzzy calls here. The paper is unambiguously in the `no_progress` regime.\n\n**Final score: 0 points.**\n\n```json\n{\n  \"id\": \"usemo_2020_p1\",\n  \"reasoning\": \"The paper contains only the sentence 'The answer is exactly the even positive integers.' The rubric explicitly states '0 points for only stating that the even positive integers are the answer.' There is no construction showing every even integer is attainable, no impossibility argument for odd integers, and no partial work of any kind toward either direction. No partial-credit regime is applicable since all three require at minimum a valid even construction plus additional mathematical work. The no_progress regime applies.\",\n  \"selected\": \"usemo_2020_p1.no_progress\",\n  \"children\": [\n    {\n      \"id\": \"usemo_2020_p1.no_progress\",\n      \"satisfied\": true,\n      \"reasoning\": \"The paper states only the answer ('The answer is exactly the even positive integers') with zero supporting argument. The rubric guideline explicitly assigns 0 points for this case. No construction, no impossibility proof, no valuation work, no factoring, no lcm divisibility claim — nothing beyond the bare answer claim is present.\"\n    }\n  ]\n}\n```"
+}

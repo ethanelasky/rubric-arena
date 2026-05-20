@@ -1,0 +1,95 @@
+{
+  "rubric_version": "1.0",
+  "id": "usemo_2020_p1_generated",
+  "description": "Classify the positive integers representable as (lcm(x,y)+lcm(y,z))/lcm(x,z).",
+  "points": 7,
+  "combinator": "one_of",
+  "guidelines": [
+    "Three official partial-credit routes exist: 2-adic (or prime-adic) valuations, pairwise-gcd factoring, and the general prime-adic lcm-divisibility claim. A complete solution earns 7 regardless of route.",
+    "0 points for only stating that the answer is the even positive integers, without proof of either direction.",
+    "0 points for only stating WLOG gcd(x,y,z)=1 without further substantive progress.",
+    "The three partial routes are mutually exclusive; pick the regime whose proof technique best matches the paper. All partial routes cap at 2 points."
+  ],
+  "children": [
+    {
+      "id": "usemo_2020_p1_generated.complete",
+      "description": "Complete solution proving both directions.",
+      "points": 7,
+      "selection_signal": "Paper gives a complete and correct proof of both directions: every even positive integer is attainable and no odd positive integer is attainable.",
+      "satisfied_when": "all",
+      "children": [
+        {
+          "id": "usemo_2020_p1_generated.complete.even_construction",
+          "description": "Proves every even positive integer is attainable by the expression."
+        },
+        {
+          "id": "usemo_2020_p1_generated.complete.odd_impossible",
+          "description": "Proves no odd positive integer is attainable by the expression."
+        }
+      ]
+    },
+    {
+      "id": "usemo_2020_p1_generated.partial_v2",
+      "description": "Partial credit via the 2-adic or prime-adic valuation route.",
+      "points": 2,
+      "selection_signal": "Paper attempts the odd-impossibility direction using 2-adic or prime-adic valuation analysis but does not complete the proof.",
+      "combinator": "sum",
+      "children": [
+        {
+          "id": "usemo_2020_p1_generated.partial_v2.even_construction",
+          "description": "Gives a valid construction showing every even positive integer is attainable.",
+          "points": 1
+        },
+        {
+          "id": "usemo_2020_p1_generated.partial_v2.substantial_case",
+          "description": "Uses 2-adic or prime-adic valuations and resolves at least one substantial case toward proving odd integers are not attainable.",
+          "points": 1
+        }
+      ]
+    },
+    {
+      "id": "usemo_2020_p1_generated.partial_factoring",
+      "description": "Partial credit via the pairwise-gcd factoring route.",
+      "points": 2,
+      "selection_signal": "Paper attempts the odd-impossibility direction using substantive pairwise-gcd factorization but does not complete the proof.",
+      "combinator": "sum",
+      "children": [
+        {
+          "id": "usemo_2020_p1_generated.partial_factoring.even_construction",
+          "description": "Gives a valid construction showing every even positive integer is attainable.",
+          "points": 1
+        },
+        {
+          "id": "usemo_2020_p1_generated.partial_factoring.pairwise_gcd_factoring",
+          "description": "Uses substantive pairwise-gcd factorization of the lcm expression beyond merely asserting WLOG gcd(x,y,z)=1.",
+          "points": 1
+        }
+      ]
+    },
+    {
+      "id": "usemo_2020_p1_generated.partial_general_vp",
+      "description": "Partial credit via the general prime-adic lcm-divisibility route.",
+      "points": 2,
+      "selection_signal": "Paper attempts the odd-impossibility direction by invoking or deriving a general primewise lcm-divisibility condition but does not complete the proof.",
+      "combinator": "sum",
+      "children": [
+        {
+          "id": "usemo_2020_p1_generated.partial_general_vp.even_construction",
+          "description": "Gives a valid construction showing every even positive integer is attainable.",
+          "points": 1
+        },
+        {
+          "id": "usemo_2020_p1_generated.partial_general_vp.lcm_divisibility",
+          "description": "States or derives that lcm(x,z) divides lcm(x,y) and lcm(y,z), or an equivalent primewise maximum condition on the valuations.",
+          "points": 1
+        }
+      ]
+    },
+    {
+      "id": "usemo_2020_p1_generated.no_progress",
+      "description": "No score-bearing progress.",
+      "points": 0,
+      "selection_signal": "Paper only states the answer, only asserts WLOG gcd(x,y,z)=1, or otherwise shows no progress matching any regime above."
+    }
+  ]
+}

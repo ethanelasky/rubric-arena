@@ -1,0 +1,35 @@
+{
+  "candidate_id": "model_partial_v2",
+  "problem_id": "usemo_2020_p1",
+  "rubric_path": "data/usemo_2020/rubrics/usemo_2020_p1.rubric.json",
+  "grader_model": "claude-sonnet-4-6",
+  "expected_score": 2,
+  "computed_score": 2,
+  "model_declared_score": null,
+  "score_consistent": null,
+  "judgment": {
+    "id": "usemo_2020_p1",
+    "reasoning": "The paper provides a correct construction for all even positive integers and uses 2-adic valuations to handle two of three cases in the odd-impossibility argument, but explicitly omits the completion of Case 2 (b ≤ min(a,c)). This fits the partial_v2 regime: even construction present, at least one substantial valuation case resolved, proof incomplete. The complete regime is ruled out by the self-identified gap.",
+    "selected": "usemo_2020_p1.partial_v2",
+    "children": [
+      {
+        "id": "usemo_2020_p1.partial_v2",
+        "reasoning": "Even construction is correct (x=z=1, y=k gives 2k, covering all even positive integers). The 2-adic valuation work resolves Case 1 (b≥max(a,c): v₂(L₁+L₂)≥b+1>v₂(L₃) so n is even) and Case 3 (a<b<c: v₂(L₁+L₂)=b<c=v₂(L₃) so ratio is not an integer) correctly and substantively. Case 2 (b≤min(a,c)) is explicitly abandoned: 'the detailed check is omitted here.' The proof is therefore incomplete.",
+        "children": [
+          {
+            "id": "usemo_2020_p1.partial_v2.even_construction",
+            "satisfied": true,
+            "reasoning": "Contestant explicitly takes x=z=1, y=k and computes (lcm(1,k)+lcm(k,1))/lcm(1,1) = (k+k)/1 = 2k, correctly producing every even positive integer. This is a complete and valid construction."
+          },
+          {
+            "id": "usemo_2020_p1.partial_v2.substantial_case",
+            "satisfied": true,
+            "reasoning": "Contestant sets up v₂(x)=a, v₂(y)=b, v₂(z)=c and correctly analyzes Case 1: when b≥max(a,c), both v₂(L₁)=b and v₂(L₂)=b, so v₂(L₁+L₂)≥b+1, which exceeds v₂(L₃)=max(a,c)≤b, forcing v₂(n)≥1 and hence n even. Case 3 (a<b<c) is also correctly dispatched: v₂(L₁+L₂)=b<c=v₂(L₃) so the ratio is not an integer. These constitute substantial valuation work on the odd-impossibility direction, even though Case 2 is left incomplete."
+          }
+        ]
+      }
+    ]
+  },
+  "validation_warnings": [],
+  "raw_model_output": "I'll read the paper carefully before grading.\n\n## Grading Summary\n\n**What the paper attempts.** The contestant investigates which positive integers are representable, correctly identifies the answer as all even positive integers, provides a construction via x=z=1, y=k, and then attempts to prove odd integers are impossible via 2-adic valuation analysis. They set up notation L₁=lcm(x,y), L₂=lcm(y,z), L₃=lcm(x,z) and perform a case analysis on the relative sizes of a=v₂(x), b=v₂(y), c=v₂(z).\n\n**What the paper achieves.** The construction for even integers is correct and complete: x=z=1, y=k gives (k+k)/1=2k, covering all even positive integers. The 2-adic valuation approach is the right framework. Case 1 (b≥max(a,c)) is handled correctly: both L₁ and L₂ have v₂=b, so v₂(L₁+L₂)≥b+1>max(a,c)=v₂(L₃), forcing v₂(n)≥1, meaning n is even. Case 3 (min(a,c)<b<max(a,c), WLOG a<b<c) is also handled correctly: v₂(L₁+L₂)=b<c=v₂(L₃), so the ratio isn't even an integer. Case 2 (b≤min(a,c)) is where the paper falls short: the contestant correctly identifies that a=c is needed for integrality, but then explicitly states \"the detailed check is omitted here\" rather than completing the argument. They don't show that when a=c and b≤a, the ratio is necessarily even.\n\n**Top-level regime selection.** The paper has the even construction and uses 2-adic valuations, resolving two of the three cases (Cases 1 and 3) correctly. Case 1 is a \"substantial valuation case\" in the sense of the rubric — it directly shows that whenever b≥max(a,c), the result is even. Case 3 shows the ratio isn't an integer. The paper is incomplete because Case 2 is explicitly abandoned with \"the detailed check is omitted.\" This routes to `partial_v2`: even construction present, at least one substantial valuation case resolved, but the proof is incomplete.\n\n**Fuzzy calls.** The close call is between `partial_v2` (2pt) and `complete` (7pt). The paper is clearly not complete — Case 2 is explicitly omitted. The paper fits `partial_v2` cleanly: it has the construction (1pt) and resolves substantial valuation cases (1pt). The `complete` regime is ruled out by the explicit omission. There's no ambiguity here; the paper self-identifies the gap.\n\nAnother question: does Case 1 alone count as a \"substantial case\"? I believe yes — Case 1 is the central case where both lcm's share the same dominant 2-adic factor, and correctly showing this forces even n is meaningful work. Combined with Case 3 (ratio not an integer), the contestant has done real valuation work, just not completed the analysis.\n\n**Final score.** 2 points under `partial_v2`: 1pt for the even construction, 1pt for substantial valuation case work (Cases 1 and 3 correctly handled).\n\n```json\n{\n  \"id\": \"usemo_2020_p1\",\n  \"reasoning\": \"The paper provides a correct construction for all even positive integers and uses 2-adic valuations to handle two of three cases in the odd-impossibility argument, but explicitly omits the completion of Case 2 (b ≤ min(a,c)). This fits the partial_v2 regime: even construction present, at least one substantial valuation case resolved, proof incomplete. The complete regime is ruled out by the self-identified gap.\",\n  \"selected\": \"usemo_2020_p1.partial_v2\",\n  \"children\": [\n    {\n      \"id\": \"usemo_2020_p1.partial_v2\",\n      \"reasoning\": \"Even construction is correct (x=z=1, y=k gives 2k, covering all even positive integers). The 2-adic valuation work resolves Case 1 (b≥max(a,c): v₂(L₁+L₂)≥b+1>v₂(L₃) so n is even) and Case 3 (a<b<c: v₂(L₁+L₂)=b<c=v₂(L₃) so ratio is not an integer) correctly and substantively. Case 2 (b≤min(a,c)) is explicitly abandoned: 'the detailed check is omitted here.' The proof is therefore incomplete.\",\n      \"children\": [\n        {\n          \"id\": \"usemo_2020_p1.partial_v2.even_construction\",\n          \"satisfied\": true,\n          \"reasoning\": \"Contestant explicitly takes x=z=1, y=k and computes (lcm(1,k)+lcm(k,1))/lcm(1,1) = (k+k)/1 = 2k, correctly producing every even positive integer. This is a complete and valid construction.\"\n        },\n        {\n          \"id\": \"usemo_2020_p1.partial_v2.substantial_case\",\n          \"satisfied\": true,\n          \"reasoning\": \"Contestant sets up v₂(x)=a, v₂(y)=b, v₂(z)=c and correctly analyzes Case 1: when b≥max(a,c), both v₂(L₁)=b and v₂(L₂)=b, so v₂(L₁+L₂)≥b+1, which exceeds v₂(L₃)=max(a,c)≤b, forcing v₂(n)≥1 and hence n even. Case 3 (a<b<c) is also correctly dispatched: v₂(L₁+L₂)=b<c=v₂(L₃) so the ratio is not an integer. These constitute substantial valuation work on the odd-impossibility direction, even though Case 2 is left incomplete.\"\n        }\n      ]\n    }\n  ]\n}\n```"
+}
