@@ -115,6 +115,75 @@ def parse_free_text_grading_output(raw_model_output: str) -> dict[str, Any]:
     return parsed
 
 
+def build_free_text_to_structured_prompt(
+    *,
+    problem: str,
+    reference_solution: str,
+    candidate_solution: str,
+    rubric: dict[str, Any],
+    free_text_assessment: str,
+) -> str:
+    """Build a prompt that maps a prose/human assessment onto a structured rubric."""
+    rubric_json = rubric_grading.format_rubric_for_prompt(rubric)
+    schema_json = rubric_grading.format_output_schema_for_prompt(rubric)
+    return f"""
+<free_text_to_structured_task>
+You are converting an existing grading assessment into a structured rubric judgment.
+
+Use the free-text assessment as the primary source of truth. Do not regrade from scratch unless the assessment is ambiguous about a rubric node. When the assessment is ambiguous, use the problem, reference solution, candidate solution, and rubric to infer the most faithful structured judgment.
+
+Output the structured judgment JSON object only. Do not include markdown fences, prose, or any text outside the JSON object.
+</free_text_to_structured_task>
+
+{rubric_grading.xml_block("problem_statement", problem)}
+
+{rubric_grading.xml_block("reference_solution", reference_solution)}
+
+{rubric_grading.xml_block("candidate_solution", candidate_solution)}
+
+{rubric_grading.xml_block("rubric_json", rubric_json)}
+
+{rubric_grading.xml_block("free_text_assessment", free_text_assessment)}
+
+{rubric_grading.xml_block("required_judgment_schema", schema_json)}
+""".strip()
+
+
+def structure_free_text_assessment(
+    row: dict[str, Any],
+    *,
+    rubric: dict[str, Any],
+    llm_call: LLMCall,
+    labeler_model: str,
+    assessment: str | None = None,
+    method: str = "human_structured",
+) -> dict[str, Any]:
+    """Convert a prose assessment into a validated structured judgment result."""
+    prompt = build_free_text_to_structured_prompt(
+        problem=row.get("problem", ""),
+        reference_solution=row.get("sample_solution") or "",
+        candidate_solution=row.get("candidate_solution") or "",
+        rubric=rubric,
+        free_text_assessment=assessment
+        if assessment is not None
+        else str(row.get("ground_truth_grading_details") or ""),
+    )
+    raw = llm_call(prompt)
+    parsed = rubric_grading.grade_from_model_output(rubric=rubric, raw_model_output=raw)
+    return {
+        "method": method,
+        "candidate_id": row.get("id"),
+        "problem_id": row.get("problem_id"),
+        "model_name": row.get("model_name"),
+        "idx_answer": row.get("idx_answer"),
+        "grader_model": labeler_model,
+        "ground_truth_score": row.get("ground_truth_score"),
+        "ground_truth_max_points": row.get("ground_truth_max_points"),
+        "prompt": prompt,
+        **parsed,
+    }
+
+
 def generate_structured_rubric(
     row: dict[str, Any],
     *,
@@ -286,6 +355,7 @@ def flatten_structured_judgment(result: dict[str, Any]) -> list[dict[str, Any]]:
                 "idx_answer": result.get("idx_answer"),
                 "grader_model": result.get("grader_model"),
                 "method": result.get("method"),
+                "repeat_idx": result.get("repeat_idx"),
                 "node_id": node.get("id"),
                 "parent_id": parent_id,
                 "depth": depth,
@@ -313,6 +383,324 @@ def flatten_all_structured_judgments(results: list[dict[str, Any]]) -> list[dict
         if result.get("method") == "structured":
             atoms.extend(flatten_structured_judgment(result))
     return atoms
+
+
+def compare_structured_judgments(
+    results: list[dict[str, Any]],
+    *,
+    human_method: str = "human_structured",
+    model_method: str = "structured",
+) -> list[dict[str, Any]]:
+    """Compare model and human structured judgments node-by-node."""
+    atom_rows: list[dict[str, Any]] = []
+    for result in results:
+        if result.get("method") in {human_method, model_method}:
+            atom_rows.extend(flatten_structured_judgment(result))
+
+    grouped: dict[tuple[Any, Any, Any, Any, Any], dict[str, dict[str, Any]]] = {}
+    for atom in atom_rows:
+        repeat_idx = atom.get("repeat_idx")
+        if repeat_idx is None:
+            repeat_idx = 0
+        problem_id = atom.get("problem_id")
+        idx_answer = atom.get("idx_answer")
+        subject_id = (problem_id, idx_answer) if idx_answer is not None else atom.get("candidate_id")
+        key = (
+            subject_id,
+            problem_id,
+            repeat_idx,
+            atom.get("node_id"),
+            atom.get("parent_id"),
+        )
+        grouped.setdefault(key, {})[str(atom.get("method"))] = atom
+
+    rows: list[dict[str, Any]] = []
+    for (subject_id, problem_id, repeat_idx, node_id, parent_id), methods in grouped.items():
+        human = methods.get(human_method)
+        model = methods.get(model_method)
+        if not human or not model:
+            continue
+        human_satisfied = human.get("satisfied")
+        model_satisfied = model.get("satisfied")
+        human_selected = human.get("selected")
+        model_selected = model.get("selected")
+        human_points = _coerce_score(human.get("points_awarded"))
+        model_points = _coerce_score(model.get("points_awarded"))
+
+        binary_disagreement = (
+            None
+            if not isinstance(human_satisfied, bool) or not isinstance(model_satisfied, bool)
+            else human_satisfied != model_satisfied
+        )
+        selection_disagreement = (
+            None
+            if human_selected is None and model_selected is None
+            else human_selected != model_selected
+        )
+        points_abs_error = (
+            None
+            if human_points is None or model_points is None
+            else abs(model_points - human_points)
+        )
+        atom_difference = _atom_difference(
+            human_satisfied=human_satisfied,
+            model_satisfied=model_satisfied,
+            human_selected=human_selected,
+            model_selected=model_selected,
+            points_abs_error=points_abs_error,
+        )
+
+        rows.append(
+            {
+                "candidate_id": subject_id,
+                "problem_id": problem_id,
+                "repeat_idx": repeat_idx,
+                "node_id": node_id,
+                "parent_id": parent_id,
+                "node_type": model.get("node_type"),
+                "human_satisfied": human_satisfied,
+                "model_satisfied": model_satisfied,
+                "binary_disagreement": binary_disagreement,
+                "human_selected": human_selected,
+                "model_selected": model_selected,
+                "selection_disagreement": selection_disagreement,
+                "human_points_awarded": human_points,
+                "model_points_awarded": model_points,
+                "points_abs_error": points_abs_error,
+                "atom_difference": atom_difference,
+                "human_reasoning": human.get("reasoning"),
+                "model_reasoning": model.get("reasoning"),
+            }
+        )
+    return rows
+
+
+
+def compare_against_human_active_nodes(
+    results: list[dict[str, Any]],
+    *,
+    human_method: str = "human_structured",
+    model_method: str = "structured",
+) -> list[dict[str, Any]]:
+    """Compare model judgments against nodes present in the human judgment tree.
+
+    The human judgment defines the ground-truth active path. If the model routes to
+    a different branch and therefore has no corresponding node, the missing model
+    node is treated as unsatisfied/0 for binary comparisons.
+    """
+    by_method: dict[str, dict[str, Any]] = {}
+    for result in results:
+        method = str(result.get("method"))
+        if method in {human_method, model_method} and isinstance(result.get("judgment"), dict):
+            by_method[method] = result
+
+    human_result = by_method.get(human_method)
+    model_result = by_method.get(model_method)
+    if not human_result or not model_result:
+        return []
+
+    human_atoms = flatten_structured_judgment(human_result)
+    model_atoms = flatten_structured_judgment(model_result)
+    model_by_node = {
+        (atom.get("node_id"), atom.get("parent_id")): atom for atom in model_atoms
+    }
+
+    repeat_idx = model_result.get("repeat_idx")
+    if repeat_idx is None:
+        repeat_idx = human_result.get("repeat_idx")
+    if repeat_idx is None:
+        repeat_idx = 0
+
+    problem_id = human_result.get("problem_id") or model_result.get("problem_id")
+    idx_answer = human_result.get("idx_answer")
+    if idx_answer is None:
+        idx_answer = model_result.get("idx_answer")
+    subject_id = (problem_id, idx_answer) if idx_answer is not None else human_result.get("candidate_id")
+
+    rows: list[dict[str, Any]] = []
+    for human in human_atoms:
+        key = (human.get("node_id"), human.get("parent_id"))
+        model = model_by_node.get(key)
+        model_missing = model is None
+
+        human_satisfied = human.get("satisfied")
+        model_satisfied = None if model is None else model.get("satisfied")
+        if model_missing and isinstance(human_satisfied, bool):
+            model_satisfied = False
+
+        human_selected = human.get("selected")
+        model_selected = None if model is None else model.get("selected")
+        human_points = _coerce_score(human.get("points_awarded"))
+        model_points = None if model is None else _coerce_score(model.get("points_awarded"))
+        if model_missing and human_points is not None:
+            model_points = 0.0
+
+        binary_disagreement = (
+            None
+            if not isinstance(human_satisfied, bool) or not isinstance(model_satisfied, bool)
+            else human_satisfied != model_satisfied
+        )
+        selection_disagreement = (
+            None
+            if human_selected is None and model_selected is None
+            else human_selected != model_selected
+        )
+        points_abs_error = (
+            None
+            if human_points is None or model_points is None
+            else abs(model_points - human_points)
+        )
+        atom_difference = _atom_difference(
+            human_satisfied=human_satisfied,
+            model_satisfied=model_satisfied,
+            human_selected=human_selected,
+            model_selected=model_selected,
+            points_abs_error=points_abs_error,
+        )
+
+        rows.append(
+            {
+                "candidate_id": subject_id,
+                "problem_id": problem_id,
+                "repeat_idx": repeat_idx,
+                "node_id": human.get("node_id"),
+                "parent_id": human.get("parent_id"),
+                "node_type": human.get("node_type"),
+                "model_missing": model_missing,
+                "human_satisfied": human_satisfied,
+                "model_satisfied": model_satisfied,
+                "binary_disagreement": binary_disagreement,
+                "human_selected": human_selected,
+                "model_selected": model_selected,
+                "selection_disagreement": selection_disagreement,
+                "human_points_awarded": human_points,
+                "model_points_awarded": model_points,
+                "points_abs_error": points_abs_error,
+                "atom_difference": atom_difference,
+                "human_reasoning": human.get("reasoning"),
+                "model_reasoning": None if model is None else model.get("reasoning"),
+            }
+        )
+    return rows
+
+def _atom_difference(
+    *,
+    human_satisfied: Any,
+    model_satisfied: Any,
+    human_selected: Any,
+    model_selected: Any,
+    points_abs_error: float | None,
+) -> float | None:
+    if isinstance(human_satisfied, bool) and isinstance(model_satisfied, bool):
+        return 0.0 if human_satisfied == model_satisfied else 1.0
+    if human_selected is not None or model_selected is not None:
+        return 0.0 if human_selected == model_selected else 1.0
+    if points_abs_error is not None:
+        return float(points_abs_error)
+    return None
+
+
+def summarize_structured_comparison(comparison_rows: list[dict[str, Any]]) -> dict[str, Any]:
+    """Summarize node-level human/model structured judgment divergence."""
+    binary_rows = [
+        row for row in comparison_rows if isinstance(row.get("binary_disagreement"), bool)
+    ]
+    selection_rows = [
+        row for row in comparison_rows if isinstance(row.get("selection_disagreement"), bool)
+    ]
+    points_rows = [
+        row for row in comparison_rows if row.get("points_abs_error") is not None
+    ]
+    atom_difference_rows = [
+        row for row in comparison_rows if row.get("atom_difference") is not None
+    ]
+
+    by_node: dict[str, dict[str, Any]] = {}
+    for row in comparison_rows:
+        node_id = str(row.get("node_id"))
+        stats = by_node.setdefault(
+            node_id,
+            {
+                "n": 0,
+                "binary_n": 0,
+                "binary_disagreements": 0,
+                "selection_n": 0,
+                "selection_disagreements": 0,
+                "points_n": 0,
+                "points_abs_error_sum": 0.0,
+                "atom_difference_n": 0,
+                "atom_difference_sum": 0.0,
+            },
+        )
+        stats["n"] += 1
+        if isinstance(row.get("binary_disagreement"), bool):
+            stats["binary_n"] += 1
+            if row["binary_disagreement"]:
+                stats["binary_disagreements"] += 1
+        if isinstance(row.get("selection_disagreement"), bool):
+            stats["selection_n"] += 1
+            if row["selection_disagreement"]:
+                stats["selection_disagreements"] += 1
+        if row.get("points_abs_error") is not None:
+            stats["points_n"] += 1
+            stats["points_abs_error_sum"] += float(row["points_abs_error"])
+        if row.get("atom_difference") is not None:
+            stats["atom_difference_n"] += 1
+            stats["atom_difference_sum"] += float(row["atom_difference"])
+
+    for stats in by_node.values():
+        stats["binary_disagreement_rate"] = (
+            stats["binary_disagreements"] / stats["binary_n"]
+            if stats["binary_n"]
+            else None
+        )
+        stats["selection_disagreement_rate"] = (
+            stats["selection_disagreements"] / stats["selection_n"]
+            if stats["selection_n"]
+            else None
+        )
+        stats["points_mae"] = (
+            stats["points_abs_error_sum"] / stats["points_n"]
+            if stats["points_n"]
+            else None
+        )
+        stats["atom_difference_mean"] = (
+            stats["atom_difference_sum"] / stats["atom_difference_n"]
+            if stats["atom_difference_n"]
+            else None
+        )
+        stats.pop("points_abs_error_sum")
+        stats.pop("atom_difference_sum")
+
+    return {
+        "n_pairs": len(comparison_rows),
+        "atom_difference_n": len(atom_difference_rows),
+        "average_atom_difference": (
+            mean(float(row["atom_difference"]) for row in atom_difference_rows)
+            if atom_difference_rows
+            else None
+        ),
+        "binary_n": len(binary_rows),
+        "binary_disagreement_rate": (
+            sum(1 for row in binary_rows if row["binary_disagreement"]) / len(binary_rows)
+            if binary_rows
+            else None
+        ),
+        "selection_n": len(selection_rows),
+        "selection_disagreement_rate": (
+            sum(1 for row in selection_rows if row["selection_disagreement"])
+            / len(selection_rows)
+            if selection_rows
+            else None
+        ),
+        "points_n": len(points_rows),
+        "points_mae": (
+            mean(float(row["points_abs_error"]) for row in points_rows)
+            if points_rows
+            else None
+        ),
+        "by_node": by_node,
+    }
 
 
 def summarize_structured_atoms(atom_rows: list[dict[str, Any]]) -> dict[str, Any]:
@@ -375,13 +763,13 @@ def score_distribution_metrics(results: list[dict[str, Any]]) -> dict[str, Any]:
 
 def holistic_vs_structured_diagnostics(results: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Pair free-text and structured scores for the same candidate."""
-    grouped: dict[tuple[Any, Any], dict[str, dict[str, Any]]] = {}
+    grouped: dict[tuple[Any, Any, Any], dict[str, dict[str, Any]]] = {}
     for result in results:
-        key = (result.get("candidate_id"), result.get("grader_model"))
+        key = (result.get("candidate_id"), result.get("grader_model"), result.get("repeat_idx"))
         grouped.setdefault(key, {})[str(result.get("method"))] = result
 
     rows: list[dict[str, Any]] = []
-    for (candidate_id, grader_model), methods in grouped.items():
+    for (candidate_id, grader_model, repeat_idx), methods in grouped.items():
         structured = methods.get("structured")
         free_text = methods.get("free_text")
         if not structured or not free_text:
@@ -395,6 +783,7 @@ def holistic_vs_structured_diagnostics(results: list[dict[str, Any]]) -> list[di
                 "candidate_id": candidate_id,
                 "problem_id": structured.get("problem_id"),
                 "grader_model": grader_model,
+                "repeat_idx": repeat_idx,
                 "ground_truth_score": gt,
                 "structured_score": structured_score,
                 "free_text_score": free_text_score,

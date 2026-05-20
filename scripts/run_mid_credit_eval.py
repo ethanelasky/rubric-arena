@@ -54,7 +54,15 @@ DEFAULT_MODEL_NAME = "Gemini 3.1 Pro Preview"
 DEFAULT_GRADER_MODEL = "gemini-3.1-pro-preview"
 
 
-def gemini_stream(client: Any, model: str, prompt: str, *, max_output_tokens: int = 64000) -> str:
+def gemini_stream(
+    client: Any,
+    model: str,
+    prompt: str,
+    *,
+    max_output_tokens: int = 64000,
+    verbose: bool = True,
+    timeout_ms: int = 240000,
+) -> str:
     from google.genai import types
 
     chunks: list[str] = []
@@ -62,15 +70,19 @@ def gemini_stream(client: Any, model: str, prompt: str, *, max_output_tokens: in
         model=model,
         contents=[{"role": "user", "parts": [{"text": prompt}]}],
         config=types.GenerateContentConfig(
-            max_output_tokens=max_output_tokens, temperature=0.0
+            max_output_tokens=max_output_tokens,
+            temperature=0.0,
+            http_options=types.HttpOptions(timeout=timeout_ms),
         ),
     )
     for event in stream:
         text = getattr(event, "text", None) or ""
         if text:
-            print(text, end="", flush=True)
+            if verbose:
+                print(text, end="", flush=True)
             chunks.append(text)
-    print()
+    if verbose:
+        print()
     return "".join(chunks)
 
 
@@ -222,14 +234,16 @@ def grade_row(
     row: dict[str, Any],
     rubric: dict[str, Any],
     grader_model: str,
+    verbose: bool = True,
 ) -> tuple[dict[str, Any] | None, dict[str, Any] | None, str | None]:
     """Returns (structured_result, free_text_result, structured_error)."""
     structured_result: dict[str, Any] | None = None
     structured_error: str | None = None
 
-    print(f"\n--- structured grading: {row['id']} ---")
+    if verbose:
+        print(f"\n--- structured grading: {row['id']} ---")
     structured_prompt = build_structured_grading_prompt(row, rubric)
-    structured_raw = gemini_stream(client, grader_model, structured_prompt)
+    structured_raw = gemini_stream(client, grader_model, structured_prompt, verbose=verbose)
     try:
         judgment = extract_first_json_object(structured_raw)
         judgment = repair_common_judgment_model_errors(rubric, judgment)
@@ -270,14 +284,24 @@ def grade_row(
         }
     except (JudgmentError, ModelOutputError) as exc:
         structured_error = f"{type(exc).__name__}: {exc}"
-        print(f"[structured] {row['id']} validation failed: {structured_error}")
+        if verbose:
+            print(f"[structured] {row['id']} validation failed: {structured_error}")
 
-    print(f"\n--- free-text grading: {row['id']} ---")
+    if verbose:
+        print(f"\n--- free-text grading: {row['id']} ---")
     free_text_prompt = build_free_text_prompt(row)
-    free_text_raw = gemini_stream(client, grader_model, free_text_prompt)
-    parsed = extract_first_json_object(free_text_raw)
-    ft_score = parse_free_text_score(parsed)
-    parsed["score"] = ft_score
+    free_text_raw = gemini_stream(client, grader_model, free_text_prompt, verbose=verbose)
+    try:
+        parsed = extract_first_json_object(free_text_raw)
+        ft_score = parse_free_text_score(parsed)
+        parsed["score"] = ft_score
+        free_text_error = None
+    except ModelOutputError as exc:
+        parsed = {}
+        ft_score = None
+        free_text_error = f"{type(exc).__name__}: {exc}"
+        if verbose:
+            print(f"[free-text] {row['id']} parsing failed: {free_text_error}")
     free_text_result = {
         "method": "free_text",
         "candidate_id": row.get("id"),
@@ -290,6 +314,7 @@ def grade_row(
         "computed_score": ft_score,
         "parsed_model_output": parsed,
         "raw_model_output": free_text_raw,
+        "error": free_text_error,
         "prompt": free_text_prompt,
     }
     return structured_result, free_text_result, structured_error

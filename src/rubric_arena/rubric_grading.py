@@ -672,13 +672,64 @@ def repair_common_judgment_model_errors(
             lower = value.strip().lower()
             if lower in {"true", "yes", "satisfied", "earned"}:
                 return True
-            if lower in {"false", "no", "not satisfied", "not_earned", "not earned"}:
+            if lower in {
+                "false",
+                "no",
+                "not satisfied",
+                "not_earned",
+                "not earned",
+                "partial",
+                "partially",
+                "partially satisfied",
+                "unclear",
+                "unknown",
+                "n/a",
+                "not applicable",
+            }:
                 return False
         return value
 
+    def synthesize_judgment_node(
+        rubric_node: dict[str, Any], satisfied: bool, reasoning: str
+    ) -> dict[str, Any]:
+        shape = node_shape(rubric_node, f"rubric node {rubric_node.get('id')}")
+        node: dict[str, Any] = {
+            "id": rubric_node.get("id"),
+            "reasoning": reasoning or "Synthesized from malformed parent judgment.",
+        }
+        if shape == "leaf":
+            node["satisfied"] = satisfied
+            return node
+        if shape == "satisfied_when":
+            children = [
+                synthesize_judgment_node(child, satisfied, reasoning)
+                for child in rubric_node.get("children", [])
+            ]
+            node["children"] = children
+            node["satisfied"] = _satisfaction_value(
+                rubric_node["satisfied_when"],
+                [bool(child.get("satisfied")) for child in children],
+            )
+            return node
+        if rubric_node.get("combinator") == "sum":
+            node["children"] = [
+                synthesize_judgment_node(child, satisfied, reasoning)
+                for child in rubric_node.get("children", [])
+            ]
+            return node
+        if rubric_node.get("combinator") == "one_of":
+            children = rubric_node.get("children", [])
+            if children:
+                selected = children[0]
+                node["selected"] = selected.get("id")
+                node["children"] = [synthesize_judgment_node(selected, satisfied, reasoning)]
+            return node
+        return node
+
     def walk(rubric_node: dict[str, Any], judgment_node: dict[str, Any]) -> None:
+        inherited_satisfied = coerce_bool(judgment_node.get("satisfied"))
         if "satisfied" in judgment_node:
-            judgment_node["satisfied"] = coerce_bool(judgment_node["satisfied"])
+            judgment_node["satisfied"] = inherited_satisfied
 
         shape = node_shape(rubric_node, f"rubric node {rubric_node.get('id')}")
         points = rubric_node.get("points")
@@ -687,9 +738,16 @@ def repair_common_judgment_model_errors(
 
 
         if shape == "leaf":
+            judgment_node.pop("selected", None)
+            judgment_node.pop("children", None)
+            if not isinstance(judgment_node.get("satisfied"), bool):
+                judgment_node["satisfied"] = False
             return
 
         if shape == "satisfied_when":
+            judgment_node.pop("selected", None)
+            if not isinstance(judgment_node.get("satisfied"), bool):
+                judgment_node["satisfied"] = False
             rubric_children = rubric_node.get("children", [])
             judgment_children = judgment_node.get("children", [])
             if isinstance(judgment_children, list):
@@ -698,21 +756,29 @@ def repair_common_judgment_model_errors(
                     match = by_id.get(child.get("id"))
                     if isinstance(match, dict):
                         walk(child, match)
-                if "satisfied" not in judgment_node:
-                    values = [
-                        child.get("satisfied")
-                        for child in judgment_children
-                        if isinstance(child, dict)
-                    ]
-                    if values and all(isinstance(value, bool) for value in values):
-                        judgment_node["satisfied"] = _satisfaction_value(
-                            rubric_node["satisfied_when"], values
-                        )
+                values = [
+                    child.get("satisfied")
+                    for child in judgment_children
+                    if isinstance(child, dict)
+                ]
+                if values and all(isinstance(value, bool) for value in values):
+                    judgment_node["satisfied"] = _satisfaction_value(
+                        rubric_node["satisfied_when"], values
+                    )
             return
 
         if rubric_node.get("combinator") == "sum":
+            judgment_node.pop("satisfied", None)
+            judgment_node.pop("selected", None)
             rubric_children = rubric_node.get("children", [])
-            judgment_children = judgment_node.get("children", [])
+            judgment_children = judgment_node.get("children")
+            if not isinstance(judgment_children, list) and isinstance(inherited_satisfied, bool):
+                reasoning = str(judgment_node.get("reasoning", ""))
+                judgment_children = [
+                    synthesize_judgment_node(child, inherited_satisfied, reasoning)
+                    for child in rubric_children
+                ]
+                judgment_node["children"] = judgment_children
             if isinstance(judgment_children, list):
                 by_id = {child.get("id"): child for child in judgment_children if isinstance(child, dict)}
                 for child in rubric_children:
@@ -722,16 +788,34 @@ def repair_common_judgment_model_errors(
             return
 
         if rubric_node.get("combinator") == "one_of":
-            selected = judgment_node.get("selected")
-            selected_rubric = None
-            for child in rubric_node.get("children", []):
-                if child.get("id") == selected:
-                    selected_rubric = child
-                    break
+            judgment_node.pop("satisfied", None)
+            rubric_children = rubric_node.get("children", [])
+            rubric_by_id = {child.get("id"): child for child in rubric_children}
             judgment_children = judgment_node.get("children", [])
-            if selected_rubric and isinstance(judgment_children, list) and judgment_children:
-                if isinstance(judgment_children[0], dict):
-                    walk(selected_rubric, judgment_children[0])
+            child_by_id = {
+                child.get("id"): child
+                for child in judgment_children
+                if isinstance(child, dict)
+            } if isinstance(judgment_children, list) else {}
+
+            selected = judgment_node.get("selected")
+            if selected not in rubric_by_id and len(child_by_id) == 1:
+                only_child_id = next(iter(child_by_id))
+                if only_child_id in rubric_by_id:
+                    selected = only_child_id
+                    judgment_node["selected"] = selected
+
+            selected_rubric = rubric_by_id.get(selected)
+            selected_child = child_by_id.get(selected)
+            if selected_rubric and isinstance(selected_child, dict):
+                judgment_node["children"] = [selected_child]
+                walk(selected_rubric, selected_child)
+            elif selected_rubric and isinstance(judgment_children, list) and judgment_children:
+                first_child = judgment_children[0]
+                if isinstance(first_child, dict):
+                    first_child["id"] = selected
+                    judgment_node["children"] = [first_child]
+                    walk(selected_rubric, first_child)
 
     walk(rubric, repaired)
     return repaired
