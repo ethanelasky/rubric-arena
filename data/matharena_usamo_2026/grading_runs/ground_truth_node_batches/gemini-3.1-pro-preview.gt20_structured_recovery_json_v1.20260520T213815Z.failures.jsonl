@@ -1,0 +1,2 @@
+{"phase": "structured", "candidate_id": "matharena_usamo_2026_p5_Step_3.5_Flash_3", "problem_id": "matharena_usamo_2026_p5", "model_name": "Step 3.5 Flash", "idx_answer": 3, "error": "ModelOutputError: Could not find a balanced JSON object"}
+{"phase": "structured", "candidate_id": "matharena_usamo_2026_p2_GLM_5_2", "problem_id": "matharena_usamo_2026_p2", "model_name": "GLM 5", "idx_answer": 2, "error": "ModelOutputError: Could not find a balanced JSON object"}

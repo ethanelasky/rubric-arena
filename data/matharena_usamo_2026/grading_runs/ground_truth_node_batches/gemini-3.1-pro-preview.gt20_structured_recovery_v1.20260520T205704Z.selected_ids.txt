@@ -1,0 +1,7 @@
+matharena_usamo_2026_p2_GLM_5_3
+matharena_usamo_2026_p2_GLM_5_2
+matharena_usamo_2026_p1_Gemini_3.1_Pro_Preview_2
+matharena_usamo_2026_p1_Step_3.5_Flash_2
+matharena_usamo_2026_p6_Claude-Opus-4.6_(High)_0
+matharena_usamo_2026_p5_Step_3.5_Flash_3
+matharena_usamo_2026_p2_Claude-Opus-4.6_(High)_2

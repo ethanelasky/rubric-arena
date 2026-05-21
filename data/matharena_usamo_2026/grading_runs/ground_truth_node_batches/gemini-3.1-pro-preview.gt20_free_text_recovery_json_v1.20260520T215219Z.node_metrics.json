@@ -1,0 +1,53 @@
+{
+  "sample_size": 2,
+  "seed": 20260520,
+  "selected_ids_path": "/Users/franknakasako/projects/rubric-arena/data/matharena_usamo_2026/grading_runs/ground_truth_node_batches/gemini-3.1-pro-preview.gt20_free_text_recovery_json_v1.20260520T215219Z.selected_ids.txt",
+  "raw_results_path": "/Users/franknakasako/projects/rubric-arena/data/matharena_usamo_2026/grading_runs/ground_truth_node_batches/gemini-3.1-pro-preview.gt20_free_text_recovery_json_v1.20260520T215219Z.jsonl",
+  "failures_path": "/Users/franknakasako/projects/rubric-arena/data/matharena_usamo_2026/grading_runs/ground_truth_node_batches/gemini-3.1-pro-preview.gt20_free_text_recovery_json_v1.20260520T215219Z.failures.jsonl",
+  "result_rows": 2,
+  "failures": [
+    {
+      "phase": "free_text",
+      "candidate_id": "matharena_usamo_2026_p2_GLM_5_3",
+      "problem_id": "matharena_usamo_2026_p2",
+      "model_name": "GLM 5",
+      "idx_answer": 3,
+      "error": "JudgmentError: judgment.children[0].children must be a list"
+    },
+    {
+      "phase": "free_text",
+      "candidate_id": "matharena_usamo_2026_p2_GLM_5_2",
+      "problem_id": "matharena_usamo_2026_p2",
+      "model_name": "GLM 5",
+      "idx_answer": 2,
+      "error": "JudgmentError: judgment.children[0].children[1].selected must be a non-empty string"
+    }
+  ],
+  "structured_candidate_n": 0,
+  "free_text_candidate_n": 0,
+  "both_candidate_n": 0,
+  "structured_vs_human_active_nodes": {
+    "n_pairs": 0,
+    "atom_difference_n": 0,
+    "average_atom_difference": null,
+    "binary_n": 0,
+    "binary_disagreement_rate": null,
+    "selection_n": 0,
+    "selection_disagreement_rate": null,
+    "points_n": 0,
+    "points_mae": null,
+    "by_node": {}
+  },
+  "free_text_vs_human_active_nodes": {
+    "n_pairs": 0,
+    "atom_difference_n": 0,
+    "average_atom_difference": null,
+    "binary_n": 0,
+    "binary_disagreement_rate": null,
+    "selection_n": 0,
+    "selection_disagreement_rate": null,
+    "points_n": 0,
+    "points_mae": null,
+    "by_node": {}
+  }
+}
